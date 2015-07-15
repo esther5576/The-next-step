@@ -83,7 +83,6 @@ public class ModuleCreator : MonoBehaviour
 				pos -= visualSize / 2;
 				pos.x = (pos.x % _gridCellSize < _gridCellSize / 2f) ? _gridCellSize * ((int)(pos.x / _gridCellSize)) : _gridCellSize * ((int)(pos.x / _gridCellSize) + 1);
 				pos.z = (pos.z % _gridCellSize < _gridCellSize / 2f) ? _gridCellSize * ((int)(pos.z / _gridCellSize)) : _gridCellSize * ((int)(pos.z / _gridCellSize) + 1);
-				Debug.Log (visualSize / 2);
 				pos += visualSize / 2;
 				visualisation.transform.position = pos + Vector3.up * 0.5f;//we move the object according to the cursor
 				
@@ -121,8 +120,7 @@ public class ModuleCreator : MonoBehaviour
 	bool CheckForConstruction (Vector3 pos, Vector3 size, int raycastMultiplier, float DiffMax)
 	{
 		Vector3 Unit = size / raycastMultiplier;
-		float maxHeight = Mathf.NegativeInfinity;
-		float minHeight = Mathf.Infinity;
+		float Height = 0f;
 
 		for (int i = 0; i <= raycastMultiplier; i++) {
 			for (int j = 0; j <= raycastMultiplier; j++) {
@@ -131,13 +129,13 @@ public class ModuleCreator : MonoBehaviour
 				raypos.z *= j;
 				RaycastHit hit;
 				if (Physics.Raycast (pos + raypos, -Vector3.up, out hit)) {
-					maxHeight = (maxHeight < hit.point.y) ? hit.point.y : maxHeight;
-					minHeight = (minHeight > hit.point.y) ? hit.point.y : minHeight;
+					Height += hit.point.y;
 				}
 			}
 		}
+		Height /= raycastMultiplier * raycastMultiplier;
 
-		return (maxHeight - minHeight) < DiffMax;
+		return Height < DiffMax;
 	}
 
 
