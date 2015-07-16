@@ -42,17 +42,16 @@ public class RoadCreator : MonoBehaviour
 	public void CreateRoad (bool Vertical, Vector3 StartPoint)
 	{
 		if (Vertical) {
-			StartCoroutine (VerticalRoad (StartPoint));
+			StartCoroutine (CreateRoad (StartPoint));
 		}
 	}
 
-	IEnumerator VerticalRoad (Vector3 StartPoint)
+	IEnumerator CreateRoad (Vector3 StartPoint)
 	{
 		bool tmp = true;
 		List<GameObject> TmpPath = new List<GameObject> ();
-		int LastDirection = 0;
+		Vector2 LastDirection = Vector2.zero;
 		while (tmp) {
-			Debug.Log ("------------");
 			Ray r = Camera.main.ScreenPointToRay (Input.mousePosition);
 			RaycastHit hit;
 			Vector3 EndPoint;
@@ -65,30 +64,69 @@ public class RoadCreator : MonoBehaviour
 				EndPoint = StartPoint;
 			}
 
-			int size = Mathf.FloorToInt (Mathf.Abs ((StartPoint - EndPoint).z / CellSize)) + 1;
-			int direction = (int)Mathf.Sign ((StartPoint - EndPoint).z);
-			if (direction != LastDirection) {
-				foreach (var ob in TmpPath) {
-					Destroy (ob);
-				}
-				TmpPath.Clear ();
-			}
-			Debug.Log ("size : " + size.ToString ());
-			Debug.Log ("direction : " + direction.ToString ());
-			Debug.Log ("TmpPath.count : " + TmpPath.Count.ToString ());
-			if (size > TmpPath.Count) {
-				for (int i = TmpPath.Count; i < size; i++) {
-					TmpPath.Add (Instantiate (Road, StartPoint + Vector3.back * i * direction, Quaternion.identity) as GameObject);
-				}
-			} else if (size < TmpPath.Count) {
-				for (int i = TmpPath.Count; i > size; i--) {
-					Debug.Log (i - 1);
-					Destroy (TmpPath [i - 1]);
-					TmpPath.RemoveAt (i - 1);
-				}
-			}
+			Vector3 road = StartPoint - EndPoint;
+			Vector2 direction = Vector2.zero;
 
+			if (Mathf.Abs (road.z) > Mathf.Abs (road.x)) {
+				int size = Mathf.FloorToInt (Mathf.Abs (road.z / CellSize)) + 1;
+				direction.y = (int)Mathf.Sign (road.z);
+				if (direction != LastDirection) {
+					foreach (var ob in TmpPath) {
+						Destroy (ob);
+					}
+					TmpPath.Clear ();
+				}
+
+				if (size > TmpPath.Count) {
+					for (int i = TmpPath.Count; i < size; i++) {
+						Vector3 pos = StartPoint + Vector3.back * i * direction.y;
+						RaycastHit HeightHit;
+						if (Physics.Raycast (pos + Vector3.up * 10, Vector3.down, out HeightHit)) {
+							pos.y = HeightHit.point.y;
+						}
+						Vector3 normal = HeightHit.normal;
+						normal.x = 0;
+						TmpPath.Add (Instantiate (Road, pos, Quaternion.identity) as GameObject);
+						TmpPath [i].transform.LookAt (TmpPath [i].transform.position + normal);
+					}
+				} else if (size < TmpPath.Count) {
+					for (int i = TmpPath.Count; i > size; i--) {
+						Destroy (TmpPath [i - 1]);
+						TmpPath.RemoveAt (i - 1);
+					}
+				}
+
+			} else {
+				int size = Mathf.FloorToInt (Mathf.Abs (road.x / CellSize)) + 1;
+				direction.x = (int)Mathf.Sign (road.x);
+				if (direction != LastDirection) {
+					foreach (var ob in TmpPath) {
+						Destroy (ob);
+					}
+					TmpPath.Clear ();
+				}
+
+				if (size > TmpPath.Count) {
+					for (int i = TmpPath.Count; i < size; i++) {
+						Vector3 pos = StartPoint + Vector3.left * i * direction.x;
+						RaycastHit HeightHit;
+						if (Physics.Raycast (pos + Vector3.up * 10, Vector3.down, out HeightHit)) {
+							pos.y = HeightHit.point.y;
+						}
+						Vector3 normal = HeightHit.normal;
+						normal.z = 0;
+						TmpPath.Add (Instantiate (Road, pos, Quaternion.identity) as GameObject);
+						TmpPath [i].transform.LookAt (TmpPath [i].transform.position + normal);
+					}
+				} else if (size < TmpPath.Count) {
+					for (int i = TmpPath.Count; i > size; i--) {
+						Destroy (TmpPath [i - 1]);
+						TmpPath.RemoveAt (i - 1);
+					}
+				}
+			}
 			LastDirection = direction;
+
 			yield return null;
 		}
 	}
