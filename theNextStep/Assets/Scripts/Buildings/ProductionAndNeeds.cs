@@ -40,11 +40,11 @@ public class ProductionAndNeeds : MonoBehaviour
 	void needs ()
 	{
 		if (_waterNeedsPerDay != 0) {
-			Camera.main.GetComponent<gameStats> ()._actualWater -= ((_waterNeedsPerDay / (this.GetComponent<dayToDayCounter> ()._dayLength * 2)) * Time.deltaTime);
+			Camera.main.GetComponent<gameStats> ()._actualWater -= ((_waterNeedsPerDay / (Camera.main.GetComponent<dayToDayCounter> ()._dayLength * 2)) * Time.deltaTime);
 		}
 
 		if (_electricityNeedsPerDay != 0) {
-			Camera.main.GetComponent<gameStats> ()._actualElectricity -= ((_electricityNeedsPerDay / (this.GetComponent<dayToDayCounter> ()._dayLength * 2)) * Time.deltaTime);
+			Camera.main.GetComponent<gameStats> ()._actualElectricity -= ((_electricityNeedsPerDay / (Camera.main.GetComponent<dayToDayCounter> ()._dayLength * 2)) * Time.deltaTime);
 		}
 
 		/*if (_CO2NeedsPerDay != 0) {
@@ -52,15 +52,15 @@ public class ProductionAndNeeds : MonoBehaviour
 		}*/
 
 		if (_O2NeedsPerDay != 0) {
-			Camera.main.GetComponent<gameStats> ()._actualOxygen -= ((_O2NeedsPerDay / (this.GetComponent<dayToDayCounter> ()._dayLength * 2)) * Time.deltaTime);
+			Camera.main.GetComponent<gameStats> ()._actualOxygen -= ((_O2NeedsPerDay / (Camera.main.GetComponent<dayToDayCounter> ()._dayLength * 2)) * Time.deltaTime);
 		}
 
 		if (_mineralsNeedsPerDay != 0) {
-			Camera.main.GetComponent<gameStats> ()._actualMineral -= ((_mineralsNeedsPerDay / (this.GetComponent<dayToDayCounter> ()._dayLength * 2)) * Time.deltaTime);
+			Camera.main.GetComponent<gameStats> ()._actualMineral -= ((_mineralsNeedsPerDay / (Camera.main.GetComponent<dayToDayCounter> ()._dayLength * 2)) * Time.deltaTime);
 		}
 
 		if (_foodNeedsPerDay != 0) {
-			Camera.main.GetComponent<gameStats> ()._actualFood -= ((_foodNeedsPerDay / (this.GetComponent<dayToDayCounter> ()._dayLength * 2)) * Time.deltaTime);
+			Camera.main.GetComponent<gameStats> ()._actualFood -= ((_foodNeedsPerDay / (Camera.main.GetComponent<dayToDayCounter> ()._dayLength * 2)) * Time.deltaTime);
 		}
 	}
 	#endregion
@@ -69,11 +69,11 @@ public class ProductionAndNeeds : MonoBehaviour
 	void production ()
 	{
 		if (_waterProductionPerDay != 0) {
-			Camera.main.GetComponent<gameStats> ()._actualWater += ((_waterProductionPerDay / (this.GetComponent<dayToDayCounter> ()._dayLength * 2)) * Time.deltaTime);
+			Camera.main.GetComponent<gameStats> ()._actualWater += ((_waterProductionPerDay / (Camera.main.GetComponent<dayToDayCounter> ()._dayLength * 2)) * Time.deltaTime);
 		}
 		
 		if (_electricityProductionPerDay != 0) {
-			Camera.main.GetComponent<gameStats> ()._actualElectricity += ((_electricityProductionPerDay / (this.GetComponent<dayToDayCounter> ()._dayLength * 2)) * Time.deltaTime);
+			Camera.main.GetComponent<gameStats> ()._actualElectricity += ((_electricityProductionPerDay / (Camera.main.GetComponent<dayToDayCounter> ()._dayLength * 2)) * Time.deltaTime);
 		}
 		
 		/*if (_CO2NeedsPerDay != 0) {
@@ -81,15 +81,15 @@ public class ProductionAndNeeds : MonoBehaviour
 		}*/
 		
 		if (_O2ProductionPerDay != 0) {
-			Camera.main.GetComponent<gameStats> ()._actualOxygen += ((_O2ProductionPerDay / (this.GetComponent<dayToDayCounter> ()._dayLength * 2)) * Time.deltaTime);
+			Camera.main.GetComponent<gameStats> ()._actualOxygen += ((_O2ProductionPerDay / (Camera.main.GetComponent<dayToDayCounter> ()._dayLength * 2)) * Time.deltaTime);
 		}
 		
 		if (_mineralsProductionPerDay != 0) {
-			Camera.main.GetComponent<gameStats> ()._actualMineral += ((_mineralsProductionPerDay / (this.GetComponent<dayToDayCounter> ()._dayLength * 2)) * Time.deltaTime);
+			Camera.main.GetComponent<gameStats> ()._actualMineral += ((_mineralsProductionPerDay / (Camera.main.GetComponent<dayToDayCounter> ()._dayLength * 2)) * Time.deltaTime);
 		}
 
 		if (_foodProductionPerDay != 0) {
-			Camera.main.GetComponent<gameStats> ()._actualFood += ((_foodProductionPerDay / (this.GetComponent<dayToDayCounter> ()._dayLength * 2)) * Time.deltaTime);
+			Camera.main.GetComponent<gameStats> ()._actualFood += ((_foodProductionPerDay / (Camera.main.GetComponent<dayToDayCounter> ()._dayLength * 2)) * Time.deltaTime);
 		}
 	}
 	#endregion
