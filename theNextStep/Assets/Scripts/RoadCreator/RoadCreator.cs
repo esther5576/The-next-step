@@ -17,15 +17,15 @@ public class RoadCreator : MonoBehaviour
 	private static RoadCreator _instance;
 	[SerializeField]
 	private GameObject
-		Road, CrossIntersection, LIntersection, TriIntersection;
-	private List<List<Edge>> HorList, VerList;
+		Road;
+	private bool _onCreation = false;
+
 	void Awake ()
 	{
 		if (!_instance) {
 			_instance = this;
 		}
-		HorList = new List<List<Edge>> ();
-		VerList = new List<List<Edge>> ();
+
 	}
 	// Use this for initialization
 	void Start ()
@@ -36,13 +36,17 @@ public class RoadCreator : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-	
-	}
-
-	public void CreateRoad (bool Vertical, Vector3 StartPoint)
-	{
-		if (Vertical) {
-			StartCoroutine (CreateRoad (StartPoint));
+		if (Input.GetKeyDown (KeyCode.Z) && !_onCreation) {
+			_onCreation = true;
+			Ray r = Camera.main.ScreenPointToRay (Input.mousePosition);
+			RaycastHit hit;
+			if (Physics.Raycast (r, out hit)) {
+				Vector3 StPt = hit.point;
+				float CellSize = ModuleCreator.Instance.GridCellSize;
+				StPt.x = (StPt.x % CellSize < CellSize / 2f) ? CellSize * ((int)(StPt.x / CellSize)) : CellSize * ((int)(StPt.x / CellSize) + 1);
+				StPt.z = (StPt.z % CellSize < CellSize / 2f) ? CellSize * ((int)(StPt.z / CellSize)) : CellSize * ((int)(StPt.z / CellSize) + 1);
+				StartCoroutine (CreateRoad (StPt));
+			}
 		}
 	}
 
@@ -75,8 +79,9 @@ public class RoadCreator : MonoBehaviour
 						Destroy (ob);
 					}
 					TmpPath.Clear ();
+					TmpPath.Add (Instantiate (Road, StartPoint, Quaternion.identity) as GameObject);
 				}
-
+				Debug.Log (size);
 				if (size > TmpPath.Count) {
 					for (int i = TmpPath.Count; i < size; i++) {
 						Vector3 pos = StartPoint + Vector3.back * i * direction.y;
@@ -84,10 +89,14 @@ public class RoadCreator : MonoBehaviour
 						if (Physics.Raycast (pos + Vector3.up * 10, Vector3.down, out HeightHit)) {
 							pos.y = HeightHit.point.y;
 						}
-						Vector3 normal = HeightHit.normal;
-						normal.x = 0;
-						TmpPath.Add (Instantiate (Road, pos, Quaternion.identity) as GameObject);
-						TmpPath [i].transform.LookAt (TmpPath [i].transform.position + normal);
+						if (HeightHit.collider.tag != "Pipeline") {
+							Vector3 normal = HeightHit.normal;
+							normal.x = 0;
+							TmpPath.Add (Instantiate (Road, pos, Quaternion.identity) as GameObject);
+							TmpPath [i].transform.LookAt (TmpPath [i].transform.position + normal);
+						} else {
+							TmpPath.Add (null);
+						}
 					}
 				} else if (size < TmpPath.Count) {
 					for (int i = TmpPath.Count; i > size; i--) {
@@ -102,10 +111,11 @@ public class RoadCreator : MonoBehaviour
 				if (direction != LastDirection) {
 					foreach (var ob in TmpPath) {
 						Destroy (ob);
-					}
+					}	
 					TmpPath.Clear ();
+					TmpPath.Add (Instantiate (Road, StartPoint, Quaternion.identity) as GameObject);
 				}
-
+				Debug.Log (size);
 				if (size > TmpPath.Count) {
 					for (int i = TmpPath.Count; i < size; i++) {
 						Vector3 pos = StartPoint + Vector3.left * i * direction.x;
@@ -113,10 +123,14 @@ public class RoadCreator : MonoBehaviour
 						if (Physics.Raycast (pos + Vector3.up * 10, Vector3.down, out HeightHit)) {
 							pos.y = HeightHit.point.y;
 						}
-						Vector3 normal = HeightHit.normal;
-						normal.z = 0;
-						TmpPath.Add (Instantiate (Road, pos, Quaternion.identity) as GameObject);
-						TmpPath [i].transform.LookAt (TmpPath [i].transform.position + normal);
+						if (HeightHit.collider.tag != "Pipeline") {
+							Vector3 normal = HeightHit.normal;
+							normal.z = 0;
+							TmpPath.Add (Instantiate (Road, pos, Quaternion.identity) as GameObject);
+							TmpPath [i].transform.LookAt (TmpPath [i].transform.position + normal);
+						} else {
+							TmpPath.Add (null);
+						}
 					}
 				} else if (size < TmpPath.Count) {
 					for (int i = TmpPath.Count; i > size; i--) {
@@ -126,12 +140,16 @@ public class RoadCreator : MonoBehaviour
 				}
 			}
 			LastDirection = direction;
+			if (Input.GetMouseButtonDown (0) && Input.GetKey (KeyCode.LeftShift)) {
+				StartPoint = TmpPath [TmpPath.Count - 1].transform.position;
+				TmpPath.Clear ();
 
+			} else if (Input.GetMouseButtonDown (0))
+				tmp = false;
 			yield return null;
 		}
+		_onCreation = false;
 	}
 
-	/*IEnumerator HorizontalRoad(Vector3 StartPoint){
-		
-	}*/
+
 }

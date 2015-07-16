@@ -20,12 +20,6 @@ public class Modules : MonoBehaviour
 		if (Input.GetKeyDown (KeyCode.A)) {
 			Creator.Deploy (Model);
 		}
-		if (Input.GetKeyDown (KeyCode.Z)) {
-			Ray r = Camera.main.ScreenPointToRay (Input.mousePosition);
-			RaycastHit hit;
-			if (Physics.Raycast (r, out hit)) {
-				RoadCreator.Instance.CreateRoad (true, hit.point);
-			}
-		}
+
 	}
 }
