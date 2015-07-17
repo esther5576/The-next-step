@@ -19,6 +19,7 @@ public class RoadCreator : MonoBehaviour
 	private GameObject
 		Road;
 	private bool _onCreation = false;
+	private Grid _grid;
 
 	void Awake ()
 	{
@@ -30,7 +31,7 @@ public class RoadCreator : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-
+		_grid = Terrain.activeTerrain.GetComponent<Grid> ();
 	}
 	
 	// Update is called once per frame
@@ -53,8 +54,11 @@ public class RoadCreator : MonoBehaviour
 	IEnumerator CreateRoad (Vector3 StartPoint)
 	{
 		bool tmp = true;
-		List<GameObject> TmpPath = new List<GameObject> ();
+		GameObject TmpPath = new GameObject ("TemporaryPath");
 		Vector2 LastDirection = Vector2.zero;
+		_grid.AddNode (new Node ((int)StartPoint.x, (int)StartPoint.z, _grid));
+		Node StartNode = _grid.Map [(int)StartPoint.x, (int)StartPoint.z];
+		List<Node> IntersectNodes = new List<Node> ();
 		while (tmp) {
 			Ray r = Camera.main.ScreenPointToRay (Input.mousePosition);
 			RaycastHit hit;
@@ -67,7 +71,6 @@ public class RoadCreator : MonoBehaviour
 			} else {
 				EndPoint = StartPoint;
 			}
-
 			Vector3 road = StartPoint - EndPoint;
 			Vector2 direction = Vector2.zero;
 
@@ -75,15 +78,15 @@ public class RoadCreator : MonoBehaviour
 				int size = Mathf.FloorToInt (Mathf.Abs (road.z / CellSize)) + 1;
 				direction.y = (int)Mathf.Sign (road.z);
 				if (direction != LastDirection) {
-					foreach (var ob in TmpPath) {
-						Destroy (ob);
+					foreach (Transform ob in TmpPath.transform) {
+						Destroy (ob.gameObject);
 					}
-					TmpPath.Clear ();
-					TmpPath.Add (Instantiate (Road, StartPoint, Quaternion.identity) as GameObject);
+					TmpPath.transform.DetachChildren ();
+					(Instantiate (Road, StartPoint, Quaternion.identity) as GameObject).transform.parent = TmpPath.transform;
 				}
-				Debug.Log (size);
-				if (size > TmpPath.Count) {
-					for (int i = TmpPath.Count; i < size; i++) {
+
+				if (size > TmpPath.transform.childCount) {
+					for (int i = TmpPath.transform.childCount; i < size; i++) {
 						Vector3 pos = StartPoint + Vector3.back * i * direction.y;
 						RaycastHit HeightHit;
 						if (Physics.Raycast (pos + Vector3.up * 10, Vector3.down, out HeightHit)) {
@@ -92,16 +95,18 @@ public class RoadCreator : MonoBehaviour
 						if (HeightHit.collider.tag != "Pipeline") {
 							Vector3 normal = HeightHit.normal;
 							normal.x = 0;
-							TmpPath.Add (Instantiate (Road, pos, Quaternion.identity) as GameObject);
-							TmpPath [i].transform.LookAt (TmpPath [i].transform.position + normal);
+							(Instantiate (Road, pos, Quaternion.identity) as GameObject).transform.parent = TmpPath.transform;
+							TmpPath.transform.GetChild (i).LookAt (TmpPath.transform.GetChild (i).position + normal);
 						} else {
-							TmpPath.Add (null);
+							GameObject nul = new GameObject ("null");
+							nul.transform.parent = TmpPath.transform;
+							IntersectNodes.Add (new Node ((int)HeightHit.point.x, (int)HeightHit.point.z, _grid));
 						}
 					}
-				} else if (size < TmpPath.Count) {
-					for (int i = TmpPath.Count; i > size; i--) {
-						Destroy (TmpPath [i - 1]);
-						TmpPath.RemoveAt (i - 1);
+				} else if (size < TmpPath.transform.childCount) {
+					for (int i = TmpPath.transform.childCount; i > size; i--) {
+						Destroy (TmpPath.transform.GetChild (i - 1).gameObject);
+						TmpPath.transform.GetChild (i - 1).parent = null;
 					}
 				}
 
@@ -109,15 +114,15 @@ public class RoadCreator : MonoBehaviour
 				int size = Mathf.FloorToInt (Mathf.Abs (road.x / CellSize)) + 1;
 				direction.x = (int)Mathf.Sign (road.x);
 				if (direction != LastDirection) {
-					foreach (var ob in TmpPath) {
-						Destroy (ob);
-					}	
-					TmpPath.Clear ();
-					TmpPath.Add (Instantiate (Road, StartPoint, Quaternion.identity) as GameObject);
+					foreach (Transform ob in TmpPath.transform) {
+						Destroy (ob.gameObject);
+					}
+					TmpPath.transform.DetachChildren ();
+					(Instantiate (Road, StartPoint, Quaternion.identity) as GameObject).transform.parent = TmpPath.transform;
 				}
-				Debug.Log (size);
-				if (size > TmpPath.Count) {
-					for (int i = TmpPath.Count; i < size; i++) {
+
+				if (size > TmpPath.transform.childCount) {
+					for (int i = TmpPath.transform.childCount; i < size; i++) {
 						Vector3 pos = StartPoint + Vector3.left * i * direction.x;
 						RaycastHit HeightHit;
 						if (Physics.Raycast (pos + Vector3.up * 10, Vector3.down, out HeightHit)) {
@@ -126,28 +131,92 @@ public class RoadCreator : MonoBehaviour
 						if (HeightHit.collider.tag != "Pipeline") {
 							Vector3 normal = HeightHit.normal;
 							normal.z = 0;
-							TmpPath.Add (Instantiate (Road, pos, Quaternion.identity) as GameObject);
-							TmpPath [i].transform.LookAt (TmpPath [i].transform.position + normal);
+							(Instantiate (Road, pos, Quaternion.identity) as GameObject).transform.parent = TmpPath.transform;
+							TmpPath.transform.GetChild (i).LookAt (TmpPath.transform.GetChild (i).position + normal);
 						} else {
-							TmpPath.Add (null);
+							GameObject nul = new GameObject ("null");
+							nul.transform.parent = TmpPath.transform;
+							IntersectNodes.Add (new Node ((int)HeightHit.point.x, (int)HeightHit.point.z, _grid));
 						}
 					}
-				} else if (size < TmpPath.Count) {
-					for (int i = TmpPath.Count; i > size; i--) {
-						Destroy (TmpPath [i - 1]);
-						TmpPath.RemoveAt (i - 1);
+				} else if (size < TmpPath.transform.childCount) {
+					for (int i = TmpPath.transform.childCount; i > size; i--) {
+						Destroy (TmpPath.transform.GetChild (i - 1).gameObject);
+						TmpPath.transform.GetChild (i - 1).parent = null;
 					}
 				}
 			}
 			LastDirection = direction;
 			if (Input.GetMouseButtonDown (0) && Input.GetKey (KeyCode.LeftShift)) {
-				StartPoint = TmpPath [TmpPath.Count - 1].transform.position;
-				TmpPath.Clear ();
+				_grid.AddNode (new Node ((int)TmpPath.transform.GetChild (TmpPath.transform.childCount - 1).position.x, (int)TmpPath.transform.GetChild (TmpPath.transform.childCount - 1).position.z, _grid));
+				Node Endnode = _grid.Map [(int)TmpPath.transform.GetChild (TmpPath.transform.childCount - 1).position.x, (int)TmpPath.transform.GetChild (TmpPath.transform.childCount - 1).position.z];
+				
+				if (IntersectNodes.Count > 0) {
+					StartNode.ConnectTo (IntersectNodes [0]);
+					for (int i = 0; i < IntersectNodes.Count; i++) {
+						if (i + 1 == IntersectNodes.Count) {
+							IntersectNodes [i].ConnectTo (Endnode);
+						} else {
+							IntersectNodes [i].ConnectTo (IntersectNodes [i + 1]);
+						}
+						_grid.AddNode (IntersectNodes [i]);
+					}
+				} else {
+					StartNode.ConnectTo (Endnode);
+				}
+			
+				StartPoint = TmpPath.transform.GetChild (TmpPath.transform.childCount - 1).position;
+				List<Transform> tmpl = new List<Transform> ();
+				foreach (Transform item in TmpPath.transform) {
+					tmpl.Add (item);
+				}
+				TmpPath.transform.DetachChildren ();
+				foreach (Transform item in tmpl) {
+					item.parent = transform;
+				}
+				
+				
+				_grid.AddNode (new Node ((int)StartPoint.x, (int)StartPoint.z, _grid));
+				StartNode = _grid.Map [(int)StartPoint.x, (int)StartPoint.z];
+				IntersectNodes.Clear ();
+				
 
-			} else if (Input.GetMouseButtonDown (0))
+			} else if (Input.GetMouseButtonDown (0)) {
+			
+				_grid.AddNode (new Node ((int)TmpPath.transform.GetChild (TmpPath.transform.childCount - 1).position.x, (int)TmpPath.transform.GetChild (TmpPath.transform.childCount - 1).position.z, _grid));
+				Node Endnode = _grid.Map [(int)TmpPath.transform.GetChild (TmpPath.transform.childCount - 1).position.x, (int)TmpPath.transform.GetChild (TmpPath.transform.childCount - 1).position.z];
+				
+				Debug.Log (IntersectNodes.Count);
+				if (IntersectNodes.Count > 0) {
+					StartNode.ConnectTo (IntersectNodes [0]);
+					for (int i = 0; i < IntersectNodes.Count; i++) {
+						if (i + 1 == IntersectNodes.Count) {
+							IntersectNodes [i].ConnectTo (Endnode);
+						} else {
+							IntersectNodes [i].ConnectTo (IntersectNodes [i + 1]);
+						}
+						_grid.AddNode (IntersectNodes [i]);
+					}
+				} else {
+					StartNode.ConnectTo (Endnode);
+				}
+			
+				List<Transform> tmpl = new List<Transform> ();
+				foreach (Transform item in TmpPath.transform) {
+					tmpl.Add (item);
+				}
+				TmpPath.transform.DetachChildren ();
+				foreach (Transform item in tmpl) {
+					item.parent = transform;
+				}
+				
+				
+				
 				tmp = false;
+			}
 			yield return null;
 		}
+		Destroy (TmpPath);
 		_onCreation = false;
 	}
 
