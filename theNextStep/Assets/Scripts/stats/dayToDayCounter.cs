@@ -4,7 +4,7 @@ using System.Collections;
 public class dayToDayCounter : MonoBehaviour
 {
 	private float _time;
-	private float _days;
+	public int _days;
 	private bool _dayMorningNight = true;
 
 	public float _dayLength = 60;

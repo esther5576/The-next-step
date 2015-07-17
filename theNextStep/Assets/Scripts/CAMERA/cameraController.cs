@@ -34,6 +34,15 @@ public class cameraController : MonoBehaviour
 	
 	void Update ()
 	{
+		if (Input.GetKeyDown (KeyCode.Space)) {
+			MoveEnabled = false;
+			CombinedMovement = false;
+		}
+		if (Input.GetKeyUp (KeyCode.Space)) {
+			MoveEnabled = true;
+			CombinedMovement = true;
+		}
+
 		_mousePos = Input.mousePosition;
 		
 		//Move camera if mouse is at the edge of the screen
