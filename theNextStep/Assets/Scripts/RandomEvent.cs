@@ -31,7 +31,7 @@ public class RandomEvent : MonoBehaviour
 		if (_activateRandomEvent == false) {
 			_dayEvent = (Random.Range (_minDay, _maxDay)) + this.GetComponent<dayToDayCounter> ()._days;
 			_activateRandomEvent = true;
-			Debug.Log (_dayEvent);
+			//Debug.Log (_dayEvent);
 		}
 
 		if (_dayEvent == this.GetComponent<dayToDayCounter> ()._days) {

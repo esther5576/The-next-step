@@ -84,8 +84,7 @@ public class ModuleCreator : MonoBehaviour
 				pos.x = (pos.x % _gridCellSize < _gridCellSize / 2f) ? _gridCellSize * ((int)(pos.x / _gridCellSize)) : _gridCellSize * ((int)(pos.x / _gridCellSize) + 1);
 				pos.z = (pos.z % _gridCellSize < _gridCellSize / 2f) ? _gridCellSize * ((int)(pos.z / _gridCellSize)) : _gridCellSize * ((int)(pos.z / _gridCellSize) + 1);
 				pos += visualSize / 2;
-				visualisation.transform.position = pos + Vector3.up * 0.5f;//we move the object according to the cursor
-				
+				visualisation.transform.position = pos + Vector3.up * 1.0f;//we move the object according to the cursor				
 
 				pos -= visualSize / 2;//to get the left bottom corner of the bounding box
 				pos.y += visualSize.y;
