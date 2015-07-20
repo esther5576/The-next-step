@@ -32,11 +32,11 @@ public class Node
 			if (_grid.Map [x0, _y] != null && _grid.Map [x0, _y] != this)
 				Neighbour.Add (_grid.Map [x0, _y]);
 			if (_grid.Map [x1, _y] != null && _grid.Map [x1, _y] != this)
-				Neighbour.Add (_grid.Map [x0, _y]);
+				Neighbour.Add (_grid.Map [x1, _y]);
 			if (_grid.Map [_x, y0] != null && _grid.Map [_x, y0] != this)
-				Neighbour.Add (_grid.Map [x0, _y]);		
+				Neighbour.Add (_grid.Map [_x, y0]);		
 			if (_grid.Map [_x, y1] != null && _grid.Map [_x, y1] != this)
-				Neighbour.Add (_grid.Map [x0, _y]);
+				Neighbour.Add (_grid.Map [_x, y1]);
 			return Neighbour;
 		}
 	}
@@ -55,11 +55,33 @@ public class Node
 	
 	public void ConnectTo (Node Target)
 	{
+		if (Target == this)
+			return;
 		if (!_connectedNodes.Contains (Target))
 			_connectedNodes.Add (Target);
 		if (Target.ConnectedNodes.Contains (this))
 			return;
 		Target.ConnectTo (this);
+		if (_x == Target.X) {
+			Node A = (_y > Target.Y) ? Target : this;
+			Node B = (A == this) ? Target : this;
+			Edge AB = new Edge ();
+			AB.A = A;
+			AB.B = B;
+			for (int i = A.Y; i < B.Y; i++) {
+				_grid._edgemap [_x, i].Add (AB);
+			}
+		} else {
+			Node A = (_x > Target.X) ? Target : this;
+			Node B = (A == this) ? Target : this;
+			Edge AB = new Edge ();
+			AB.A = A;
+			AB.B = B;
+			for (int i = A.X; i < B.X; i++) {
+				_grid._edgemap [i, _y].Add (AB);
+			}
+		}
+		
 	}
 	
 	public void ConnectTo (List<Node> Targets)
@@ -69,13 +91,33 @@ public class Node
 		}
 	}
 	
-	public void DisconnectTo (Node Target)
+	public void DisconnectFrom (Node Target)
 	{
 		_connectedNodes.Remove (Target);
-		if (Target.ConnectedNodes.Contains (this))
-			Target.DisconnectTo (this);
+		if (Target.ConnectedNodes.Contains (this)) {
+			Target.DisconnectFrom (this);
+			if (_x == Target.X) {
+				Node A = (_y > Target.Y) ? Target : this;
+				Node B = (A == this) ? Target : this;
+				Edge AB = new Edge ();
+				_grid.RemoveEdge (AB);
+				
+			} else {
+				Node A = (_x > Target.X) ? Target : this;
+				Node B = (A == this) ? Target : this;
+				Edge AB = new Edge ();
+				_grid.RemoveEdge (AB);
+			}
+		}
+		
 	}
 	
+	public void DisconnectFromEveryNodes ()
+	{
+		foreach (var item in _connectedNodes) {
+			DisconnectFrom (item);
+		}
+	}
 	
 	bool IsConnectedTo (Node Target)
 	{

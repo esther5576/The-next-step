@@ -56,9 +56,6 @@ public class RoadCreator : MonoBehaviour
 		bool tmp = true;
 		GameObject TmpPath = new GameObject ("TemporaryPath");
 		Vector2 LastDirection = Vector2.zero;
-		_grid.AddNode (new Node ((int)StartPoint.x, (int)StartPoint.z, _grid));
-		Node StartNode = _grid.Map [(int)StartPoint.x, (int)StartPoint.z];
-		List<Node> IntersectNodes = new List<Node> ();
 		while (tmp) {
 			Ray r = Camera.main.ScreenPointToRay (Input.mousePosition);
 			RaycastHit hit;
@@ -99,8 +96,8 @@ public class RoadCreator : MonoBehaviour
 							TmpPath.transform.GetChild (i).LookAt (TmpPath.transform.GetChild (i).position + normal);
 						} else {
 							GameObject nul = new GameObject ("null");
+							nul.transform.position = pos;
 							nul.transform.parent = TmpPath.transform;
-							IntersectNodes.Add (new Node ((int)HeightHit.point.x, (int)HeightHit.point.z, _grid));
 						}
 					}
 				} else if (size < TmpPath.transform.childCount) {
@@ -135,8 +132,8 @@ public class RoadCreator : MonoBehaviour
 							TmpPath.transform.GetChild (i).LookAt (TmpPath.transform.GetChild (i).position + normal);
 						} else {
 							GameObject nul = new GameObject ("null");
+							nul.transform.position = pos;
 							nul.transform.parent = TmpPath.transform;
-							IntersectNodes.Add (new Node ((int)HeightHit.point.x, (int)HeightHit.point.z, _grid));
 						}
 					}
 				} else if (size < TmpPath.transform.childCount) {
@@ -147,24 +144,7 @@ public class RoadCreator : MonoBehaviour
 				}
 			}
 			LastDirection = direction;
-			if (Input.GetMouseButtonDown (0) && Input.GetKey (KeyCode.LeftShift)) {
-				_grid.AddNode (new Node ((int)TmpPath.transform.GetChild (TmpPath.transform.childCount - 1).position.x, (int)TmpPath.transform.GetChild (TmpPath.transform.childCount - 1).position.z, _grid));
-				Node Endnode = _grid.Map [(int)TmpPath.transform.GetChild (TmpPath.transform.childCount - 1).position.x, (int)TmpPath.transform.GetChild (TmpPath.transform.childCount - 1).position.z];
-				
-				if (IntersectNodes.Count > 0) {
-					StartNode.ConnectTo (IntersectNodes [0]);
-					for (int i = 0; i < IntersectNodes.Count; i++) {
-						if (i + 1 == IntersectNodes.Count) {
-							IntersectNodes [i].ConnectTo (Endnode);
-						} else {
-							IntersectNodes [i].ConnectTo (IntersectNodes [i + 1]);
-						}
-						_grid.AddNode (IntersectNodes [i]);
-					}
-				} else {
-					StartNode.ConnectTo (Endnode);
-				}
-			
+			if (Input.GetMouseButtonDown (0) && Input.GetKey (KeyCode.LeftShift)) {			
 				StartPoint = TmpPath.transform.GetChild (TmpPath.transform.childCount - 1).position;
 				List<Transform> tmpl = new List<Transform> ();
 				foreach (Transform item in TmpPath.transform) {
@@ -175,44 +155,22 @@ public class RoadCreator : MonoBehaviour
 					item.parent = transform;
 				}
 				
-				
-				_grid.AddNode (new Node ((int)StartPoint.x, (int)StartPoint.z, _grid));
-				StartNode = _grid.Map [(int)StartPoint.x, (int)StartPoint.z];
-				IntersectNodes.Clear ();
-				
-
 			} else if (Input.GetMouseButtonDown (0)) {
-			
-				_grid.AddNode (new Node ((int)TmpPath.transform.GetChild (TmpPath.transform.childCount - 1).position.x, (int)TmpPath.transform.GetChild (TmpPath.transform.childCount - 1).position.z, _grid));
-				Node Endnode = _grid.Map [(int)TmpPath.transform.GetChild (TmpPath.transform.childCount - 1).position.x, (int)TmpPath.transform.GetChild (TmpPath.transform.childCount - 1).position.z];
-				
-				Debug.Log (IntersectNodes.Count);
-				if (IntersectNodes.Count > 0) {
-					StartNode.ConnectTo (IntersectNodes [0]);
-					for (int i = 0; i < IntersectNodes.Count; i++) {
-						if (i + 1 == IntersectNodes.Count) {
-							IntersectNodes [i].ConnectTo (Endnode);
-						} else {
-							IntersectNodes [i].ConnectTo (IntersectNodes [i + 1]);
-						}
-						_grid.AddNode (IntersectNodes [i]);
-					}
-				} else {
-					StartNode.ConnectTo (Endnode);
-				}
-			
 				List<Transform> tmpl = new List<Transform> ();
 				foreach (Transform item in TmpPath.transform) {
 					tmpl.Add (item);
 				}
 				TmpPath.transform.DetachChildren ();
 				foreach (Transform item in tmpl) {
-					item.parent = transform;
+					if (item.name != "null")
+						item.parent = transform;
+					else {
+						Destroy (item.gameObject);
+					}
 				}
-				
-				
-				
 				tmp = false;
+				_grid.CreateRoad (StartPoint, tmpl [tmpl.Count - 1].position);
+
 			}
 			yield return null;
 		}

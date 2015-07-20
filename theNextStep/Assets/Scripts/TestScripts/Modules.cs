@@ -8,7 +8,7 @@ public class Modules : MonoBehaviour
 	public GameObject Model;
 	private ModuleCreator Creator;
 	// Use this for initialization
-	void Start ()
+	void Awake ()
 	{
 		Creator = ModuleCreator.Instance;
 		Creator.Initiate (1f);
