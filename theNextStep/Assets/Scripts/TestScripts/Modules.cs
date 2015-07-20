@@ -29,31 +29,55 @@ public class Modules : MonoBehaviour
 	public void MainBuilding (bool _MainBuilding)
 	{
 		Model = _buildings [0];
+
+		if (_maximumBuildings > 0) {
+			Creator.Deploy (Model);
+		}
 	}
 
 	public void FoodProduction (bool _FoodProduction)
 	{
 		Model = _buildings [1];
+
+		if (_maximumBuildings > 0) {
+			Creator.Deploy (Model);
+		}
 	}
 
 	public void SolarPanels (bool _SolarPanels)
 	{
 		Model = _buildings [2];
+
+		if (_maximumBuildings > 0) {
+			Creator.Deploy (Model);
+		}
 	}
 
 	public void HumanHabitats (bool _HumanHabitats)
 	{
 		Model = _buildings [3];
+
+		if (_maximumBuildings > 0) {
+			Creator.Deploy (Model);
+		}
 	}
 
 	public void WaterExtractionCenter (bool _WaterExtractionCenter)
 	{
 		Model = _buildings [4];
+
+		if (_maximumBuildings > 0) {
+			Creator.Deploy (Model);
+		}
 	}
 
 	public void LandingZone (bool _LandingZone)
 	{
 		Model = _buildings [5];
+
+		if (_maximumBuildings > 0) {
+			Creator.Deploy (Model);
+		}
 	}
 
 	void OnGUI ()
