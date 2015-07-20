@@ -95,9 +95,10 @@ public class ModuleCreator : MonoBehaviour
 			}
 			//if we can build on the Terrain and the visualisation object doesn't collide with any other objet we build it and destoy the visualisation object
 			if (Input.GetMouseButtonDown (0) && !visualisation.GetComponent<Visualisation> ().Collide) {
-				Instantiate (ObjectToDeploy, visualisation.transform.position, Quaternion.identity);
+				Instantiate (ObjectToDeploy, visualisation.transform.position, /*Quaternion.identity*/visualisation.transform.rotation);
 				_onDeployement = false;
 				DestroyImmediate (visualisation);
+				Camera.main.GetComponent<Modules> ()._maximumBuildings --;
 			}
 			end:
 			if (Input.GetMouseButtonDown (1)) {

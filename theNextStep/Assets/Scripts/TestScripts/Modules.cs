@@ -10,6 +10,7 @@ public class Modules : MonoBehaviour
 	private ModuleCreator Creator;
 
 	public List<GameObject> _buildings = new List<GameObject> ();
+	public int _maximumBuildings = 10;
 	// Use this for initialization
 	void Awake ()
 	{
@@ -20,7 +21,7 @@ public class Modules : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-		if (Input.GetKeyDown (KeyCode.A)) {
+		if (Input.GetKeyDown (KeyCode.A) && _maximumBuildings > 0) {
 			Creator.Deploy (Model);
 		}
 	}
@@ -53,5 +54,10 @@ public class Modules : MonoBehaviour
 	public void LandingZone (bool _LandingZone)
 	{
 		Model = _buildings [5];
+	}
+
+	void OnGUI ()
+	{
+		GUI.Label (new Rect (Screen.width - 125, 100, 500, 30), "buildings left: " + _maximumBuildings);
 	}
 }
