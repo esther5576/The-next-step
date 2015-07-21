@@ -32,8 +32,10 @@ public class ProductionAndNeeds : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-		needs ();
-		production ();
+		if (this.name != "visualisation") {
+			needs ();
+			production ();
+		}
 	}
 
 	#region Needs

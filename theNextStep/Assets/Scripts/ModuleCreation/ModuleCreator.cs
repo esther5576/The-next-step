@@ -59,6 +59,7 @@ public class ModuleCreator : MonoBehaviour
 		_onDeployement = true;
 		//we create our visualtion gameobject
 		GameObject visualisation = Instantiate (ObjectToDeploy);//this object let the player know where he's going to place his building
+		visualisation.name = "visualisation";
 		visualisation.layer = 2;
 		visualisation.AddComponent<Visualisation> ();
 		if (!visualisation.GetComponent<Rigidbody> ()) {//we had a rigidbody to check collision

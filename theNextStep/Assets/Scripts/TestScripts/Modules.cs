@@ -11,6 +11,7 @@ public class Modules : MonoBehaviour
 
 	public List<GameObject> _buildings = new List<GameObject> ();
 	public int _maximumBuildings = 10;
+
 	// Use this for initialization
 	void Awake ()
 	{
