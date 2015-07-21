@@ -53,7 +53,7 @@ public class BarRepresentation : MonoBehaviour
 		#region Oxygen
 		//For oxygen ==================================================================================================================================================================================================
 		//draw the background ==================================================
-		GUI.BeginGroup (new Rect (((Screen.width / 2) - 150) - _sizeOxygen.x / 2, _posOxygen.y, _sizeOxygen.x, _sizeOxygen.y));
+		GUI.BeginGroup (new Rect (((Screen.width / 2) - 300) - _sizeOxygen.x / 2, _posOxygen.y, _sizeOxygen.x, _sizeOxygen.y));
 		GUI.Box (new Rect (0, 0, _sizeOxygen.x, _sizeOxygen.y), _emptyTexOxygen);
 		//draw the background ==================================================
 
@@ -87,7 +87,7 @@ public class BarRepresentation : MonoBehaviour
 		#region Food
 		//For food ==================================================================================================================================================================================================
 		//draw the background ==================================================
-		GUI.BeginGroup (new Rect (((Screen.width / 2) + 150) - _sizeFood.x / 2, _posFood.y, _sizeFood.x, _sizeFood.y));
+		GUI.BeginGroup (new Rect (((Screen.width / 2) + 300) - _sizeFood.x / 2, _posFood.y, _sizeFood.x, _sizeFood.y));
 		GUI.Box (new Rect (0, 0, _sizeFood.x, _sizeFood.y), _emptyTexFood);
 		//draw the background ==================================================
 		
@@ -102,11 +102,15 @@ public class BarRepresentation : MonoBehaviour
 		#endregion
 
 		//INFO TEXT OPTIONNEL ===================================================
-		GUI.Label (new Rect (((Screen.width / 2) - 150) + (_sizeOxygen.x / 4) - _sizeOxygen.x / 2, 20, 100, 30), "OXYGEN");
+		GUIStyle myStyle = new GUIStyle ();
+		myStyle.fontSize = 30;
 
-		GUI.Label (new Rect ((Screen.width / 2) + (_sizeWater.x / 4) - _sizeWater.x / 2, 20, 100, 30), "WATER");
+		myStyle.normal.textColor = Color.white;
+		GUI.Label (new Rect (((Screen.width / 2) - 300) + (_sizeOxygen.x / 4) - _sizeOxygen.x / 2, 30, 100, 30), "OXYGEN", myStyle);
 
-		GUI.Label (new Rect (((Screen.width / 2) + 160) + (_sizeFood.x / 4) - _sizeFood.x / 2, 20, 100, 30), "FOOD");
+		GUI.Label (new Rect ((Screen.width / 2) + (_sizeWater.x / 4) - _sizeWater.x / 2, 30, 100, 30), "WATER", myStyle);
+
+		GUI.Label (new Rect (((Screen.width / 2) + 320) + (_sizeFood.x / 4) - _sizeFood.x / 2, 30, 100, 30), "FOOD", myStyle);
 		//INFO TEXT OPTIONNEL ===================================================
 	}
 	

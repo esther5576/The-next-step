@@ -21,9 +21,9 @@ public class Modules : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-		if (Input.GetKeyDown (KeyCode.A) && _maximumBuildings > 0) {
+		/*if (Input.GetKeyDown (KeyCode.A) && _maximumBuildings > 0) {
 			Creator.Deploy (Model);
-		}
+		}*/
 	}
 
 	public void MainBuilding (bool _MainBuilding)
@@ -82,6 +82,9 @@ public class Modules : MonoBehaviour
 
 	void OnGUI ()
 	{
-		GUI.Label (new Rect (Screen.width - 125, 100, 500, 30), "buildings left: " + _maximumBuildings);
+		GUIStyle myStyle = new GUIStyle ();
+		myStyle.fontSize = 25;
+		myStyle.normal.textColor = Color.white;
+		GUI.Label (new Rect (Screen.width - 200, 100, 500, 30), "buildings left: " + _maximumBuildings, myStyle);
 	}
 }

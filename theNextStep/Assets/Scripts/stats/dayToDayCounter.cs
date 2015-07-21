@@ -26,12 +26,16 @@ public class dayToDayCounter : MonoBehaviour
 
 	void OnGUI ()
 	{
+		GUIStyle myStyle = new GUIStyle ();
+		myStyle.fontSize = 30;
+		myStyle.normal.textColor = Color.white;
+
 		if (_dayMorningNight == true) {
-			GUI.Label (new Rect (Screen.width - 50, 20, 100, 30), "DAY");
+			GUI.Label (new Rect (Screen.width - 100, 20, 100, 30), "DAY", myStyle);
 		}
 		if (_dayMorningNight == false) {
-			GUI.Label (new Rect (Screen.width - 50, 20, 100, 30), "NIGHT");
+			GUI.Label (new Rect (Screen.width - 100, 20, 100, 30), "NIGHT", myStyle);
 		}
-		GUI.Label (new Rect (Screen.width - 40, 40, 100, 30), "" + _days);
+		GUI.Label (new Rect (Screen.width - 75, 50, 100, 30), "" + _days, myStyle);
 	}
 }
