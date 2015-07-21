@@ -46,7 +46,8 @@ public class Grid : MonoBehaviour
 	public void RemoveEdge (Edge target)
 	{
 		foreach (var item in _edgemap) {
-			item.Remove (target);
+			if (item.Remove (target))
+				Debug.Log ("RemoveSucces");
 		}
 	}
 	
@@ -76,776 +77,521 @@ public class Grid : MonoBehaviour
 			return true;
 		}
 	}
-	
-	public void IntersectionConnection (Node intersection)
+
+	public void CreateRoadFrom2Nodes (Vector3 Start, Vector3 End)
 	{
+		Vector3 direction = (End - Start).normalized;
+		if (direction.x < 0 || direction.z < 0) {
+			Vector3 tmpV = Start;
+			Start = End;
+			End = tmpV;
+			direction = (End - Start).normalized;
+		}
+		List<Node> PathNodes = new List<Node> ();
+		PathNodes.Add (_map [(int)Start.x, (int)Start.z]);
+		if (Mathf.Abs (direction.x) > 0) {
+			Node tmp = PathNodes [0];
+			bool _CorrectStart = false;
+			foreach (Node neihbour in PathNodes[0].ConnectedNodes) {
+				Vector3 NeihbourPos = new Vector3 (neihbour.X, 0, neihbour.Y);
+				if ((NeihbourPos - Start).normalized == direction * -1f)
+					tmp = neihbour;	
+				if (Mathf.Abs ((NeihbourPos - Start).z) > 0)
+					_CorrectStart = true;
+			}
+			if (!_CorrectStart && PathNodes [0] != tmp) {
+				PathNodes [0].DisconnectFromEveryNodes ();
+				PathNodes [0] = tmp;
+				_map [(int)Start.x, (int)Start.z] = null;
+			}
+			for (int i = (int)Start.x+1; i < End.x+1; i++) {
+				Node ChNode = _map [i, (int)Start.z];
+				if (ChNode == null) {
+					//Debug.Log (_edgemap [i, (int)Start.z].Count.ToString () + " " + i.ToString () + " " + (int)Start.z);
+					if (_edgemap [i, (int)Start.z].Count == 0 && _map [i, (int)Start.z + 1] == null && _map [i, (int)Start.z - 1] == null)
+						continue;
+					if (_edgemap [i, (int)Start.z].Count > 0) {
+						ChNode = new Node (i, (int)Start.z, this);
+						Edge CollapseEdge = _edgemap [i, (int)Start.z] [0];
+						CollapseEdge.A.DisconnectFrom (CollapseEdge.B);
+						ChNode.ConnectTo (CollapseEdge.A);
+						ChNode.ConnectTo (CollapseEdge.B);
+						AddNode (ChNode);
+					} else if (_map [i, (int)Start.z + 1] != null || _map [i, (int)Start.z - 1] != null) {
+						ChNode = new Node (i, (int)Start.z, this);
+						AddNode (ChNode);
+						if (_map [i, (int)Start.z + 1] != null) {
+							Node neihbourg = _map [i, (int)Start.z + 1];
+							bool keepNode = false;
+							foreach (Node n in neihbourg.ConnectedNodes) {
+								if (Vector3.Angle (neihbourg.DirectionTo (n), ChNode.DirectionTo (neihbourg)) != 0)
+									keepNode = true;
+							}
+							if (!keepNode) {
+								ChNode.ConnectTo (neihbourg.ConnectedNodes);
+								neihbourg.DisconnectFromEveryNodes ();
+								RemoveNode (neihbourg);
+							} else {
+								ChNode.ConnectTo (neihbourg);
+							}
+						}
+						if (_map [i, (int)Start.z - 1] != null) {
+							Node neihbourg = _map [i, (int)Start.z - 1];
+							bool keepNode = false;
+							foreach (Node n in neihbourg.ConnectedNodes) {
+								if (Vector3.Angle (neihbourg.DirectionTo (n), ChNode.DirectionTo (neihbourg)) != 0)
+									keepNode = true;
+							}
+							if (!keepNode) {
+								ChNode.ConnectTo (neihbourg.ConnectedNodes);
+								neihbourg.DisconnectFromEveryNodes ();
+								RemoveNode (neihbourg);
+							} else {
+								ChNode.ConnectTo (neihbourg);
+							}
+						}
+					}
+				}
+				bool KeepNode = false;
+				foreach (var neihbour in ChNode.ConnectedNodes) {
+					if (neihbour.Y != PathNodes [0].Y)
+						KeepNode = true;
+					else if (neihbour.X > End.x + 1)
+						PathNodes.Add (neihbour);
+				}
+				if (ChNode.ConnectedNodes.Count == 0 && i + 1 >= End.x + 1) {
+					KeepNode = true;
+				}
+				if (!KeepNode) {
+					ChNode.DisconnectFromEveryNodes ();
+					RemoveNode (ChNode);
+				} else {
+					PathNodes.Add (ChNode);
+				}
+			}
+		} else {
+			Node tmp = PathNodes [0];
+			bool _CorrectStart = false;
+			foreach (Node neihbour in PathNodes[0].ConnectedNodes) {
+				Vector3 NeihbourPos = new Vector3 (neihbour.X, 0, neihbour.Y);
+				if ((NeihbourPos - Start).normalized == direction * -1f)
+					tmp = neihbour;
+				if (Mathf.Abs ((NeihbourPos - Start).x) > 0)
+					_CorrectStart = true;
+			}
+			if (!_CorrectStart && PathNodes [0] != tmp) {
+				PathNodes [0].DisconnectFromEveryNodes ();
+				PathNodes [0] = tmp;
+				_map [(int)Start.x, (int)Start.z] = null;
+			}
+			for (int i = (int)Start.z+1; i < End.z+1; i++) {
+				Node ChNode = _map [(int)Start.x, i];
+				if (ChNode == null) {
+					//Debug.Log (_edgemap [(int)Start.x, i].Count.ToString () + " " + i.ToString () + " " + (int)Start.x);
+					if (_edgemap [(int)Start.x, i].Count == 0 && _map [(int)Start.x + 1, i] == null && _map [(int)Start.x - 1, i] == null)
+						continue;
+					if (_edgemap [(int)Start.x, i].Count > 0) {
+						ChNode = new Node ((int)Start.x, i, this);
+						Edge CollapseEdge = _edgemap [(int)Start.x, i] [0];
+						CollapseEdge.A.DisconnectFrom (CollapseEdge.B);
+						ChNode.ConnectTo (CollapseEdge.A);
+						ChNode.ConnectTo (CollapseEdge.B);
+						AddNode (ChNode);
+					} else if (_map [(int)Start.x + 1, i] != null || _map [(int)Start.x - 1, i] != null) {
+						ChNode = new Node ((int)Start.x, i, this);
+						AddNode (ChNode);
+						if (_map [(int)Start.x + 1, i] != null) {
+							Node neihbourg = _map [(int)Start.x + 1, i];
+							bool keepNode = false;
+							foreach (Node n in neihbourg.ConnectedNodes) {
+								if (Vector3.Angle (neihbourg.DirectionTo (n), ChNode.DirectionTo (neihbourg)) != 0)
+									keepNode = true;
+							}
+							if (!keepNode) {
+								ChNode.ConnectTo (neihbourg.ConnectedNodes);
+								neihbourg.DisconnectFromEveryNodes ();
+								RemoveNode (neihbourg);
+							} else {
+								ChNode.ConnectTo (neihbourg);
+							}
+						}
+						if (_map [(int)Start.x - 1, i] != null) {
+							Node neihbourg = _map [(int)Start.x - 1, i];
+							bool keepNode = false;
+							foreach (Node n in neihbourg.ConnectedNodes) {
+								if (Vector3.Angle (neihbourg.DirectionTo (n), ChNode.DirectionTo (neihbourg)) != 0)
+									keepNode = true;
+							}
+							if (!keepNode) {
+								ChNode.ConnectTo (neihbourg.ConnectedNodes);
+								neihbourg.DisconnectFromEveryNodes ();
+								RemoveNode (neihbourg);
+							} else {
+								ChNode.ConnectTo (neihbourg);
+							}
+						}
+					}
+				}
+				bool KeepNode = false;
+				foreach (var neihbour in ChNode.ConnectedNodes) {
+					if (neihbour.X != PathNodes [0].X)
+						KeepNode = true;
+					else if (neihbour.Y > End.z + 1)
+						PathNodes.Add (neihbour);
+				}
+				if (ChNode.ConnectedNodes.Count == 0 && i + 1 >= End.z + 1) {
+					KeepNode = true;
+				}
+				if (!KeepNode) {
+					ChNode.DisconnectFromEveryNodes ();
+					RemoveNode (ChNode);
+				} else {
+					PathNodes.Add (ChNode);
+				}
+			}	 
+		}
 		
+		for (int i = 0; i < PathNodes.Count-1; i++) {
+			PathNodes [i].ConnectTo (PathNodes [i + 1]);
+		}
+		return;
 	}
 	
 	public void CreateRoad (Vector3 Start, Vector3 End)
 	{
+		Start.y = 0;
+		End.y = 0;
 		//We check if Start is not already a node on the grid
 		if (_map [(int)Start.x, (int)Start.z] != null) {
 			//we check if End is not already a node on the grid
 			if (_map [(int)End.x, (int)End.z] != null) {
 				//TODO : Start and End are already nodes on the grid
-				List<Node> PathNodes = new List<Node> ();
-				PathNodes.Add (_map [(int)Start.x, (int)Start.z]);
-				Vector3 direction = End - Start;
-				direction.Normalize ();
-				Debug.Log ("OPTION 1");
-				if (Mathf.Abs (direction.x) > 0) {
-					Debug.Log ("/t X direction");
-					Node tmp = PathNodes [0];
-					bool _CorrectStart = false;
-					foreach (Node neihbour in PathNodes[0].ConnectedNodes) {
-						Vector3 NeihbourPos = new Vector3 (neihbour.X, 0, neihbour.Y);
-						if ((NeihbourPos - Start).normalized == direction * -1f)
-							tmp = neihbour;
-						if (Mathf.Abs ((NeihbourPos - Start).z) > 0)
-							_CorrectStart = true;
-					}
-					if (!_CorrectStart) {
-						PathNodes [0].DisconnectFromEveryNodes ();
-						PathNodes [0] = tmp;
-						_map [(int)Start.x, (int)Start.z] = null;
-					}
-					if (direction.x > 0) {
-						for (int i = (int)Start.x; i < End.x; i++) {
-							Node ChNode = _map [i, (int)Start.z];
-							if (ChNode == null)
-								continue;
-							bool KeepNode = false;
-							foreach (var neihbour in ChNode.ConnectedNodes) {
-								if (neihbour.Y != PathNodes [0].Y)
-									KeepNode = true;
-							}
-							if (!KeepNode) {
-								ChNode.DisconnectFromEveryNodes ();
-								RemoveNode (ChNode);
-							} else {
-								PathNodes.Add (ChNode);
-							}
-						}
-					} else {
-						for (int i = (int)Start.x; i > End.x; i--) {
-							Node ChNode = _map [i, (int)Start.z];
-							bool KeepNode = false;
-							foreach (var neihbour in ChNode.ConnectedNodes) {
-								if (neihbour.Y != PathNodes [0].Y)
-									KeepNode = true;
-							}
-							if (!KeepNode) {
-								ChNode.DisconnectFromEveryNodes ();
-								RemoveNode (ChNode);
-							} else {
-								PathNodes.Add (ChNode);
-							}
-						}
-					}
-				} else {
-					Node tmp = PathNodes [0];
-					bool _CorrectStart = false;
-					foreach (Node neihbour in PathNodes[0].ConnectedNodes) {
-						Vector3 NeihbourPos = new Vector3 (neihbour.X, 0, neihbour.Y);
-						if ((NeihbourPos - Start).normalized == direction * -1f)
-							tmp = neihbour;
-						if (Mathf.Abs ((NeihbourPos - Start).x) > 0)
-							_CorrectStart = true;
-					}
-					if (!_CorrectStart) {
-						PathNodes [0].DisconnectFromEveryNodes ();
-						PathNodes [0] = tmp;
-						_map [(int)Start.x, (int)Start.z] = null;
-					}
-					if ((End - Start).z > 0) {
-						for (int i = (int)Start.z; i > End.z; i++) {
-							Node ChNode = _map [i, (int)Start.z];
-							bool KeepNode = false;
-							foreach (var neihbour in ChNode.ConnectedNodes) {
-								if (neihbour.X != PathNodes [0].X)
-									KeepNode = true;
-							}
-							if (!KeepNode) {
-								ChNode.DisconnectFromEveryNodes ();
-								RemoveNode (ChNode);
-							} else {
-								PathNodes.Add (ChNode);
-							}
-						}
-					} else {
-						for (int i = (int)Start.z; i > End.z; i--) {
-							Node ChNode = _map [i, (int)Start.z];
-							bool KeepNode = false;
-							foreach (var neihbour in ChNode.ConnectedNodes) {
-								if (neihbour.X != PathNodes [0].X)
-									KeepNode = true;
-							}
-							if (!KeepNode) {
-								ChNode.DisconnectFromEveryNodes ();
-								RemoveNode (ChNode);
-							} else {
-								PathNodes.Add (ChNode);
-							}
-						}
-					}
-				}
-				PathNodes.Add (_map [(int)End.x, (int)End.z]);
-				for (int i = 0; i < PathNodes.Count-1; i++) {
-					PathNodes [i].ConnectTo (PathNodes [i + 1]);
-				}
+				CreateRoadFrom2Nodes (Start, End);
 				return;
 			}
 			//We check if End is on an edge
 			if (_edgemap [(int)End.x, (int)End.z].Count > 0) {
 				//TODO : Start is already a node on the grid and End is on a edge
-				List<Node> PathNodes = new List<Node> ();
-				PathNodes.Add (_map [(int)Start.x, (int)Start.z]);
 				Vector3 direction = End - Start;
 				direction.Normalize ();
-				Node LastNode = new Node ((int)End.x, (int)End.z, this);
-				Node EndNode = LastNode;
-				
-				if (Mathf.Abs (direction.x) > 0) {
-					Node tmp = PathNodes [0];
-					bool _CorrectStart = false;
-					foreach (Node neihbour in PathNodes[0].ConnectedNodes) {
-						Vector3 NeihbourPos = new Vector3 (neihbour.X, 0, neihbour.Y);
-						if ((NeihbourPos - Start).normalized == direction * -1f)
-							tmp = neihbour;
-						if (Mathf.Abs ((NeihbourPos - Start).z) > 0)
-							_CorrectStart = true;
-					}
-					if (!_CorrectStart) {
-						PathNodes [0].DisconnectFromEveryNodes ();
-						PathNodes [0] = tmp;
-						_map [(int)Start.x, (int)Start.z] = null;
-					}
-					if (direction.x > 0) {
-						for (int i = (int)Start.x; i < End.x; i++) {
-							Node ChNode = _map [i, (int)Start.z];
-							bool KeepNode = false;
-							foreach (var neihbour in ChNode.ConnectedNodes) {
-								if (neihbour.Y != PathNodes [0].Y)
-									KeepNode = true;
-								else if (i + 1 > End.x)
-									LastNode = neihbour;
-							}
-							if (!KeepNode) {
-								ChNode.DisconnectFromEveryNodes ();
-								RemoveNode (ChNode);
-							} else {
-								PathNodes.Add (ChNode);
-							}
-						}
-					} else {
-						for (int i = (int)Start.x; i > End.x; i--) {
-							Node ChNode = _map [i, (int)Start.z];
-							bool KeepNode = false;
-							foreach (var neihbour in ChNode.ConnectedNodes) {
-								if (neihbour.Y != PathNodes [0].Y)
-									KeepNode = true;
-								else if (i + 1 > End.x)
-									LastNode = neihbour;
-							}
-							if (!KeepNode) {
-								ChNode.DisconnectFromEveryNodes ();
-								RemoveNode (ChNode);
-							} else {
-								PathNodes.Add (ChNode);
-							}
-						}
-					}
+				if (_edgemap [(int)End.x, (int)End.z] [0].getDirection () == (direction.z == 0)) {
+					Debug.Log ("Orthogonal");
+					Node EndNode = new Node ((int)End.x, (int)End.z, this);
+					EndNode.ConnectTo (_edgemap [(int)End.x, (int)End.z] [0].A);
+					EndNode.ConnectTo (_edgemap [(int)End.x, (int)End.z] [0].B);
+					_edgemap [(int)End.x, (int)End.z] [0].A.DisconnectFrom (_edgemap [(int)End.x, (int)End.z] [0].B);
+					AddNode (EndNode);
+					End.x = EndNode.X;
+					End.z = EndNode.Y;
 				} else {
-					Node tmp = PathNodes [0];
-					bool _CorrectStart = false;
-					foreach (Node neihbour in PathNodes[0].ConnectedNodes) {
-						Vector3 NeihbourPos = new Vector3 (neihbour.X, 0, neihbour.Y);
-						if ((NeihbourPos - Start).normalized == direction * -1f)
-							tmp = neihbour;
-						if (Mathf.Abs ((NeihbourPos - Start).x) > 0)
-							_CorrectStart = true;
-					}
-					if (!_CorrectStart) {
-						PathNodes [0].DisconnectFromEveryNodes ();
-						PathNodes [0] = tmp;
-						_map [(int)Start.x, (int)Start.z] = null;
-					}
-					if ((End - Start).z > 0) {
-						for (int i = (int)Start.z; i > End.z; i++) {
-							Node ChNode = _map [i, (int)Start.z];
-							bool KeepNode = false;
-							foreach (var neihbour in ChNode.ConnectedNodes) {
-								if (neihbour.X != PathNodes [0].X)
-									KeepNode = true;
-								else if (i + 1 > End.x)
-									LastNode = neihbour;
-							}
-							if (!KeepNode) {
-								ChNode.DisconnectFromEveryNodes ();
-								RemoveNode (ChNode);
-							} else {
-								PathNodes.Add (ChNode);
-							}
-						}
+					if (_edgemap [(int)End.x, (int)End.z] [0].A.DistanceTo (Start) > _edgemap [(int)End.x, (int)End.z] [0].B.DistanceTo (Start)) {
+						End.x = _edgemap [(int)End.x, (int)End.z] [0].A.X;
+						End.z = _edgemap [(int)End.x, (int)End.z] [0].A.Y;
 					} else {
-						for (int i = (int)Start.z; i > End.z; i--) {
-							Node ChNode = _map [i, (int)Start.z];
-							bool KeepNode = false;
-							foreach (var neihbour in ChNode.ConnectedNodes) {
-								if (neihbour.X != PathNodes [0].X)
-									KeepNode = true;
-								else if (i + 1 > End.x)
-									LastNode = neihbour;
-							}
-							if (!KeepNode) {
-								ChNode.DisconnectFromEveryNodes ();
-								RemoveNode (ChNode);
-							} else {
-								PathNodes.Add (ChNode);
-							}
-						}
+						End.x = _edgemap [(int)End.x, (int)End.z] [0].B.X;
+						End.z = _edgemap [(int)End.x, (int)End.z] [0].B.Y;
 					}
 				}
-				if (LastNode == EndNode) {
-					_edgemap [(int)End.x, (int)End.z] [0].A.ConnectTo (LastNode);
-					_edgemap [(int)End.x, (int)End.z] [0].B.ConnectTo (LastNode);
-				}
-				PathNodes.Add (LastNode);
-				for (int i = 0; i < PathNodes.Count-1; i++) {
-					PathNodes [i].ConnectTo (PathNodes [i + 1]);
-				}
+				CreateRoadFrom2Nodes (Start, End);
 				return;
 			} 
 			//
 			else {
-				List<Node> PathNodes = new List<Node> ();
 				Node LastNode = new Node ((int)End.x, (int)End.z, this);
 				AddNode (LastNode);
-				PathNodes.Add (_map [(int)Start.x, (int)Start.z]);
-				Vector3 direction = End - Start;
-				direction.Normalize ();
-				
-				if (Mathf.Abs (direction.x) > 0) {
-					Node tmp = PathNodes [0];
-					bool _CorrectStart = false;
-					foreach (Node neihbour in PathNodes[0].ConnectedNodes) {
-						Vector3 NeihbourPos = new Vector3 (neihbour.X, 0, neihbour.Y);
-						if ((NeihbourPos - Start).normalized == direction * -1f)
-							tmp = neihbour;
-						if (Mathf.Abs ((NeihbourPos - Start).z) > 0)
-							_CorrectStart = true;
+				Vector3 direction = (End - Start).normalized;
+
+				bool keepOriginal = false;
+				bool CheckEdge = true;
+				if (_map [(int)End.x + (int)direction.z, (int)End.z + (int)direction.x] != null) {
+					Debug.LogWarning ("Direction side 1");
+					Node neihbourg = _map [(int)End.x + (int)direction.z, (int)End.z + (int)direction.x];
+					bool keepNode = false;
+					foreach (Node n in neihbourg.ConnectedNodes) {
+						if (Vector3.Angle (neihbourg.DirectionTo (n), LastNode.DirectionTo (neihbourg)) != 0)
+							keepNode = true;
 					}
-					if (!_CorrectStart) {
-						PathNodes [0].DisconnectFromEveryNodes ();
-						PathNodes [0] = tmp;
-						_map [(int)Start.x, (int)Start.z] = null;
-					}
-					if (direction.x > 0) {
-						for (int i = (int)Start.x; i < End.x; i++) {
-							Node ChNode = _map [i, (int)Start.z];
-							if (ChNode == null)
-								continue;
-							bool KeepNode = false;
-							foreach (var neihbour in ChNode.ConnectedNodes) {
-								if (neihbour.Y != PathNodes [0].Y)
-									KeepNode = true;
-							}
-							if (!KeepNode) {
-								ChNode.DisconnectFromEveryNodes ();
-								RemoveNode (ChNode);
-							} else {
-								PathNodes.Add (ChNode);
-							}
-						}
+					if (!keepNode) {
+						LastNode.ConnectTo (neihbourg.ConnectedNodes [0]);
+						neihbourg.DisconnectFromEveryNodes ();
+						RemoveNode (neihbourg);
 					} else {
-						for (int i = (int)Start.x; i > End.x; i--) {
-							Node ChNode = _map [i, (int)Start.z];
-							if (ChNode == null)
-								continue;
-							bool KeepNode = false;
-							foreach (var neihbour in ChNode.ConnectedNodes) {
-								if (neihbour.Y != PathNodes [0].Y)
-									KeepNode = true;
-							}
-							if (!KeepNode) {
-								ChNode.DisconnectFromEveryNodes ();
-								RemoveNode (ChNode);
-							} else {
-								PathNodes.Add (ChNode);
-							}
-						}
+						LastNode.ConnectTo (neihbourg);
 					}
-				} else {
-					Node tmp = PathNodes [0];
-					bool _CorrectStart = false;
-					foreach (Node neihbour in PathNodes[0].ConnectedNodes) {
-						Vector3 NeihbourPos = new Vector3 (neihbour.X, 0, neihbour.Y);
-						if ((NeihbourPos - Start).normalized == direction * -1f)
-							tmp = neihbour;
-						if (Mathf.Abs ((NeihbourPos - Start).x) > 0)
-							_CorrectStart = true;
+					keepOriginal = true;
+				}	
+				if (_map [(int)End.x - (int)direction.z, (int)End.z - (int)direction.x] != null) {
+					Node neihbourg = _map [(int)End.x - (int)direction.z, (int)End.z - (int)direction.x];
+					Debug.LogWarning ("Direction side 2");
+					bool keepNode = false;
+					foreach (Node n in neihbourg.ConnectedNodes) {
+						if (Vector3.Angle (neihbourg.DirectionTo (n), LastNode.DirectionTo (neihbourg)) != 0)
+							keepNode = true;
 					}
-					if (!_CorrectStart) {
-						PathNodes [0].DisconnectFromEveryNodes ();
-						PathNodes [0] = tmp;
-						_map [(int)Start.x, (int)Start.z] = null;
-					}
-					if ((End - Start).z > 0) {
-						for (int i = (int)Start.z; i > End.z; i++) {
-							Node ChNode = _map [i, (int)Start.z];
-							bool KeepNode = false;
-							foreach (var neihbour in ChNode.ConnectedNodes) {
-								if (neihbour.X != PathNodes [0].X)
-									KeepNode = true;
-							}
-							if (!KeepNode) {
-								ChNode.DisconnectFromEveryNodes ();
-								RemoveNode (ChNode);
-							} else {
-								PathNodes.Add (ChNode);
-							}
-						}
+					if (!keepNode) {
+						LastNode.ConnectTo (neihbourg.ConnectedNodes [0]);
+						neihbourg.DisconnectFromEveryNodes ();
+						RemoveNode (neihbourg);
 					} else {
-						for (int i = (int)Start.z; i > End.z; i--) {
-							Node ChNode = _map [i, (int)Start.z];
-							bool KeepNode = false;
-							foreach (var neihbour in ChNode.ConnectedNodes) {
-								if (neihbour.X != PathNodes [0].X)
-									KeepNode = true;
+						LastNode.ConnectTo (neihbourg);
+					}
+					keepOriginal = true;
+				}
+				if (_map [(int)End.x + (int)direction.x, (int)End.z + (int)direction.z] != null) {
+					Node neihbourg = _map [(int)End.x + (int)direction.x, (int)End.z + (int)direction.z];
+					Debug.LogWarning ("Direction - 1");
+					if (!keepOriginal) {
+						RemoveNode (LastNode);
+						End.x = neihbourg.X;
+						End.z = neihbourg.Y;
+						CheckEdge = false;
+					} else {
+						LastNode.ConnectTo (neihbourg);
+					}
+				}
+				//We Check for neighbourg edges to connect to
+				if (CheckEdge) {
+					if (_edgemap [(int)End.x + (int)direction.z, (int)End.z + (int)direction.x].Count > 0) {
+						foreach (var item in _edgemap[(int)End.x + (int)direction.z, (int)End.z + (int)direction.x].ToArray()) {
+							if (!item.A.IsConnectedTo (LastNode) && !item.B.IsConnectedTo (LastNode)) {
+								Node IntersectionNode = new Node ((int)End.x + (int)direction.z, (int)End.z + (int)direction.x, this);
+								AddNode (IntersectionNode);
+								item.A.ConnectTo (IntersectionNode);
+								item.B.ConnectTo (IntersectionNode);
+								item.A.DisconnectFrom (item.B);	
+								LastNode.ConnectTo (IntersectionNode);
 							}
-							if (!KeepNode) {
-								ChNode.DisconnectFromEveryNodes ();
-								RemoveNode (ChNode);
-							} else {
-								PathNodes.Add (ChNode);
+						}
+					}	
+					if (_edgemap [(int)End.x - (int)direction.z, (int)End.z - (int)direction.x].Count > 0) {
+						foreach (var item in _edgemap[(int)End.x - (int)direction.z, (int)End.z - (int)direction.x].ToArray()) {
+							Debug.Log ((!item.A.IsConnectedTo (LastNode)).ToString () + " , " + (!item.B.IsConnectedTo (LastNode)).ToString ());
+							if (!item.A.IsConnectedTo (LastNode) && !item.B.IsConnectedTo (LastNode)) {
+								Node IntersectionNode = new Node ((int)End.x - (int)direction.z, (int)End.z - (int)direction.x, this);
+								AddNode (IntersectionNode);
+								item.A.ConnectTo (IntersectionNode);
+								item.B.ConnectTo (IntersectionNode);
+								item.A.DisconnectFrom (item.B);	
+								LastNode.ConnectTo (IntersectionNode);
 							}
+						}
+					}
+					if (_edgemap [(int)End.x + (int)direction.x, (int)End.z + (int)direction.z].Count > 0) {
+						foreach (var item in _edgemap[(int)End.x + (int)direction.x, (int)End.z + (int)direction.z].ToArray()) {
+							if (!item.A.IsConnectedTo (LastNode) && !item.B.IsConnectedTo (LastNode)) {
+								Node IntersectionNode = new Node ((int)End.x + (int)direction.x, (int)End.z + (int)direction.z, this);
+								AddNode (IntersectionNode);
+								item.A.ConnectTo (IntersectionNode);
+								item.B.ConnectTo (IntersectionNode);
+								item.A.DisconnectFrom (item.B);	
+								if (LastNode.ConnectedNodes.Count == 0) {
+									RemoveNode (LastNode);
+									End.x = (int)End.x + (int)direction.x;
+									End.z = (int)End.z + (int)direction.z;
+								} else {
+									LastNode.ConnectTo (IntersectionNode);
+								}
+							}	
 						}
 					}
 				}
-				for (int i = 0; i < PathNodes.Count-1; i++) {
-					PathNodes [i].ConnectTo (PathNodes [i + 1]);
-				}
+
+				CreateRoadFrom2Nodes (Start, End);
+				return;
 			}
 		}
 		//We check if Start is on an edge
 		if (_edgemap [(int)Start.x, (int)Start.z].Count > 0) {
 			//We check if End is not already a node on the grid
 			if (_map [(int)End.x, (int)End.z] != null) {
-				List<Node> PathNodes = new List<Node> ();
-				PathNodes.Add (_map [(int)Start.x, (int)Start.z]);
+				//Start on an edge and End is alreay a node on the grid
 				Vector3 direction = End - Start;
 				direction.Normalize ();
-				Node LastNode = new Node ((int)End.x, (int)End.z, this);
-				if (_edgemap [(int)Start.x, (int)Start.z] [0].A.X != _edgemap [(int)Start.x, (int)Start.z] [0].B.X) {
+				if (_edgemap [(int)Start.x, (int)Start.z] [0].getDirection () == (direction.z == 0)) {
+					Debug.Log ("Orthogonal");
+					Node StartNode = new Node ((int)Start.x, (int)Start.z, this);
+					StartNode.ConnectTo (_edgemap [(int)Start.x, (int)Start.z] [0].A);
+					StartNode.ConnectTo (_edgemap [(int)Start.x, (int)Start.z] [0].B);
 					_edgemap [(int)Start.x, (int)Start.z] [0].A.DisconnectFrom (_edgemap [(int)Start.x, (int)Start.z] [0].B);
-					PathNodes [0].ConnectTo (_edgemap [(int)Start.x, (int)Start.z] [0].A);
-					PathNodes [0].ConnectTo (_edgemap [(int)Start.x, (int)Start.z] [0].B);
+					AddNode (StartNode);
+					Start.x = StartNode.X;
+					Start.z = StartNode.Y;
 				} else {
-					if (direction.x > 0) {
-						if (_edgemap [(int)Start.x, (int)Start.z] [0].A.X > _edgemap [(int)Start.x, (int)Start.z] [0].B.X) {
-							PathNodes [0] = _edgemap [(int)Start.x, (int)Start.z] [0].B;
-							_edgemap [(int)Start.x, (int)Start.z] [0].A.DisconnectFromEveryNodes ();
-							RemoveNode (_edgemap [(int)Start.x, (int)Start.z] [0].A);
-						} else {
-							PathNodes [0] = _edgemap [(int)Start.x, (int)Start.z] [0].A;
-							_edgemap [(int)Start.x, (int)Start.z] [0].B.DisconnectFromEveryNodes ();
-							RemoveNode (_edgemap [(int)Start.x, (int)Start.z] [0].B);
-						}
+					if (_edgemap [(int)Start.x, (int)Start.z] [0].A.DistanceTo (End) > _edgemap [(int)Start.x, (int)Start.z] [0].B.DistanceTo (End)) {
+						Start.x = _edgemap [(int)Start.x, (int)Start.z] [0].A.X;
+						Start.z = _edgemap [(int)Start.x, (int)Start.z] [0].A.Y;
 					} else {
-						if (_edgemap [(int)Start.x, (int)Start.z] [0].A.X > _edgemap [(int)Start.x, (int)Start.z] [0].B.X) {
-							PathNodes [0] = _edgemap [(int)Start.x, (int)Start.z] [0].A;
-							_edgemap [(int)Start.x, (int)Start.z] [0].B.DisconnectFromEveryNodes ();
-							RemoveNode (_edgemap [(int)Start.x, (int)Start.z] [0].B);
-						} else {
-							PathNodes [0] = _edgemap [(int)Start.x, (int)Start.z] [0].B;
-							_edgemap [(int)Start.x, (int)Start.z] [0].A.DisconnectFromEveryNodes ();
-							RemoveNode (_edgemap [(int)Start.x, (int)Start.z] [0].A);
-						}
+						Start.x = _edgemap [(int)Start.x, (int)Start.z] [0].B.X;
+						Start.z = _edgemap [(int)Start.x, (int)Start.z] [0].B.Y;
 					}
 				}
-				
-				if (Mathf.Abs (direction.x) > 0) {
-					Node tmp = PathNodes [0];
-					bool _CorrectStart = false;
-					foreach (Node neihbour in PathNodes[0].ConnectedNodes) {
-						Vector3 NeihbourPos = new Vector3 (neihbour.X, 0, neihbour.Y);
-						if ((NeihbourPos - Start).normalized == direction * -1f)
-							tmp = neihbour;
-						if (Mathf.Abs ((NeihbourPos - Start).z) > 0)
-							_CorrectStart = true;
-					}
-					if (!_CorrectStart) {
-						PathNodes [0].DisconnectFromEveryNodes ();
-						PathNodes [0] = tmp;
-						_map [(int)Start.x, (int)Start.z] = null;
-					}
-					if (direction.x > 0) {
-						for (int i = (int)Start.x; i < End.x; i++) {
-							Node ChNode = _map [i, (int)Start.z];
-							bool KeepNode = false;
-							foreach (var neihbour in ChNode.ConnectedNodes) {
-								if (neihbour.Y != PathNodes [0].Y)
-									KeepNode = true;
-							}
-							if (!KeepNode) {
-								ChNode.DisconnectFromEveryNodes ();
-								RemoveNode (ChNode);
-							} else {
-								PathNodes.Add (ChNode);
-							}
-						}
-					} else {
-						for (int i = (int)Start.x; i > End.x; i--) {
-							Node ChNode = _map [i, (int)Start.z];
-							bool KeepNode = false;
-							foreach (var neihbour in ChNode.ConnectedNodes) {
-								if (neihbour.Y != PathNodes [0].Y)
-									KeepNode = true;
-							}
-							if (!KeepNode) {
-								ChNode.DisconnectFromEveryNodes ();
-								RemoveNode (ChNode);
-							} else {
-								PathNodes.Add (ChNode);
-							}
-						}
-					}
-				} else {
-					Node tmp = PathNodes [0];
-					bool _CorrectStart = false;
-					foreach (Node neihbour in PathNodes[0].ConnectedNodes) {
-						Vector3 NeihbourPos = new Vector3 (neihbour.X, 0, neihbour.Y);
-						if ((NeihbourPos - Start).normalized == direction * -1f)
-							tmp = neihbour;
-						if (Mathf.Abs ((NeihbourPos - Start).x) > 0)
-							_CorrectStart = true;
-					}
-					if (!_CorrectStart) {
-						PathNodes [0].DisconnectFromEveryNodes ();
-						PathNodes [0] = tmp;
-						_map [(int)Start.x, (int)Start.z] = null;
-					}
-					if ((End - Start).z > 0) {
-						for (int i = (int)Start.z; i > End.z; i++) {
-							Node ChNode = _map [i, (int)Start.z];
-							bool KeepNode = false;
-							foreach (var neihbour in ChNode.ConnectedNodes) {
-								if (neihbour.X != PathNodes [0].X)
-									KeepNode = true;
-							}
-							if (!KeepNode) {
-								ChNode.DisconnectFromEveryNodes ();
-								RemoveNode (ChNode);
-							} else {
-								PathNodes.Add (ChNode);
-							}
-						}
-					} else {
-						for (int i = (int)Start.z; i > End.z; i--) {
-							Node ChNode = _map [i, (int)Start.z];
-							bool KeepNode = false;
-							foreach (var neihbour in ChNode.ConnectedNodes) {
-								if (neihbour.X != PathNodes [0].X)
-									KeepNode = true;
-							}
-							if (!KeepNode) {
-								ChNode.DisconnectFromEveryNodes ();
-								RemoveNode (ChNode);
-							} else {
-								PathNodes.Add (ChNode);
-							}
-						}
-					}
-				}
-				//PathNodes.Add (LastNode);
-				for (int i = 0; i < PathNodes.Count-1; i++) {
-					PathNodes [i].ConnectTo (PathNodes [i + 1]);
-				}
+				CreateRoadFrom2Nodes (Start, End);
 				return;
 			}
 			//We check if End is on an edge
 			if (_edgemap [(int)End.x, (int)End.z].Count > 0) {
-				List<Node> PathNodes = new List<Node> ();
-				PathNodes.Add (_map [(int)Start.x, (int)Start.z]);
 				Vector3 direction = End - Start;
 				direction.Normalize ();
-				Node LastNode = new Node ((int)End.x, (int)End.z, this);
-				Node EndNode = LastNode;
-				
-				if (_edgemap [(int)Start.x, (int)Start.z] [0].A.X != _edgemap [(int)Start.x, (int)Start.z] [0].B.X) {
+				if (_edgemap [(int)Start.x, (int)Start.z] [0].getDirection () == (direction.z == 0)) {
+					Debug.Log ("Orthogonal");
+					Node StartNode = new Node ((int)Start.x, (int)Start.z, this);
+					StartNode.ConnectTo (_edgemap [(int)Start.x, (int)Start.z] [0].A);
+					StartNode.ConnectTo (_edgemap [(int)Start.x, (int)Start.z] [0].B);
 					_edgemap [(int)Start.x, (int)Start.z] [0].A.DisconnectFrom (_edgemap [(int)Start.x, (int)Start.z] [0].B);
-					PathNodes [0].ConnectTo (_edgemap [(int)Start.x, (int)Start.z] [0].A);
-					PathNodes [0].ConnectTo (_edgemap [(int)Start.x, (int)Start.z] [0].B);
+					AddNode (StartNode);
+					Start.x = StartNode.X;
+					Start.z = StartNode.Y;
 				} else {
-					if (direction.x > 0) {
-						if (_edgemap [(int)Start.x, (int)Start.z] [0].A.X > _edgemap [(int)Start.x, (int)Start.z] [0].B.X) {
-							PathNodes [0] = _edgemap [(int)Start.x, (int)Start.z] [0].B;
-							_edgemap [(int)Start.x, (int)Start.z] [0].A.DisconnectFromEveryNodes ();
-							RemoveNode (_edgemap [(int)Start.x, (int)Start.z] [0].A);
-						} else {
-							PathNodes [0] = _edgemap [(int)Start.x, (int)Start.z] [0].A;
-							_edgemap [(int)Start.x, (int)Start.z] [0].B.DisconnectFromEveryNodes ();
-							RemoveNode (_edgemap [(int)Start.x, (int)Start.z] [0].B);
-						}
+					if (_edgemap [(int)Start.x, (int)Start.z] [0].A.DistanceTo (End) > _edgemap [(int)Start.x, (int)Start.z] [0].B.DistanceTo (End)) {
+						Start.x = _edgemap [(int)Start.x, (int)Start.z] [0].A.X;
+						Start.z = _edgemap [(int)Start.x, (int)Start.z] [0].A.Y;
 					} else {
-						if (_edgemap [(int)Start.x, (int)Start.z] [0].A.X > _edgemap [(int)Start.x, (int)Start.z] [0].B.X) {
-							PathNodes [0] = _edgemap [(int)Start.x, (int)Start.z] [0].A;
-							_edgemap [(int)Start.x, (int)Start.z] [0].B.DisconnectFromEveryNodes ();
-							RemoveNode (_edgemap [(int)Start.x, (int)Start.z] [0].B);
-						} else {
-							PathNodes [0] = _edgemap [(int)Start.x, (int)Start.z] [0].B;
-							_edgemap [(int)Start.x, (int)Start.z] [0].A.DisconnectFromEveryNodes ();
-							RemoveNode (_edgemap [(int)Start.x, (int)Start.z] [0].A);
-						}
+						Start.x = _edgemap [(int)Start.x, (int)Start.z] [0].B.X;
+						Start.z = _edgemap [(int)Start.x, (int)Start.z] [0].B.Y;
 					}
 				}
-				
-				if (Mathf.Abs (direction.x) > 0) {
-					Node tmp = PathNodes [0];
-					bool _CorrectStart = false;
-					foreach (Node neihbour in PathNodes[0].ConnectedNodes) {
-						Vector3 NeihbourPos = new Vector3 (neihbour.X, 0, neihbour.Y);
-						if ((NeihbourPos - Start).normalized == direction * -1f)
-							tmp = neihbour;
-						if (Mathf.Abs ((NeihbourPos - Start).z) > 0)
-							_CorrectStart = true;
-					}
-					if (!_CorrectStart) {
-						PathNodes [0].DisconnectFromEveryNodes ();
-						PathNodes [0] = tmp;
-						_map [(int)Start.x, (int)Start.z] = null;
-					}
-					if (direction.x > 0) {
-						for (int i = (int)Start.x; i < End.x; i++) {
-							Node ChNode = _map [i, (int)Start.z];
-							bool KeepNode = false;
-							foreach (var neihbour in ChNode.ConnectedNodes) {
-								if (neihbour.Y != PathNodes [0].Y)
-									KeepNode = true;
-								else if (i + 1 > End.x)
-									LastNode = neihbour;
-									
-							}
-							if (!KeepNode) {
-								ChNode.DisconnectFromEveryNodes ();
-								RemoveNode (ChNode);
-							} else {
-								PathNodes.Add (ChNode);
-							}
-						}
-					} else {
-						for (int i = (int)Start.x; i > End.x; i--) {
-							Node ChNode = _map [i, (int)Start.z];
-							bool KeepNode = false;
-							foreach (var neihbour in ChNode.ConnectedNodes) {
-								if (neihbour.Y != PathNodes [0].Y)
-									KeepNode = true;
-								else if (i + 1 > End.x)
-									LastNode = neihbour;
-							}
-							if (!KeepNode) {
-								ChNode.DisconnectFromEveryNodes ();
-								RemoveNode (ChNode);
-							} else {
-								PathNodes.Add (ChNode);
-							}
-						}
-					}
+				if (_edgemap [(int)End.x, (int)End.z] [0].getDirection () == (direction.z == 0)) {
+					Debug.Log ("Orthogonal");
+					Node EndNode = new Node ((int)End.x, (int)End.z, this);
+					EndNode.ConnectTo (_edgemap [(int)End.x, (int)End.z] [0].A);
+					EndNode.ConnectTo (_edgemap [(int)End.x, (int)End.z] [0].B);
+					_edgemap [(int)End.x, (int)End.z] [0].A.DisconnectFrom (_edgemap [(int)End.x, (int)End.z] [0].B);
+					AddNode (EndNode);
+					End.x = EndNode.X;
+					End.z = EndNode.Y;
 				} else {
-					Node tmp = PathNodes [0];
-					bool _CorrectStart = false;
-					foreach (Node neihbour in PathNodes[0].ConnectedNodes) {
-						Vector3 NeihbourPos = new Vector3 (neihbour.X, 0, neihbour.Y);
-						if ((NeihbourPos - Start).normalized == direction * -1f)
-							tmp = neihbour;
-						if (Mathf.Abs ((NeihbourPos - Start).x) > 0)
-							_CorrectStart = true;
-					}
-					if (!_CorrectStart) {
-						PathNodes [0].DisconnectFromEveryNodes ();
-						PathNodes [0] = tmp;
-						_map [(int)Start.x, (int)Start.z] = null;
-					}
-					if ((End - Start).z > 0) {
-						for (int i = (int)Start.z; i > End.z; i++) {
-							Node ChNode = _map [i, (int)Start.z];
-							bool KeepNode = false;
-							foreach (var neihbour in ChNode.ConnectedNodes) {
-								if (neihbour.X != PathNodes [0].X)
-									KeepNode = true;
-								else if (i + 1 > End.x)
-									LastNode = neihbour;
-							}
-							if (!KeepNode) {
-								ChNode.DisconnectFromEveryNodes ();
-								RemoveNode (ChNode);
-							} else {
-								PathNodes.Add (ChNode);
-							}
-						}
+					if (_edgemap [(int)End.x, (int)End.z] [0].A.DistanceTo (Start) > _edgemap [(int)End.x, (int)End.z] [0].B.DistanceTo (Start)) {
+						End.x = _edgemap [(int)End.x, (int)End.z] [0].A.X;
+						End.z = _edgemap [(int)End.x, (int)End.z] [0].A.Y;
 					} else {
-						for (int i = (int)Start.z; i > End.z; i--) {
-							Node ChNode = _map [i, (int)Start.z];
-							bool KeepNode = false;
-							foreach (var neihbour in ChNode.ConnectedNodes) {
-								if (neihbour.X != PathNodes [0].X)
-									KeepNode = true;
-								else if (i + 1 > End.x)
-									LastNode = neihbour;
-							}
-							if (!KeepNode) {
-								ChNode.DisconnectFromEveryNodes ();
-								RemoveNode (ChNode);
-							} else {
-								PathNodes.Add (ChNode);
-							}
-						}
+						End.x = _edgemap [(int)End.x, (int)End.z] [0].B.X;
+						End.z = _edgemap [(int)End.x, (int)End.z] [0].B.Y;
 					}
 				}
-				if (LastNode == EndNode) {
-					_edgemap [(int)End.x, (int)End.z] [0].A.ConnectTo (LastNode);
-					_edgemap [(int)End.x, (int)End.z] [0].B.ConnectTo (LastNode);
-				}
-				PathNodes.Add (LastNode);
-				for (int i = 0; i < PathNodes.Count-1; i++) {
-					PathNodes [i].ConnectTo (PathNodes [i + 1]);
-				}
+				CreateRoadFrom2Nodes (Start, End);
 				return;
 			} 
 			//
 			else {
-				List<Node> PathNodes = new List<Node> ();
-				Node LastNode = new Node ((int)End.x, (int)End.z, this);
-				AddNode (LastNode);
-				PathNodes.Add (_map [(int)Start.x, (int)Start.z]);
 				Vector3 direction = End - Start;
 				direction.Normalize ();
-				if (_edgemap [(int)Start.x, (int)Start.z] [0].A.X != _edgemap [(int)Start.x, (int)Start.z] [0].B.X) {
+				if (_edgemap [(int)Start.x, (int)Start.z] [0].getDirection () == (direction.z == 0)) {
+					Debug.Log ("Orthogonal");
+					Node StartNode = new Node ((int)Start.x, (int)Start.z, this);
+					StartNode.ConnectTo (_edgemap [(int)Start.x, (int)Start.z] [0].A);
+					StartNode.ConnectTo (_edgemap [(int)Start.x, (int)Start.z] [0].B);
 					_edgemap [(int)Start.x, (int)Start.z] [0].A.DisconnectFrom (_edgemap [(int)Start.x, (int)Start.z] [0].B);
-					PathNodes [0].ConnectTo (_edgemap [(int)Start.x, (int)Start.z] [0].A);
-					PathNodes [0].ConnectTo (_edgemap [(int)Start.x, (int)Start.z] [0].B);
+					AddNode (StartNode);
+					Start.x = StartNode.X;
+					Start.z = StartNode.Y;
 				} else {
-					if (direction.x > 0) {
-						if (_edgemap [(int)Start.x, (int)Start.z] [0].A.X > _edgemap [(int)Start.x, (int)Start.z] [0].B.X) {
-							PathNodes [0] = _edgemap [(int)Start.x, (int)Start.z] [0].B;
-							_edgemap [(int)Start.x, (int)Start.z] [0].A.DisconnectFromEveryNodes ();
-							RemoveNode (_edgemap [(int)Start.x, (int)Start.z] [0].A);
-						} else {
-							PathNodes [0] = _edgemap [(int)Start.x, (int)Start.z] [0].A;
-							_edgemap [(int)Start.x, (int)Start.z] [0].B.DisconnectFromEveryNodes ();
-							RemoveNode (_edgemap [(int)Start.x, (int)Start.z] [0].B);
-						}
+					if (_edgemap [(int)Start.x, (int)Start.z] [0].A.DistanceTo (End) > _edgemap [(int)Start.x, (int)Start.z] [0].B.DistanceTo (End)) {
+						Start.x = _edgemap [(int)Start.x, (int)Start.z] [0].A.X;
+						Start.z = _edgemap [(int)Start.x, (int)Start.z] [0].A.Y;
 					} else {
-						if (_edgemap [(int)Start.x, (int)Start.z] [0].A.X > _edgemap [(int)Start.x, (int)Start.z] [0].B.X) {
-							PathNodes [0] = _edgemap [(int)Start.x, (int)Start.z] [0].A;
-							_edgemap [(int)Start.x, (int)Start.z] [0].B.DisconnectFromEveryNodes ();
-							RemoveNode (_edgemap [(int)Start.x, (int)Start.z] [0].B);
-						} else {
-							PathNodes [0] = _edgemap [(int)Start.x, (int)Start.z] [0].B;
-							_edgemap [(int)Start.x, (int)Start.z] [0].A.DisconnectFromEveryNodes ();
-							RemoveNode (_edgemap [(int)Start.x, (int)Start.z] [0].A);
+						Start.x = _edgemap [(int)Start.x, (int)Start.z] [0].A.X;
+						Start.z = _edgemap [(int)Start.x, (int)Start.z] [0].A.Y;
+					}
+				}
+				Node LastNode = new Node ((int)End.x, (int)End.z, this);
+				AddNode (LastNode);
+
+				bool keepOriginal = false;
+				bool CheckEdge = true;
+				if (_map [(int)End.x + (int)direction.z, (int)End.z + (int)direction.x] != null) {
+					Debug.LogWarning ("Direction side 1");
+					Node neihbourg = _map [(int)End.x + (int)direction.z, (int)End.z + (int)direction.x];
+					bool keepNode = false;
+					foreach (Node n in neihbourg.ConnectedNodes) {
+						if (Vector3.Angle (neihbourg.DirectionTo (n), LastNode.DirectionTo (neihbourg)) != 0)
+							keepNode = true;
+					}
+					if (!keepNode) {
+						LastNode.ConnectTo (neihbourg.ConnectedNodes [0]);
+						neihbourg.DisconnectFromEveryNodes ();
+						RemoveNode (neihbourg);
+					} else {
+						LastNode.ConnectTo (neihbourg);
+					}
+					keepOriginal = true;
+				}	
+				if (_map [(int)End.x - (int)direction.z, (int)End.z - (int)direction.x] != null) {
+					Node neihbourg = _map [(int)End.x - (int)direction.z, (int)End.z - (int)direction.x];
+					Debug.LogWarning ("Direction side 2");
+					bool keepNode = false;
+					foreach (Node n in neihbourg.ConnectedNodes) {
+						if (Vector3.Angle (neihbourg.DirectionTo (n), LastNode.DirectionTo (neihbourg)) != 0)
+							keepNode = true;
+					}
+					if (!keepNode) {
+						LastNode.ConnectTo (neihbourg.ConnectedNodes [0]);
+						neihbourg.DisconnectFromEveryNodes ();
+						RemoveNode (neihbourg);
+					} else {
+						LastNode.ConnectTo (neihbourg);
+					}
+					keepOriginal = true;
+				}
+				if (_map [(int)End.x + (int)direction.x, (int)End.z + (int)direction.z] != null) {
+					Node neihbourg = _map [(int)End.x + (int)direction.x, (int)End.z + (int)direction.z];
+					Debug.LogWarning ("Direction - 1");
+					if (!keepOriginal) {
+						RemoveNode (LastNode);
+						End.x = neihbourg.X;
+						End.z = neihbourg.Y;
+						CheckEdge = false;
+					} else {
+						LastNode.ConnectTo (neihbourg);
+					}
+				}
+				//We Check for neighbourg edges to connect to
+				if (CheckEdge) {
+					if (_edgemap [(int)End.x + (int)direction.z, (int)End.z + (int)direction.x].Count > 0) {
+						foreach (var item in _edgemap[(int)End.x + (int)direction.z, (int)End.z + (int)direction.x].ToArray()) {
+							if (!item.A.IsConnectedTo (LastNode) && !item.B.IsConnectedTo (LastNode)) {
+								Node IntersectionNode = new Node ((int)End.x + (int)direction.z, (int)End.z + (int)direction.x, this);
+								AddNode (IntersectionNode);
+								item.A.ConnectTo (IntersectionNode);
+								item.B.ConnectTo (IntersectionNode);
+								item.A.DisconnectFrom (item.B);	
+								LastNode.ConnectTo (IntersectionNode);
+							}
+						}
+					}	
+					if (_edgemap [(int)End.x - (int)direction.z, (int)End.z - (int)direction.x].Count > 0) {
+						foreach (var item in _edgemap[(int)End.x - (int)direction.z, (int)End.z - (int)direction.x].ToArray()) {
+							Debug.Log ((!item.A.IsConnectedTo (LastNode)).ToString () + " , " + (!item.B.IsConnectedTo (LastNode)).ToString ());
+							if (!item.A.IsConnectedTo (LastNode) && !item.B.IsConnectedTo (LastNode)) {
+								Node IntersectionNode = new Node ((int)End.x - (int)direction.z, (int)End.z - (int)direction.x, this);
+								AddNode (IntersectionNode);
+								item.A.ConnectTo (IntersectionNode);
+								item.B.ConnectTo (IntersectionNode);
+								item.A.DisconnectFrom (item.B);	
+								LastNode.ConnectTo (IntersectionNode);
+							}
+						}
+					}
+					if (_edgemap [(int)End.x + (int)direction.x, (int)End.z + (int)direction.z].Count > 0) {
+						foreach (var item in _edgemap[(int)End.x + (int)direction.x, (int)End.z + (int)direction.z].ToArray()) {
+							if (!item.A.IsConnectedTo (LastNode) && !item.B.IsConnectedTo (LastNode)) {
+								Node IntersectionNode = new Node ((int)End.x + (int)direction.x, (int)End.z + (int)direction.z, this);
+								AddNode (IntersectionNode);
+								item.A.ConnectTo (IntersectionNode);
+								item.B.ConnectTo (IntersectionNode);
+								item.A.DisconnectFrom (item.B);	
+								if (LastNode.ConnectedNodes.Count == 0) {
+									RemoveNode (LastNode);
+									End.x = (int)End.x + (int)direction.x;
+									End.z = (int)End.z + (int)direction.z;
+								} else {
+									LastNode.ConnectTo (IntersectionNode);
+								}
+							}	
 						}
 					}
 				}
-				
-				if (Mathf.Abs (direction.x) > 0) {
-					Node tmp = PathNodes [0];
-					bool _CorrectStart = false;
-					foreach (Node neihbour in PathNodes[0].ConnectedNodes) {
-						Vector3 NeihbourPos = new Vector3 (neihbour.X, 0, neihbour.Y);
-						if ((NeihbourPos - Start).normalized == direction * -1f)
-							tmp = neihbour;
-						if (Mathf.Abs ((NeihbourPos - Start).z) > 0)
-							_CorrectStart = true;
-					}
-					if (!_CorrectStart) {
-						PathNodes [0].DisconnectFromEveryNodes ();
-						PathNodes [0] = tmp;
-						_map [(int)Start.x, (int)Start.z] = null;
-					}
-					if (direction.x > 0) {
-						for (int i = (int)Start.x; i < End.x; i++) {
-							Node ChNode = _map [i, (int)Start.z];
-							bool KeepNode = false;
-							foreach (var neihbour in ChNode.ConnectedNodes) {
-								if (neihbour.Y != PathNodes [0].Y)
-									KeepNode = true;
-							}
-							if (!KeepNode) {
-								ChNode.DisconnectFromEveryNodes ();
-								RemoveNode (ChNode);
-							} else {
-								PathNodes.Add (ChNode);
-							}
-						}
-					} else {
-						for (int i = (int)Start.x; i > End.x; i--) {
-							Node ChNode = _map [i, (int)Start.z];
-							bool KeepNode = false;
-							foreach (var neihbour in ChNode.ConnectedNodes) {
-								if (neihbour.Y != PathNodes [0].Y)
-									KeepNode = true;
-							}
-							if (!KeepNode) {
-								ChNode.DisconnectFromEveryNodes ();
-								RemoveNode (ChNode);
-							} else {
-								PathNodes.Add (ChNode);
-							}
-						}
-					}
-				} else {
-					Node tmp = PathNodes [0];
-					bool _CorrectStart = false;
-					foreach (Node neihbour in PathNodes[0].ConnectedNodes) {
-						Vector3 NeihbourPos = new Vector3 (neihbour.X, 0, neihbour.Y);
-						if ((NeihbourPos - Start).normalized == direction * -1f)
-							tmp = neihbour;
-						if (Mathf.Abs ((NeihbourPos - Start).x) > 0)
-							_CorrectStart = true;
-					}
-					if (!_CorrectStart) {
-						PathNodes [0].DisconnectFromEveryNodes ();
-						PathNodes [0] = tmp;
-						_map [(int)Start.x, (int)Start.z] = null;
-					}
-					if ((End - Start).z > 0) {
-						for (int i = (int)Start.z; i > End.z; i++) {
-							Node ChNode = _map [i, (int)Start.z];
-							bool KeepNode = false;
-							foreach (var neihbour in ChNode.ConnectedNodes) {
-								if (neihbour.X != PathNodes [0].X)
-									KeepNode = true;
-							}
-							if (!KeepNode) {
-								ChNode.DisconnectFromEveryNodes ();
-								RemoveNode (ChNode);
-							} else {
-								PathNodes.Add (ChNode);
-							}
-						}
-					} else {
-						for (int i = (int)Start.z; i > End.z; i--) {
-							Node ChNode = _map [i, (int)Start.z];
-							bool KeepNode = false;
-							foreach (var neihbour in ChNode.ConnectedNodes) {
-								if (neihbour.X != PathNodes [0].X)
-									KeepNode = true;
-							}
-							if (!KeepNode) {
-								ChNode.DisconnectFromEveryNodes ();
-								RemoveNode (ChNode);
-							} else {
-								PathNodes.Add (ChNode);
-							}
-						}
-					}
-				}
-				//PathNodes.Add (LastNode);
-				for (int i = 0; i < PathNodes.Count-1; i++) {
-					PathNodes [i].ConnectTo (PathNodes [i + 1]);
-				}
+
+				CreateRoadFrom2Nodes (Start, End);
 				return;
 			}
 		}
@@ -853,378 +599,437 @@ public class Grid : MonoBehaviour
 		else {
 			//We check if End is not already a node on the grid
 			if (_map [(int)End.x, (int)End.z] != null) {
-				//TODO : End is already a node on the grid	
-				List<Node> PathNodes = new List<Node> ();
+				//TODO : End is already a node on the grid
 				Node StartNode = new Node ((int)Start.x, (int)Start.z, this);
 				AddNode (StartNode);
-				PathNodes.Add (StartNode);
 				Vector3 direction = End - Start;
 				direction.Normalize ();
-				
-				if (Mathf.Abs (direction.x) > 0) {
-					Node tmp = PathNodes [0];
-					bool _CorrectStart = false;
-					foreach (Node neihbour in PathNodes[0].ConnectedNodes) {
-						Vector3 NeihbourPos = new Vector3 (neihbour.X, 0, neihbour.Y);
-						if ((NeihbourPos - Start).normalized == direction * -1f)
-							tmp = neihbour;
-						if (Mathf.Abs ((NeihbourPos - Start).z) > 0)
-							_CorrectStart = true;
+				//We Check for Neihbourg Nodes to connect to
+				bool keepOriginal = false; 	
+				bool CheckEdge = true;
+				if (_map [(int)Start.x + (int)direction.z, (int)Start.z + (int)direction.x] != null) {
+					Debug.LogWarning ("Direction side 1");
+					Node neihbourg = _map [(int)Start.x + (int)direction.z, (int)Start.z + (int)direction.x];
+					bool keepNode = false;
+					foreach (Node n in neihbourg.ConnectedNodes) {
+						if (Vector3.Angle (neihbourg.DirectionTo (n), StartNode.DirectionTo (neihbourg)) != 0)
+							keepNode = true;
 					}
-					if (!_CorrectStart) {
-						PathNodes [0].DisconnectFromEveryNodes ();
-						PathNodes [0] = tmp;
-						_map [(int)Start.x, (int)Start.z] = null;
-					}
-					if (direction.x > 0) {
-						for (int i = (int)Start.x; i < End.x; i++) {
-							Node ChNode = _map [i, (int)Start.z];
-							if (ChNode == null)
-								continue;
-							bool KeepNode = false;
-							foreach (var neihbour in ChNode.ConnectedNodes) {
-								if (neihbour.Y != PathNodes [0].Y)
-									KeepNode = true;
-							}
-							if (!KeepNode) {
-								ChNode.DisconnectFromEveryNodes ();
-								RemoveNode (ChNode);
-							} else {
-								PathNodes.Add (ChNode);
-							}
-						}
+					if (!keepNode) {
+						StartNode.ConnectTo (neihbourg.ConnectedNodes [0]);
+						neihbourg.DisconnectFromEveryNodes ();
+						RemoveNode (neihbourg);
 					} else {
-						for (int i = (int)Start.x; i > End.x; i--) {
-							Node ChNode = _map [i, (int)Start.z];
-							if (ChNode == null)
-								continue;
-							bool KeepNode = false;
-							foreach (var neihbour in ChNode.ConnectedNodes) {
-								if (neihbour.Y != PathNodes [0].Y)
-									KeepNode = true;
-							}
-							if (!KeepNode) {
-								ChNode.DisconnectFromEveryNodes ();
-								RemoveNode (ChNode);
-							} else {
-								PathNodes.Add (ChNode);
-							}
-						}
+						StartNode.ConnectTo (neihbourg);
 					}
-				} else {
-					Node tmp = PathNodes [0];
-					bool _CorrectStart = false;
-					foreach (Node neihbour in PathNodes[0].ConnectedNodes) {
-						Vector3 NeihbourPos = new Vector3 (neihbour.X, 0, neihbour.Y);
-						if ((NeihbourPos - Start).normalized == direction * -1f)
-							tmp = neihbour;
-						if (Mathf.Abs ((NeihbourPos - Start).x) > 0)
-							_CorrectStart = true;
+					keepOriginal = true;
+				}	
+				if (_map [(int)Start.x - (int)direction.z, (int)Start.z - (int)direction.x] != null) {
+					Node neihbourg = _map [(int)Start.x - (int)direction.z, (int)Start.z - (int)direction.x];
+					Debug.LogWarning ("Direction side 2");
+					bool keepNode = false;
+					foreach (Node n in neihbourg.ConnectedNodes) {
+						if (Vector3.Angle (neihbourg.DirectionTo (n), StartNode.DirectionTo (neihbourg)) != 0)
+							keepNode = true;
 					}
-					if (!_CorrectStart) {
-						PathNodes [0].DisconnectFromEveryNodes ();
-						PathNodes [0] = tmp;
-						_map [(int)Start.x, (int)Start.z] = null;
-					}
-					if ((End - Start).z > 0) {
-						for (int i = (int)Start.z; i > End.z; i++) {
-							Node ChNode = _map [i, (int)Start.z];
-							bool KeepNode = false;
-							foreach (var neihbour in ChNode.ConnectedNodes) {
-								if (neihbour.X != PathNodes [0].X)
-									KeepNode = true;
-							}
-							if (!KeepNode) {
-								ChNode.DisconnectFromEveryNodes ();
-								RemoveNode (ChNode);
-							} else {
-								PathNodes.Add (ChNode);
-							}
-						}
+					if (!keepNode) {
+						StartNode.ConnectTo (neihbourg.ConnectedNodes [0]);
+						neihbourg.DisconnectFromEveryNodes ();
+						RemoveNode (neihbourg);
 					} else {
-						for (int i = (int)Start.z; i > End.z; i--) {
-							Node ChNode = _map [i, (int)Start.z];
-							bool KeepNode = false;
-							foreach (var neihbour in ChNode.ConnectedNodes) {
-								if (neihbour.X != PathNodes [0].X)
-									KeepNode = true;
+						StartNode.ConnectTo (neihbourg);
+					}
+					keepOriginal = true;
+				}
+				if (_map [(int)Start.x - (int)direction.x, (int)Start.z - (int)direction.z] != null) {
+					Node neihbourg = _map [(int)Start.x - (int)direction.x, (int)Start.z - (int)direction.z];
+					Debug.LogWarning ("Direction - 1");
+					if (!keepOriginal) {
+						RemoveNode (StartNode);
+						Start.x = neihbourg.X;
+						Start.z = neihbourg.Y;
+						CheckEdge = false;
+					} else {
+						StartNode.ConnectTo (neihbourg);
+					}
+				}
+				//We Check for neighbourg edges to connect to
+				if (CheckEdge) {
+					if (_edgemap [(int)Start.x + (int)direction.z, (int)Start.z + (int)direction.x].Count > 0) {
+						foreach (var item in _edgemap[(int)Start.x + (int)direction.z, (int)Start.z + (int)direction.x].ToArray()) {
+							if (!item.A.IsConnectedTo (StartNode) && !item.B.IsConnectedTo (StartNode)) {
+								Node IntersectionNode = new Node ((int)Start.x + (int)direction.z, (int)Start.z + (int)direction.x, this);
+								AddNode (IntersectionNode);
+								item.A.ConnectTo (IntersectionNode);
+								item.B.ConnectTo (IntersectionNode);
+								item.A.DisconnectFrom (item.B);	
+								StartNode.ConnectTo (IntersectionNode);
 							}
-							if (!KeepNode) {
-								ChNode.DisconnectFromEveryNodes ();
-								RemoveNode (ChNode);
-							} else {
-								PathNodes.Add (ChNode);
+						}
+					}	
+					if (_edgemap [(int)Start.x - (int)direction.z, (int)Start.z - (int)direction.x].Count > 0) {
+						foreach (var item in _edgemap[(int)Start.x - (int)direction.z, (int)Start.z - (int)direction.x].ToArray()) {
+							Debug.Log ((!item.A.IsConnectedTo (StartNode)).ToString () + " , " + (!item.B.IsConnectedTo (StartNode)).ToString ());
+							if (!item.A.IsConnectedTo (StartNode) && !item.B.IsConnectedTo (StartNode)) {
+								Node IntersectionNode = new Node ((int)Start.x - (int)direction.z, (int)Start.z - (int)direction.x, this);
+								AddNode (IntersectionNode);
+								item.A.ConnectTo (IntersectionNode);
+								item.B.ConnectTo (IntersectionNode);
+								item.A.DisconnectFrom (item.B);	
+								StartNode.ConnectTo (IntersectionNode);
 							}
+						}
+					}
+					if (_edgemap [(int)Start.x - (int)direction.x, (int)Start.z - (int)direction.z].Count > 0) {
+						foreach (var item in _edgemap[(int)Start.x - (int)direction.x, (int)Start.z - (int)direction.z].ToArray()) {
+							if (!item.A.IsConnectedTo (StartNode) && !item.B.IsConnectedTo (StartNode)) {
+								Node IntersectionNode = new Node ((int)Start.x - (int)direction.x, (int)Start.z - (int)direction.z, this);
+								AddNode (IntersectionNode);
+								item.A.ConnectTo (IntersectionNode);
+								item.B.ConnectTo (IntersectionNode);
+								item.A.DisconnectFrom (item.B);	
+								if (StartNode.ConnectedNodes.Count == 0) {
+									RemoveNode (StartNode);
+									Start.x = (int)Start.x - (int)direction.x;
+									Start.z = (int)Start.z - (int)direction.z;
+								} else {
+									StartNode.ConnectTo (IntersectionNode);
+								}
+							}	
 						}
 					}
 				}
-				for (int i = 0; i < PathNodes.Count-1; i++) {
-					PathNodes [i].ConnectTo (PathNodes [i + 1]);
-				}
+
+				CreateRoadFrom2Nodes (Start, End);
 				return;
 			}
 			//We check if End is on an edge
 			if (_edgemap [(int)End.x, (int)End.z].Count > 0) {
 				//TODO : End is on a edge
-				List<Node> PathNodes = new List<Node> ();
 				Node StartNode = new Node ((int)Start.x, (int)Start.z, this);
 				AddNode (StartNode);
-				PathNodes.Add (StartNode);
 				Vector3 direction = End - Start;
 				direction.Normalize ();
-				Node LastNode = new Node ((int)End.x, (int)End.z, this);
-				Node EndNode = LastNode;
-				
-				if (Mathf.Abs (direction.x) > 0) {
-					Node tmp = PathNodes [0];
-					bool _CorrectStart = false;
-					foreach (Node neihbour in PathNodes[0].ConnectedNodes) {
-						Vector3 NeihbourPos = new Vector3 (neihbour.X, 0, neihbour.Y);
-						if ((NeihbourPos - Start).normalized == direction * -1f)
-							tmp = neihbour;
-						if (Mathf.Abs ((NeihbourPos - Start).z) > 0)
-							_CorrectStart = true;
+				//We Check for Neihbourg Nodes to connect to
+				bool keepOriginal = false;
+				bool CheckEdge = true;
+				if (_map [(int)Start.x + (int)direction.z, (int)Start.z + (int)direction.x] != null) {
+					Debug.LogWarning ("Direction side 1");
+					Node neihbourg = _map [(int)Start.x + (int)direction.z, (int)Start.z + (int)direction.x];
+					bool keepNode = false;
+					foreach (Node n in neihbourg.ConnectedNodes) {
+						if (Vector3.Angle (neihbourg.DirectionTo (n), StartNode.DirectionTo (neihbourg)) != 0)
+							keepNode = true;
 					}
-					if (!_CorrectStart) {
-						PathNodes [0].DisconnectFromEveryNodes ();
-						PathNodes [0] = tmp;
-						_map [(int)Start.x, (int)Start.z] = null;
-					}
-					if (direction.x > 0) {
-						for (int i = (int)Start.x; i < End.x; i++) {
-							Node ChNode = _map [i, (int)Start.z];
-							bool KeepNode = false;
-							foreach (var neihbour in ChNode.ConnectedNodes) {
-								if (neihbour.Y != PathNodes [0].Y)
-									KeepNode = true;
-								else if (i + 1 > End.x)
-									LastNode = neihbour;
-							}
-							if (!KeepNode) {
-								ChNode.DisconnectFromEveryNodes ();
-								RemoveNode (ChNode);
-							} else {
-								PathNodes.Add (ChNode);
-							}
-						}
+					if (!keepNode) {
+						StartNode.ConnectTo (neihbourg.ConnectedNodes [0]);
+						neihbourg.DisconnectFromEveryNodes ();
+						RemoveNode (neihbourg);
 					} else {
-						for (int i = (int)Start.x; i > End.x; i--) {
-							Node ChNode = _map [i, (int)Start.z];
-							bool KeepNode = false;
-							foreach (var neihbour in ChNode.ConnectedNodes) {
-								if (neihbour.Y != PathNodes [0].Y)
-									KeepNode = true;
-								else if (i + 1 > End.x)
-									LastNode = neihbour;
+						StartNode.ConnectTo (neihbourg);
+					}
+					keepOriginal = true;
+				}	
+				if (_map [(int)Start.x - (int)direction.z, (int)Start.z - (int)direction.x] != null) {
+					Node neihbourg = _map [(int)Start.x - (int)direction.z, (int)Start.z - (int)direction.x];
+					Debug.LogWarning ("Direction side 2");
+					bool keepNode = false;
+					foreach (Node n in neihbourg.ConnectedNodes) {
+						if (Vector3.Angle (neihbourg.DirectionTo (n), StartNode.DirectionTo (neihbourg)) != 0)
+							keepNode = true;
+					}
+					if (!keepNode) {
+						StartNode.ConnectTo (neihbourg.ConnectedNodes [0]);
+						neihbourg.DisconnectFromEveryNodes ();
+						RemoveNode (neihbourg);
+					} else {
+						StartNode.ConnectTo (neihbourg);
+					}
+					keepOriginal = true;
+				}
+				if (_map [(int)Start.x - (int)direction.x, (int)Start.z - (int)direction.z] != null) {
+					Node neihbourg = _map [(int)Start.x - (int)direction.x, (int)Start.z - (int)direction.z];
+					Debug.LogWarning ("Direction - 1");
+					if (!keepOriginal) {
+						RemoveNode (StartNode);
+						Start.x = neihbourg.X;
+						Start.z = neihbourg.Y;
+						CheckEdge = false;
+					} else {
+						StartNode.ConnectTo (neihbourg);
+					}
+				}
+				//We Check for neighbourg edges to connect to
+				if (CheckEdge) {
+					if (_edgemap [(int)Start.x + (int)direction.z, (int)Start.z + (int)direction.x].Count > 0) {
+						foreach (var item in _edgemap[(int)Start.x + (int)direction.z, (int)Start.z + (int)direction.x].ToArray()) {
+							if (!item.A.IsConnectedTo (StartNode) && !item.B.IsConnectedTo (StartNode)) {
+								Node IntersectionNode = new Node ((int)Start.x + (int)direction.z, (int)Start.z + (int)direction.x, this);
+								AddNode (IntersectionNode);
+								item.A.ConnectTo (IntersectionNode);
+								item.B.ConnectTo (IntersectionNode);
+								item.A.DisconnectFrom (item.B);	
+								StartNode.ConnectTo (IntersectionNode);
 							}
-							if (!KeepNode) {
-								ChNode.DisconnectFromEveryNodes ();
-								RemoveNode (ChNode);
-							} else {
-								PathNodes.Add (ChNode);
+						}
+					}	
+					if (_edgemap [(int)Start.x - (int)direction.z, (int)Start.z - (int)direction.x].Count > 0) {
+						foreach (var item in _edgemap[(int)Start.x - (int)direction.z, (int)Start.z - (int)direction.x].ToArray()) {
+							Debug.Log ((!item.A.IsConnectedTo (StartNode)).ToString () + " , " + (!item.B.IsConnectedTo (StartNode)).ToString ());
+							if (!item.A.IsConnectedTo (StartNode) && !item.B.IsConnectedTo (StartNode)) {
+								Node IntersectionNode = new Node ((int)Start.x - (int)direction.z, (int)Start.z - (int)direction.x, this);
+								AddNode (IntersectionNode);
+								item.A.ConnectTo (IntersectionNode);
+								item.B.ConnectTo (IntersectionNode);
+								item.A.DisconnectFrom (item.B);	
+								StartNode.ConnectTo (IntersectionNode);
 							}
 						}
 					}
+					if (_edgemap [(int)Start.x - (int)direction.x, (int)Start.z - (int)direction.z].Count > 0) {
+						foreach (var item in _edgemap[(int)Start.x - (int)direction.x, (int)Start.z - (int)direction.z].ToArray()) {
+							if (!item.A.IsConnectedTo (StartNode) && !item.B.IsConnectedTo (StartNode)) {
+								Node IntersectionNode = new Node ((int)Start.x - (int)direction.x, (int)Start.z - (int)direction.z, this);
+								AddNode (IntersectionNode);
+								item.A.ConnectTo (IntersectionNode);
+								item.B.ConnectTo (IntersectionNode);
+								item.A.DisconnectFrom (item.B);	
+								if (StartNode.ConnectedNodes.Count == 0) {
+									RemoveNode (StartNode);
+									Start.x = (int)Start.x - (int)direction.x;
+									Start.z = (int)Start.z - (int)direction.z;
+								} else {
+									StartNode.ConnectTo (IntersectionNode);
+								}
+							}	
+						}
+					}
+				}
+
+				if (_edgemap [(int)End.x, (int)End.z] [0].getDirection () == (direction.z == 0)) {
+					Node EndNode = new Node ((int)End.x, (int)End.z, this);
+					EndNode.ConnectTo (_edgemap [(int)End.x, (int)End.z] [0].A);
+					EndNode.ConnectTo (_edgemap [(int)End.x, (int)End.z] [0].B);
+					_edgemap [(int)End.x, (int)End.z] [0].A.DisconnectFrom (_edgemap [(int)End.x, (int)End.z] [0].B);
+					AddNode (EndNode);
+					End.x = EndNode.X;
+					End.z = EndNode.Y;
 				} else {
-					Node tmp = PathNodes [0];
-					bool _CorrectStart = false;
-					foreach (Node neihbour in PathNodes[0].ConnectedNodes) {
-						Vector3 NeihbourPos = new Vector3 (neihbour.X, 0, neihbour.Y);
-						if ((NeihbourPos - Start).normalized == direction * -1f)
-							tmp = neihbour;
-						if (Mathf.Abs ((NeihbourPos - Start).x) > 0)
-							_CorrectStart = true;
-					}
-					if (!_CorrectStart) {
-						PathNodes [0].DisconnectFromEveryNodes ();
-						PathNodes [0] = tmp;
-						_map [(int)Start.x, (int)Start.z] = null;
-					}
-					if ((End - Start).z > 0) {
-						for (int i = (int)Start.z; i > End.z; i++) {
-							Node ChNode = _map [i, (int)Start.z];
-							bool KeepNode = false;
-							foreach (var neihbour in ChNode.ConnectedNodes) {
-								if (neihbour.X != PathNodes [0].X)
-									KeepNode = true;
-								else if (i + 1 > End.x)
-									LastNode = neihbour;
-							}
-							if (!KeepNode) {
-								ChNode.DisconnectFromEveryNodes ();
-								RemoveNode (ChNode);
-							} else {
-								PathNodes.Add (ChNode);
-							}
-						}
+					Debug.Log (_edgemap [(int)End.x, (int)End.z] [0].A.DistanceTo (Start));
+					Debug.Log (_edgemap [(int)End.x, (int)End.z] [0].B.DistanceTo (Start));
+					if (_edgemap [(int)End.x, (int)End.z] [0].A.DistanceTo (Start) > _edgemap [(int)End.x, (int)End.z] [0].B.DistanceTo (Start)) {
+						End.x = _edgemap [(int)End.x, (int)End.z] [0].A.X;
+						End.z = _edgemap [(int)End.x, (int)End.z] [0].A.Y;
 					} else {
-						for (int i = (int)Start.z; i > End.z; i--) {
-							Node ChNode = _map [i, (int)Start.z];
-							bool KeepNode = false;
-							foreach (var neihbour in ChNode.ConnectedNodes) {
-								if (neihbour.X != PathNodes [0].X)
-									KeepNode = true;
-								else if (i + 1 > End.x)
-									LastNode = neihbour;
-							}
-							if (!KeepNode) {
-								ChNode.DisconnectFromEveryNodes ();
-								RemoveNode (ChNode);
-							} else {
-								PathNodes.Add (ChNode);
-							}
-						}
+						End.x = _edgemap [(int)End.x, (int)End.z] [0].B.X;
+						End.z = _edgemap [(int)End.x, (int)End.z] [0].B.Y;
 					}
 				}
-				if (LastNode == EndNode) {
-					_edgemap [(int)End.x, (int)End.z] [0].A.ConnectTo (LastNode);
-					_edgemap [(int)End.x, (int)End.z] [0].B.ConnectTo (LastNode);
-				}
-				PathNodes.Add (LastNode);
-				for (int i = 0; i < PathNodes.Count-1; i++) {
-					PathNodes [i].ConnectTo (PathNodes [i + 1]);
-				}
+				CreateRoadFrom2Nodes (Start, End);
 				return;
 			} 
 			//
 			else {
-				List<Node> PathNodes = new List<Node> ();
+				Vector3 direction = (End - Start).normalized;
 				Node StartNode = new Node ((int)Start.x, (int)Start.z, this);
-				Node LastNode = new Node ((int)End.x, (int)End.z, this);
 				AddNode (StartNode);
+
+				//We Check for Neihbourg Nodes to connect to
+				bool keepOriginal = false;
+				bool CheckEdge = true;
+				if (_map [(int)Start.x + (int)direction.z, (int)Start.z + (int)direction.x] != null) {
+					Debug.LogWarning ("Direction side 1");
+					Node neihbourg = _map [(int)Start.x + (int)direction.z, (int)Start.z + (int)direction.x];
+					bool keepNode = false;
+					foreach (Node n in neihbourg.ConnectedNodes) {
+						if (Vector3.Angle (neihbourg.DirectionTo (n), StartNode.DirectionTo (neihbourg)) != 0)
+							keepNode = true;
+					}
+					if (!keepNode) {
+						StartNode.ConnectTo (neihbourg.ConnectedNodes [0]);
+						neihbourg.DisconnectFromEveryNodes ();
+						RemoveNode (neihbourg);
+					} else {
+						StartNode.ConnectTo (neihbourg);
+					}
+					keepOriginal = true;
+				}	
+				if (_map [(int)Start.x - (int)direction.z, (int)Start.z - (int)direction.x] != null) {
+					Node neihbourg = _map [(int)Start.x - (int)direction.z, (int)Start.z - (int)direction.x];
+					Debug.LogWarning ("Direction side 2");
+					bool keepNode = false;
+					foreach (Node n in neihbourg.ConnectedNodes) {
+						if (Vector3.Angle (neihbourg.DirectionTo (n), StartNode.DirectionTo (neihbourg)) != 0)
+							keepNode = true;
+					}
+					if (!keepNode) {
+						StartNode.ConnectTo (neihbourg.ConnectedNodes [0]);
+						neihbourg.DisconnectFromEveryNodes ();
+						RemoveNode (neihbourg);
+					} else {
+						StartNode.ConnectTo (neihbourg);
+					}
+					keepOriginal = true;
+				}
+				if (_map [(int)Start.x - (int)direction.x, (int)Start.z - (int)direction.z] != null) {
+					Node neihbourg = _map [(int)Start.x - (int)direction.x, (int)Start.z - (int)direction.z];
+					Debug.LogWarning ("Direction - 1");
+					if (!keepOriginal) {
+						RemoveNode (StartNode);
+						Start.x = neihbourg.X;
+						Start.z = neihbourg.Y;
+						CheckEdge = false;
+					} else {
+						StartNode.ConnectTo (neihbourg);
+					}
+				}
+				//We Check for neighbourg edges to connect to
+				if (CheckEdge) {
+					if (_edgemap [(int)Start.x + (int)direction.z, (int)Start.z + (int)direction.x].Count > 0) {
+						foreach (var item in _edgemap[(int)Start.x + (int)direction.z, (int)Start.z + (int)direction.x].ToArray()) {
+							if (!item.A.IsConnectedTo (StartNode) && !item.B.IsConnectedTo (StartNode)) {
+								Node IntersectionNode = new Node ((int)Start.x + (int)direction.z, (int)Start.z + (int)direction.x, this);
+								AddNode (IntersectionNode);
+								item.A.ConnectTo (IntersectionNode);
+								item.B.ConnectTo (IntersectionNode);
+								item.A.DisconnectFrom (item.B);	
+								StartNode.ConnectTo (IntersectionNode);
+							}
+						}
+					}	
+					if (_edgemap [(int)Start.x - (int)direction.z, (int)Start.z - (int)direction.x].Count > 0) {
+						foreach (var item in _edgemap[(int)Start.x - (int)direction.z, (int)Start.z - (int)direction.x].ToArray()) {
+							Debug.Log ((!item.A.IsConnectedTo (StartNode)).ToString () + " , " + (!item.B.IsConnectedTo (StartNode)).ToString ());
+							if (!item.A.IsConnectedTo (StartNode) && !item.B.IsConnectedTo (StartNode)) {
+								Node IntersectionNode = new Node ((int)Start.x - (int)direction.z, (int)Start.z - (int)direction.x, this);
+								AddNode (IntersectionNode);
+								item.A.ConnectTo (IntersectionNode);
+								item.B.ConnectTo (IntersectionNode);
+								item.A.DisconnectFrom (item.B);	
+								StartNode.ConnectTo (IntersectionNode);
+							}
+						}
+					}
+					if (_edgemap [(int)Start.x - (int)direction.x, (int)Start.z - (int)direction.z].Count > 0) {
+						foreach (var item in _edgemap[(int)Start.x - (int)direction.x, (int)Start.z - (int)direction.z].ToArray()) {
+							if (!item.A.IsConnectedTo (StartNode) && !item.B.IsConnectedTo (StartNode)) {
+								Node IntersectionNode = new Node ((int)Start.x - (int)direction.x, (int)Start.z - (int)direction.z, this);
+								AddNode (IntersectionNode);
+								item.A.ConnectTo (IntersectionNode);
+								item.B.ConnectTo (IntersectionNode);
+								item.A.DisconnectFrom (item.B);	
+								if (StartNode.ConnectedNodes.Count == 0) {
+									RemoveNode (StartNode);
+									Start.x = (int)Start.x - (int)direction.x;
+									Start.z = (int)Start.z - (int)direction.z;
+								} else {
+									StartNode.ConnectTo (IntersectionNode);
+								}
+							}	
+						}
+					}
+				}
+
+
+				Node LastNode = new Node ((int)End.x, (int)End.z, this);
 				AddNode (LastNode);
-				PathNodes.Add (StartNode);
-				Vector3 direction = End - Start;
-				direction.Normalize ();
-				
-				if (Mathf.Abs (direction.x) > 0) {
-					Node tmp = PathNodes [0];
-					bool _CorrectStart = true;
-					foreach (Node neihbour in PathNodes[0].ConnectedNodes) {
-						Vector3 NeihbourPos = new Vector3 (neihbour.X, 0, neihbour.Y);
-						if ((NeihbourPos - Start).normalized == direction * -1f)
-							tmp = neihbour;
-						if (Mathf.Abs ((NeihbourPos - Start).z) > 0)
-							_CorrectStart = false;
+
+				//We Check for Neihbourg Nodes to connect to
+				keepOriginal = false;
+				CheckEdge = true;
+				if (_map [(int)End.x + (int)direction.z, (int)End.z + (int)direction.x] != null) {
+					Debug.LogWarning ("Direction side 1");
+					Node neihbourg = _map [(int)End.x + (int)direction.z, (int)End.z + (int)direction.x];
+					bool keepNode = false;
+					foreach (Node n in neihbourg.ConnectedNodes) {
+						if (Vector3.Angle (neihbourg.DirectionTo (n), LastNode.DirectionTo (neihbourg)) != 0)
+							keepNode = true;
 					}
-					if (!_CorrectStart) {
-						PathNodes [0].DisconnectFromEveryNodes ();
-						PathNodes [0] = tmp;
-						_map [(int)Start.x, (int)Start.z] = null;
-					}
-					if (direction.x > 0) {
-						for (int i = (int)Start.x+1; i < End.x; i++) {
-							Node ChNode = _map [i, (int)Start.z];
-							if (ChNode == null)
-								continue;
-							bool KeepNode = false;
-							foreach (var neihbour in ChNode.ConnectedNodes) {
-								if (neihbour.Y != PathNodes [0].Y)
-									KeepNode = true;
-							}
-							if (!KeepNode) {
-								ChNode.DisconnectFromEveryNodes ();
-								RemoveNode (ChNode);
-							} else {
-								PathNodes.Add (ChNode);
-							}
-						}
+					if (!keepNode) {
+						LastNode.ConnectTo (neihbourg.ConnectedNodes [0]);
+						neihbourg.DisconnectFromEveryNodes ();
+						RemoveNode (neihbourg);
 					} else {
-						for (int i = (int)Start.x+1; i > End.x; i--) {
-							Node ChNode = _map [i, (int)Start.z];
-							if (ChNode == null)
-								continue;
-							bool KeepNode = false;
-							foreach (var neihbour in ChNode.ConnectedNodes) {
-								if (neihbour.Y != PathNodes [0].Y)
-									KeepNode = true;
-							}
-							if (!KeepNode) {
-								ChNode.DisconnectFromEveryNodes ();
-								RemoveNode (ChNode);
-							} else {
-								PathNodes.Add (ChNode);
-							}
-						}
+						LastNode.ConnectTo (neihbourg);
 					}
-				} else {
-					Node tmp = PathNodes [0];
-					bool _CorrectStart = true;
-					foreach (Node neihbour in PathNodes[0].ConnectedNodes) {
-						Vector3 NeihbourPos = new Vector3 (neihbour.X, 0, neihbour.Y);
-						if ((NeihbourPos - Start).normalized == direction * -1f)
-							tmp = neihbour;
-						if (Mathf.Abs ((NeihbourPos - Start).x) > 0)
-							_CorrectStart = false;
+					keepOriginal = true;
+				}	
+				if (_map [(int)End.x - (int)direction.z, (int)End.z - (int)direction.x] != null) {
+					Node neihbourg = _map [(int)End.x - (int)direction.z, (int)End.z - (int)direction.x];
+					Debug.LogWarning ("Direction side 2");
+					bool keepNode = false;
+					foreach (Node n in neihbourg.ConnectedNodes) {
+						if (Vector3.Angle (neihbourg.DirectionTo (n), LastNode.DirectionTo (neihbourg)) != 0)
+							keepNode = true;
 					}
-					if (!_CorrectStart) {
-						PathNodes [0].DisconnectFromEveryNodes ();
-						PathNodes [0] = tmp;
-						_map [(int)Start.x, (int)Start.z] = null;
-					}
-					if ((End - Start).z > 0) {
-						for (int i = (int)Start.z+1; i < End.z; i++) {
-							Node ChNode = _map [(int)Start.x, i];
-							if (ChNode == null) {
-								//Debug.Log (_edgemap [(int)Start.x, i].Count.ToString () + " " + i.ToString () + " " + (int)Start.x);
-								if (_edgemap [(int)Start.x, i].Count == 0)
-									continue;
-								ChNode = new Node ((int)Start.x, i, this);
-								Edge CollapseEdge = _edgemap [(int)Start.x, i] [0];
-								CollapseEdge.A.DisconnectFrom (CollapseEdge.B);
-								ChNode.ConnectTo (CollapseEdge.A);
-								ChNode.ConnectTo (CollapseEdge.B);
-								AddNode (ChNode);
-							}
-							bool KeepNode = false;
-							foreach (var neihbour in ChNode.ConnectedNodes) {
-								if (neihbour.X != PathNodes [0].X)
-									KeepNode = true;
-							}
-							if (!KeepNode) {
-								ChNode.DisconnectFromEveryNodes ();
-								RemoveNode (ChNode);
-							} else {
-								PathNodes.Add (ChNode);
-							}
-						}
+					if (!keepNode) {
+						LastNode.ConnectTo (neihbourg.ConnectedNodes [0]);
+						neihbourg.DisconnectFromEveryNodes ();
+						RemoveNode (neihbourg);
 					} else {
-						for (int i = ((int)Start.z)-1; i > End.z; i--) {
-							Node ChNode = _map [(int)Start.x, i];
-							if (ChNode == null) {
-								if (_edgemap [(int)Start.x, i].Count == 0)
-									continue;
-								ChNode = new Node ((int)Start.x, i, this);
-								Edge CollapseEdge = _edgemap [(int)Start.x, i] [0];
-								CollapseEdge.A.DisconnectFrom (CollapseEdge.B);
-								ChNode.ConnectTo (CollapseEdge.A);
-								ChNode.ConnectTo (CollapseEdge.B);
-								AddNode (ChNode);
+						LastNode.ConnectTo (neihbourg);
+					}
+					keepOriginal = true;
+				}
+				if (_map [(int)End.x + (int)direction.x, (int)End.z + (int)direction.z] != null) {
+					Node neihbourg = _map [(int)End.x + (int)direction.x, (int)End.z + (int)direction.z];
+					Debug.LogWarning ("Direction - 1");
+					if (!keepOriginal) {
+						RemoveNode (LastNode);
+						End.x = neihbourg.X;
+						End.z = neihbourg.Y;
+						CheckEdge = false;
+					} else {
+						LastNode.ConnectTo (neihbourg);
+					}
+				}
+				//We Check for neighbourg edges to connect to
+				if (CheckEdge) {
+					if (_edgemap [(int)End.x + (int)direction.z, (int)End.z + (int)direction.x].Count > 0) {
+						foreach (var item in _edgemap[(int)End.x + (int)direction.z, (int)End.z + (int)direction.x].ToArray()) {
+							if (!item.A.IsConnectedTo (LastNode) && !item.B.IsConnectedTo (LastNode)) {
+								Node IntersectionNode = new Node ((int)End.x + (int)direction.z, (int)End.z + (int)direction.x, this);
+								AddNode (IntersectionNode);
+								item.A.ConnectTo (IntersectionNode);
+								item.B.ConnectTo (IntersectionNode);
+								item.A.DisconnectFrom (item.B);	
+								LastNode.ConnectTo (IntersectionNode);
 							}
-							bool KeepNode = false;
-							foreach (var neihbour in ChNode.ConnectedNodes) {
-								if (neihbour.X != PathNodes [0].X)
-									KeepNode = true;
+						}
+					}	
+					if (_edgemap [(int)End.x - (int)direction.z, (int)End.z - (int)direction.x].Count > 0) {
+						foreach (var item in _edgemap[(int)End.x - (int)direction.z, (int)End.z - (int)direction.x].ToArray()) {
+							Debug.Log ((!item.A.IsConnectedTo (LastNode)).ToString () + " , " + (!item.B.IsConnectedTo (LastNode)).ToString ());
+							if (!item.A.IsConnectedTo (LastNode) && !item.B.IsConnectedTo (LastNode)) {
+								Node IntersectionNode = new Node ((int)End.x - (int)direction.z, (int)End.z - (int)direction.x, this);
+								AddNode (IntersectionNode);
+								item.A.ConnectTo (IntersectionNode);
+								item.B.ConnectTo (IntersectionNode);
+								item.A.DisconnectFrom (item.B);	
+								LastNode.ConnectTo (IntersectionNode);
 							}
-							if (!KeepNode) {
-								Debug.Log (i);
-								ChNode.DisconnectFromEveryNodes ();
-								RemoveNode (ChNode);
-							} else {
-								PathNodes.Add (ChNode);
-							}
+						}
+					}
+					if (_edgemap [(int)End.x + (int)direction.x, (int)End.z + (int)direction.z].Count > 0) {
+						foreach (var item in _edgemap[(int)End.x + (int)direction.x, (int)End.z + (int)direction.z].ToArray()) {
+							if (!item.A.IsConnectedTo (LastNode) && !item.B.IsConnectedTo (LastNode)) {
+								Node IntersectionNode = new Node ((int)End.x + (int)direction.x, (int)End.z + (int)direction.z, this);
+								AddNode (IntersectionNode);
+								item.A.ConnectTo (IntersectionNode);
+								item.B.ConnectTo (IntersectionNode);
+								item.A.DisconnectFrom (item.B);	
+								if (LastNode.ConnectedNodes.Count == 0) {
+									RemoveNode (LastNode);
+									End.x = (int)End.x + (int)direction.x;
+									End.z = (int)End.z + (int)direction.z;
+								} else {
+									LastNode.ConnectTo (IntersectionNode);
+								}
+							}	
 						}
 					}
 				}
-				
-				PathNodes.Add (LastNode);
-				for (int i = 0; i < PathNodes.Count-1; i++) {
-					PathNodes [i].ConnectTo (PathNodes [i + 1]);
-				}
-				/*foreach (var item in _edgemap) {
-					if (item.Count == 1)
-						Debug.Log (item [0].A.X.ToString () + " | " + item [0].A.Y.ToString () + " ||| " + item [0].B.X.ToString () + " | " + item [0].B.Y.ToString ());
-				}*/
+				CreateRoadFrom2Nodes (Start, End);
 				return;
 			}
 		}
@@ -1256,7 +1061,7 @@ public class Grid : MonoBehaviour
 					Vector3 posB = new Vector3 (CoN.X, 5f + height, CoN.Y);
 					Gizmos.DrawLine (posA, posB);
 				}
-				Debug.Log (item.X.ToString () + " | " + item.Y.ToString () + " | " + height.ToString () + " | " + item.ConnectedNodes.Count.ToString ());
+				//Debug.Log (item.X.ToString () + " | " + item.Y.ToString () + " | " + height.ToString () + " | " + item.ConnectedNodes.Count.ToString ());
 				height += 0.5f;
 			}
 		}

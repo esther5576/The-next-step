@@ -144,7 +144,8 @@ public class RoadCreator : MonoBehaviour
 				}
 			}
 			LastDirection = direction;
-			if (Input.GetMouseButtonDown (0) && Input.GetKey (KeyCode.LeftShift)) {			
+			if (Input.GetMouseButtonDown (0) && Input.GetKey (KeyCode.LeftShift)) {
+				_grid.CreateRoad (StartPoint, TmpPath.transform.GetChild (TmpPath.transform.childCount - 1).position);
 				StartPoint = TmpPath.transform.GetChild (TmpPath.transform.childCount - 1).position;
 				List<Transform> tmpl = new List<Transform> ();
 				foreach (Transform item in TmpPath.transform) {

@@ -50,9 +50,26 @@ public class Node
 		_y = y;
 		_grid = ParentGrid;
 		_connectedNodes = new List<Node> ();
-		ConnectTo (_neighbours);
+		//ConnectTo (_neighbours);
 	}
-	
+
+	public float DistanceTo (Node Target)
+	{
+		return Mathf.Sqrt (Mathf.Pow (Target.X - X, 2f) + Mathf.Pow (Target.Y - Y, 2f));
+	}
+
+	public float DistanceTo (Vector3 Target)
+	{
+		return Mathf.Sqrt (Mathf.Pow (Target.x - X, 2f) + Mathf.Pow (Target.z - Y, 2f));
+	}
+
+	public Vector3 DirectionTo (Node Target)
+	{
+		Vector3 node = new Vector3 (X, 0, Y);
+		Vector3 target = new Vector3 (Target.X, 0, Target.Y);
+		return target - node;
+	}
+
 	public void ConnectTo (Node Target)
 	{
 		if (Target == this)
@@ -62,13 +79,14 @@ public class Node
 		if (Target.ConnectedNodes.Contains (this))
 			return;
 		Target.ConnectTo (this);
+		Debug.Log ("[" + X.ToString () + "," + Y.ToString () + "] [" + Target.X.ToString () + "," + Target.Y.ToString () + "]");
 		if (_x == Target.X) {
 			Node A = (_y > Target.Y) ? Target : this;
 			Node B = (A == this) ? Target : this;
 			Edge AB = new Edge ();
 			AB.A = A;
 			AB.B = B;
-			for (int i = A.Y; i < B.Y; i++) {
+			for (int i = A.Y; i <= B.Y; i++) {
 				_grid._edgemap [_x, i].Add (AB);
 			}
 		} else {
@@ -77,7 +95,7 @@ public class Node
 			Edge AB = new Edge ();
 			AB.A = A;
 			AB.B = B;
-			for (int i = A.X; i < B.X; i++) {
+			for (int i = A.X; i <= B.X; i++) {
 				_grid._edgemap [i, _y].Add (AB);
 			}
 		}
@@ -96,17 +114,11 @@ public class Node
 		_connectedNodes.Remove (Target);
 		if (Target.ConnectedNodes.Contains (this)) {
 			Target.DisconnectFrom (this);
-			if (_x == Target.X) {
-				Node A = (_y > Target.Y) ? Target : this;
-				Node B = (A == this) ? Target : this;
-				Edge AB = new Edge ();
-				_grid.RemoveEdge (AB);
-				
-			} else {
-				Node A = (_x > Target.X) ? Target : this;
-				Node B = (A == this) ? Target : this;
-				Edge AB = new Edge ();
-				_grid.RemoveEdge (AB);
+			Edge edgeToRemove = new Edge ();
+			foreach (var item in _grid._edgemap[X, Y].ToArray()) {
+				if ((item.A == this || item.B == this) && (item.A == Target || item.B == Target)) {
+					_grid.RemoveEdge (item);
+				}
 			}
 		}
 		
@@ -114,12 +126,12 @@ public class Node
 	
 	public void DisconnectFromEveryNodes ()
 	{
-		foreach (var item in _connectedNodes) {
+		foreach (var item in _connectedNodes.ToArray()) {
 			DisconnectFrom (item);
 		}
 	}
 	
-	bool IsConnectedTo (Node Target)
+	public bool IsConnectedTo (Node Target)
 	{
 		List<Node> ToChek = new List<Node> ();
 		List<Node> Checked = new List<Node> ();
