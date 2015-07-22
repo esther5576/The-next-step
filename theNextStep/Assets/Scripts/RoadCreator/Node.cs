@@ -19,6 +19,11 @@ public class Node
 			return _y;
 		}
 	}
+	public Vector3 Position {
+		get {
+			return new Vector3 (_x, 0, _y);
+		}
+	}
 	
 	protected List<Node> _neighbours {
 		get {

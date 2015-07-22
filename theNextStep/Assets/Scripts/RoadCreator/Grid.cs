@@ -42,6 +42,27 @@ public class Grid : MonoBehaviour
 	{
 	
 	}
+
+	public void AddBuilding (Vector3 position, Vector3 size)
+	{
+		Vector3 A, B, C, D;
+		A = new Vector3 ((position.x - (size.x / 2f)) + 0.5f, 0, (position.z + (size.z / 2f)) - 0.5f);
+		B = new Vector3 ((position.x + (size.x / 2f)) - 0.5f, 0, (position.z + (size.z / 2f)) - 0.5f);
+		C = new Vector3 ((position.x + (size.x / 2f)) - 0.5f, 0, (position.z - (size.z / 2f)) + 0.5f);
+		D = new Vector3 ((position.x - (size.x / 2f)) + 0.5f, 0, (position.z - (size.z / 2f)) + 0.5f);
+
+		Debug.Log (A);
+		Debug.Log (B);
+		Debug.Log (C);
+		Debug.Log (D);
+		
+
+		CreateRoad (A, B);
+		CreateRoad (B, C);
+		CreateRoad (C, D);
+		CreateRoad (D, A);
+		
+	}
 	
 	public void RemoveEdge (Edge target)
 	{
@@ -260,7 +281,12 @@ public class Grid : MonoBehaviour
 	public void CreateRoad (Vector3 Start, Vector3 End)
 	{
 		Start.y = 0;
+		Start.x -= 0.5f;
+		Start.z -= 0.5f;
 		End.y = 0;
+		End.x -= 0.5f;
+		End.z -= 0.5f;
+
 		//We check if Start is not already a node on the grid
 		if (_map [(int)Start.x, (int)Start.z] != null) {
 			//we check if End is not already a node on the grid
@@ -1045,7 +1071,7 @@ public class Grid : MonoBehaviour
 			foreach (Node item in _map) {
 				if (item == null)
 					continue;
-				Vector3 pos = new Vector3 (item.X, 5f, item.Y);
+				Vector3 pos = new Vector3 (item.X + 0.5f, 5f, item.Y + 0.5f);
 				
 				Gizmos.DrawSphere (pos, 0.5f);
 				
@@ -1056,9 +1082,9 @@ public class Grid : MonoBehaviour
 			foreach (var item in _map) {
 				if (item == null)
 					continue;
-				Vector3 posA = new Vector3 (item.X, 5f + height, item.Y);
+				Vector3 posA = new Vector3 (item.X + 0.5f, 5f + height, item.Y + 0.5f);
 				foreach (var CoN in item.ConnectedNodes) {
-					Vector3 posB = new Vector3 (CoN.X, 5f + height, CoN.Y);
+					Vector3 posB = new Vector3 (CoN.X + 0.5f, 5f + height, CoN.Y + 0.5f);
 					Gizmos.DrawLine (posA, posB);
 				}
 				//Debug.Log (item.X.ToString () + " | " + item.Y.ToString () + " | " + height.ToString () + " | " + item.ConnectedNodes.Count.ToString ());

@@ -22,9 +22,9 @@ public class Modules : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-		/*if (Input.GetKeyDown (KeyCode.A) && _maximumBuildings > 0) {
+		if (Input.GetKeyDown (KeyCode.A) && _maximumBuildings > 0) {
 			Creator.Deploy (Model);
-		}*/
+		}
 	}
 
 	public void MainBuilding (bool _MainBuilding)

@@ -44,8 +44,9 @@ public class RoadCreator : MonoBehaviour
 			if (Physics.Raycast (r, out hit)) {
 				Vector3 StPt = hit.point;
 				float CellSize = ModuleCreator.Instance.GridCellSize;
-				StPt.x = (StPt.x % CellSize < CellSize / 2f) ? CellSize * ((int)(StPt.x / CellSize)) : CellSize * ((int)(StPt.x / CellSize) + 1);
-				StPt.z = (StPt.z % CellSize < CellSize / 2f) ? CellSize * ((int)(StPt.z / CellSize)) : CellSize * ((int)(StPt.z / CellSize) + 1);
+				StPt.x = ((StPt.x % CellSize < CellSize / 2f) ? CellSize * ((int)(StPt.x / CellSize)) : CellSize * ((int)(StPt.x / CellSize) + 1)) + 0.5f;
+				StPt.z = ((StPt.z % CellSize < CellSize / 2f) ? CellSize * ((int)(StPt.z / CellSize)) : CellSize * ((int)(StPt.z / CellSize) + 1)) + 0.5f;
+				StPt.y = 0f;
 				StartCoroutine (CreateRoad (StPt));
 			}
 		}
@@ -53,131 +54,86 @@ public class RoadCreator : MonoBehaviour
 
 	IEnumerator CreateRoad (Vector3 StartPoint)
 	{
-		bool tmp = true;
-		GameObject TmpPath = new GameObject ("TemporaryPath");
-		Vector2 LastDirection = Vector2.zero;
-		while (tmp) {
+		List<GameObject> Path = new List<GameObject> ();
+		while (true) {
+			Vector3 EndPoint = Vector3.zero;
+			List<GameObject> ActivePath = new List<GameObject> ();
 			Ray r = Camera.main.ScreenPointToRay (Input.mousePosition);
 			RaycastHit hit;
-			Vector3 EndPoint;
 			float CellSize = ModuleCreator.Instance.GridCellSize;
 			if (Physics.Raycast (r, out hit)) {
 				EndPoint = hit.point;
-				EndPoint.x = (EndPoint.x % CellSize < CellSize / 2f) ? CellSize * ((int)(EndPoint.x / CellSize)) : CellSize * ((int)(EndPoint.x / CellSize) + 1);
-				EndPoint.z = (EndPoint.z % CellSize < CellSize / 2f) ? CellSize * ((int)(EndPoint.z / CellSize)) : CellSize * ((int)(EndPoint.z / CellSize) + 1);
+				EndPoint.x = ((EndPoint.x % CellSize < CellSize / 2f) ? CellSize * ((int)(EndPoint.x / CellSize)) : CellSize * ((int)(EndPoint.x / CellSize) + 1)) + 0.5f;
+				EndPoint.z = ((EndPoint.z % CellSize < CellSize / 2f) ? CellSize * ((int)(EndPoint.z / CellSize)) : CellSize * ((int)(EndPoint.z / CellSize) + 1)) + 0.5f;
+				EndPoint.y = 0;
 			} else {
 				EndPoint = StartPoint;
 			}
-			Vector3 road = StartPoint - EndPoint;
-			Vector2 direction = Vector2.zero;
 
-			if (Mathf.Abs (road.z) > Mathf.Abs (road.x)) {
-				int size = Mathf.FloorToInt (Mathf.Abs (road.z / CellSize)) + 1;
-				direction.y = (int)Mathf.Sign (road.z);
-				if (direction != LastDirection) {
-					foreach (Transform ob in TmpPath.transform) {
-						Destroy (ob.gameObject);
-					}
-					TmpPath.transform.DetachChildren ();
-					(Instantiate (Road, StartPoint, Quaternion.identity) as GameObject).transform.parent = TmpPath.transform;
-				}
+			Vector3 RoadVec = EndPoint - StartPoint;
+			RoadVec.x = (Mathf.Abs (RoadVec.x) > Mathf.Abs (RoadVec.z)) ? RoadVec.x : 0;
+			RoadVec.z = (Mathf.Abs (RoadVec.z) > Mathf.Abs (RoadVec.x)) ? RoadVec.z : 0;
+			RoadVec.y = 0f;
 
-				if (size > TmpPath.transform.childCount) {
-					for (int i = TmpPath.transform.childCount; i < size; i++) {
-						Vector3 pos = StartPoint + Vector3.back * i * direction.y;
-						RaycastHit HeightHit;
-						if (Physics.Raycast (pos + Vector3.up * 10, Vector3.down, out HeightHit)) {
-							pos.y = HeightHit.point.y;
-						}
-						if (HeightHit.collider.tag != "Pipeline") {
-							Vector3 normal = HeightHit.normal;
-							normal.x = 0;
-							(Instantiate (Road, pos, Quaternion.identity) as GameObject).transform.parent = TmpPath.transform;
-							TmpPath.transform.GetChild (i).LookAt (TmpPath.transform.GetChild (i).position + normal);
-						} else {
-							GameObject nul = new GameObject ("null");
-							nul.transform.position = pos;
-							nul.transform.parent = TmpPath.transform;
-						}
-					}
-				} else if (size < TmpPath.transform.childCount) {
-					for (int i = TmpPath.transform.childCount; i > size; i--) {
-						Destroy (TmpPath.transform.GetChild (i - 1).gameObject);
-						TmpPath.transform.GetChild (i - 1).parent = null;
-					}
-				}
 
-			} else {
-				int size = Mathf.FloorToInt (Mathf.Abs (road.x / CellSize)) + 1;
-				direction.x = (int)Mathf.Sign (road.x);
-				if (direction != LastDirection) {
-					foreach (Transform ob in TmpPath.transform) {
-						Destroy (ob.gameObject);
-					}
-					TmpPath.transform.DetachChildren ();
-					(Instantiate (Road, StartPoint, Quaternion.identity) as GameObject).transform.parent = TmpPath.transform;
-				}
+			while (Path.Count < RoadVec.magnitude + 1) {//When we need to add more cube to increase the path
+				Path.Add (Instantiate (Road, Vector3.zero, Quaternion.identity) as GameObject);
+			}
 
-				if (size > TmpPath.transform.childCount) {
-					for (int i = TmpPath.transform.childCount; i < size; i++) {
-						Vector3 pos = StartPoint + Vector3.left * i * direction.x;
-						RaycastHit HeightHit;
-						if (Physics.Raycast (pos + Vector3.up * 10, Vector3.down, out HeightHit)) {
-							pos.y = HeightHit.point.y;
-						}
-						if (HeightHit.collider.tag != "Pipeline") {
-							Vector3 normal = HeightHit.normal;
-							normal.z = 0;
-							(Instantiate (Road, pos, Quaternion.identity) as GameObject).transform.parent = TmpPath.transform;
-							TmpPath.transform.GetChild (i).LookAt (TmpPath.transform.GetChild (i).position + normal);
-						} else {
-							GameObject nul = new GameObject ("null");
-							nul.transform.position = pos;
-							nul.transform.parent = TmpPath.transform;
-						}
-					}
-				} else if (size < TmpPath.transform.childCount) {
-					for (int i = TmpPath.transform.childCount; i > size; i--) {
-						Destroy (TmpPath.transform.GetChild (i - 1).gameObject);
-						TmpPath.transform.GetChild (i - 1).parent = null;
-					}
+			//we set the cube that we don't need inactive and we set the other active and we add them to the active path
+			for (int i = 0; i < Path.Count; i++) {
+				if (i > RoadVec.magnitude)
+					Path [i].SetActive (false);
+				else {
+					if (!Path [i].activeSelf)
+						Path [i].SetActive (true);
+					ActivePath.Add (Path [i]);
 				}
 			}
-			LastDirection = direction;
-			if (Input.GetMouseButtonDown (0) && Input.GetKey (KeyCode.LeftShift)) {
-				_grid.CreateRoad (StartPoint, TmpPath.transform.GetChild (TmpPath.transform.childCount - 1).position);
-				StartPoint = TmpPath.transform.GetChild (TmpPath.transform.childCount - 1).position;
-				List<Transform> tmpl = new List<Transform> ();
-				foreach (Transform item in TmpPath.transform) {
-					tmpl.Add (item);
-				}
-				TmpPath.transform.DetachChildren ();
-				foreach (Transform item in tmpl) {
-					item.parent = transform;
-				}
-				
-			} else if (Input.GetMouseButtonDown (0)) {
-				List<Transform> tmpl = new List<Transform> ();
-				foreach (Transform item in TmpPath.transform) {
-					tmpl.Add (item);
-				}
-				TmpPath.transform.DetachChildren ();
-				foreach (Transform item in tmpl) {
-					if (item.name != "null")
-						item.parent = transform;
-					else {
-						Destroy (item.gameObject);
-					}
-				}
-				tmp = false;
-				_grid.CreateRoad (StartPoint, tmpl [tmpl.Count - 1].position);
 
+			//we place the cubes along the path
+			for (int i = 0; i < ActivePath.Count; i++) {
+				if (Physics.Raycast (StartPoint + RoadVec.normalized * i + Vector3.up * 5, Vector3.down, out hit)) {
+					if (hit.collider.tag == "Pipeline") {
+						ActivePath.Remove (ActivePath [i]);
+						ActivePath.Insert (i, null);
+						continue;
+					}
+					ActivePath [i].transform.position = StartPoint + RoadVec.normalized * i;
+					ActivePath [i].transform.position += Vector3.up * hit.point.y;
+					Vector3 normal = hit.normal;
+					if (Mathf.Abs (RoadVec.x) > Mathf.Abs (RoadVec.z)) {
+						normal.z = 0;
+					} else
+						normal.x = 0;
+					ActivePath [i].transform.LookAt (ActivePath [i].transform.position + normal);
+				}
+			}
+
+			if (Input.GetMouseButtonDown (0) && Input.GetKey (KeyCode.LeftShift)) {
+				foreach (var item in ActivePath) {
+					if (item == null)
+						continue;
+					item.transform.parent = transform;
+					item.layer = 0;
+					Path.Remove (item);
+				}
+				_grid.CreateRoad (StartPoint, ActivePath [ActivePath.Count - 1].transform.position);
+				StartPoint = ActivePath [ActivePath.Count - 1].transform.position;
+				StartPoint.y = 0;
+			} else if (Input.GetMouseButtonDown (0)) {
+				foreach (var item in ActivePath) {
+					if (item == null)
+						continue;
+					item.transform.parent = transform;
+					item.layer = 0;
+				}
+				_grid.CreateRoad (StartPoint, ActivePath [ActivePath.Count - 1].transform.position);
+				break;
 			}
 			yield return null;
 		}
-		Destroy (TmpPath);
 		_onCreation = false;
 	}
-
 
 }
