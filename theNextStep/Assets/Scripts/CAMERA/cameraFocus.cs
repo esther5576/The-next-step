@@ -23,7 +23,7 @@ public class cameraFocus : MonoBehaviour
 			if (Physics.Raycast (ray, out hit)) {
 				if (hit.rigidbody != null) {
 					_activeFocus = true;
-					_target = new Vector3 (hit.rigidbody.position.x, this.transform.position.y, hit.rigidbody.position.z);
+					_target = new Vector3 (hit.rigidbody.position.x - 2, this.transform.position.y, hit.rigidbody.position.z - 2);
 				}
 			}
 		}
@@ -32,11 +32,11 @@ public class cameraFocus : MonoBehaviour
 			float _step = _speed * Time.deltaTime;
 			transform.position = Vector3.MoveTowards (transform.position, _target, _step);
 
-			if (Camera.main.GetComponent<cameraBehaviour> ()._zoomNumber < 1) {
-				Camera.main.GetComponent<cameraBehaviour> ()._zoomNumber += 2 * Time.deltaTime;
+			if (Camera.main.GetComponent<cameraBehaviour> ()._zoomNumber < 0.5f) {
+				Camera.main.GetComponent<cameraBehaviour> ()._zoomNumber += 1 * Time.deltaTime;
 			}
-			if (Camera.main.GetComponent<cameraBehaviour> ()._zoomNumber >= 1) {
-				Camera.main.GetComponent<cameraBehaviour> ()._zoomNumber = 1;
+			if (Camera.main.GetComponent<cameraBehaviour> ()._zoomNumber >= 0.5f) {
+				Camera.main.GetComponent<cameraBehaviour> ()._zoomNumber = 0.5f;
 			}
 			
 
