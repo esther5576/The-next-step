@@ -3,6 +3,7 @@ using System.Collections;
 
 public class ProductionAndNeeds : MonoBehaviour
 {
+	//Ceci correspond aux variables que dont le batiment a besoin sur l'inspecteur on defini les variables
 	#region Material needs per day
 	public float _waterNeedsPerDay = 0;
 	public float _electricityNeedsPerDay = 0;
@@ -13,6 +14,7 @@ public class ProductionAndNeeds : MonoBehaviour
 	public float _HumansNeeds = 0;
 	#endregion
 
+	//Ceci correspond aux variables que dont le batiment a besoin sur l'inspecteur on defini les variables
 	#region Material production per day
 	public float _waterProductionPerDay = 0;
 	public float _electricityProductionPerDay = 0;
@@ -23,19 +25,30 @@ public class ProductionAndNeeds : MonoBehaviour
 	public float _HumansProduction = 0;
 	#endregion
 
+	//Cette bool correspond au switch on et off du batiment
+	public bool _buildingSwitch;
 	// Use this for initialization
 	void Start ()
 	{
-	
+		//au debut le batiment est active
+		_buildingSwitch = true;
 	}
 	
 	// Update is called once per frame
 	void Update ()
 	{
-		if (this.name != "visualisation") {
+		//Les needs et productions sont actifs si le batiment n'est pas une visualisation(=quand on va placer le batiment)
+		//et la bool buildingSwitch est true
+		if (this.name != "visualisation" && _buildingSwitch == true) {
 			needs ();
 			production ();
 		}
+	}
+
+	//Cette fonction est appellee quand le boutton est appuye
+	public void buildingActivation ()
+	{
+		_buildingSwitch = !_buildingSwitch;
 	}
 
 	#region Needs
