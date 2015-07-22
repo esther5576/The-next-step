@@ -15,7 +15,7 @@ public class BuildingUi : MonoBehaviour
 	void Start ()
 	{
 		_canvas = GameObject.Find ("BuildingUi").GetComponent<BuildingUiCanvas> ();
-		_scale = GameObject.Find ("Canvas").GetComponent<CanvasScaler> ();
+		_scale = GameObject.Find ("BuildingNeedsAndProduction").GetComponent<CanvasScaler> ();
 	}
 	
 	// Update is called once per frame

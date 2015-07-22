@@ -7,6 +7,7 @@ public class cameraFocus : MonoBehaviour
 	public Vector3 _target = new Vector3 (); 
 	
 	private bool _activeFocus;
+
 	// Use this for initialization
 	void Start ()
 	{
@@ -31,6 +32,15 @@ public class cameraFocus : MonoBehaviour
 			float _step = _speed * Time.deltaTime;
 			transform.position = Vector3.MoveTowards (transform.position, _target, _step);
 
+			if (Camera.main.GetComponent<cameraBehaviour> ()._zoomNumber < 1) {
+				Camera.main.GetComponent<cameraBehaviour> ()._zoomNumber += 2 * Time.deltaTime;
+			}
+			if (Camera.main.GetComponent<cameraBehaviour> ()._zoomNumber >= 1) {
+				Camera.main.GetComponent<cameraBehaviour> ()._zoomNumber = 1;
+			}
+			
+
+			//Camera.main.GetComponent<cameraBehaviour> ()._animation.SetFloat ("cameraType", _cameraStep);
 			if (transform.position == _target) {
 				_activeFocus = false;
 			}

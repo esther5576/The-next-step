@@ -91,8 +91,8 @@ public class cameraController : MonoBehaviour
 		}
 		
 		// Zoom Camera in or out
-		if (ZoomEnabled) {
-			/*if (Input.GetAxis("Mouse ScrollWheel") < 0) 
+		/*if (ZoomEnabled) {
+			if (Input.GetAxis("Mouse ScrollWheel") < 0) 
 			{
 				_yMove = 1;
 			}
@@ -103,10 +103,10 @@ public class cameraController : MonoBehaviour
 			else 
 			{
 				_yMove = 0;
-			}*/
+			}
 		} else {
 			_zMove = 0;
-		}
+		}*/
 		
 		//move the object
 		MoveMe (_xMove, _yMove, _zMove);
@@ -114,8 +114,9 @@ public class cameraController : MonoBehaviour
 	
 	private void MoveMe (float x, float y, float z)
 	{
-		_moveVector = (new Vector3 (x * horizontalScrollSpeed,
-		                           y * verticalScrollSpeed, z * horizontalScrollSpeed) * Time.deltaTime);
+		_moveVector = (new Vector3 (x * horizontalScrollSpeed + z * horizontalScrollSpeed,
+		                            y * horizontalScrollSpeed, z * horizontalScrollSpeed - x * horizontalScrollSpeed) * Time.deltaTime);
+
 		transform.Translate (_moveVector, Space.World);
 	}
 }
