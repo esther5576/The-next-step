@@ -10,6 +10,12 @@ public class dayToDayCounter : MonoBehaviour
 	public float _dayLength = 60;
 
 	public GameObject _sandEffect;
+
+	void Start ()
+	{
+		_sandEffect = GameObject.Find ("DustStormEsther");
+	}
+
 	void LateUpdate ()
 	{
 		_time += Time.deltaTime;

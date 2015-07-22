@@ -26,7 +26,13 @@ public class ProductionAndNeeds : MonoBehaviour
 	#endregion
 
 	//Cette bool correspond au switch on et off du batiment
-	public bool _buildingSwitch;
+	[HideInInspector]
+	public bool
+		_buildingSwitch;
+
+	[HideInInspector]
+	public bool
+		_buildingBroken;
 	// Use this for initialization
 	void Start ()
 	{
@@ -39,7 +45,7 @@ public class ProductionAndNeeds : MonoBehaviour
 	{
 		//Les needs et productions sont actifs si le batiment n'est pas une visualisation(=quand on va placer le batiment)
 		//et la bool buildingSwitch est true
-		if (this.name != "visualisation" && _buildingSwitch == true) {
+		if (this.name != "visualisation" && _buildingSwitch == true && _buildingBroken == false) {
 			needs ();
 			production ();
 		}
