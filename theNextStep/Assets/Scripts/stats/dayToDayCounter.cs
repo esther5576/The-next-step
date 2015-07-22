@@ -8,7 +8,8 @@ public class dayToDayCounter : MonoBehaviour
 	private bool _dayMorningNight = true;
 
 	public float _dayLength = 60;
-	
+
+	public GameObject _sandEffect;
 	void LateUpdate ()
 	{
 		_time += Time.deltaTime;
@@ -21,6 +22,13 @@ public class dayToDayCounter : MonoBehaviour
 			_dayMorningNight = true;
 			_days += 1;
 			_time = 0;
+		}
+
+		if (_dayMorningNight == true) {
+			_sandEffect.SetActive (true);
+		}
+		if (_dayMorningNight == false) {
+			_sandEffect.SetActive (false);
 		}
 	}
 
