@@ -45,7 +45,7 @@ public class ProductionAndNeeds : MonoBehaviour
 		}
 	}
 
-	public int _level;
+	public int _level = 1;
 	public int _maxLevel = 5;
 	// Use this for initialization
 	void Start ()
@@ -75,27 +75,27 @@ public class ProductionAndNeeds : MonoBehaviour
 	void needs ()
 	{
 		if (_waterNeedsPerDay != 0) {
-			Camera.main.GetComponent<gameStats> ()._actualWater -= ((_waterNeedsPerDay / (Camera.main.GetComponent<dayToDayCounter> ()._dayLength * 2)) * Time.deltaTime);
+			Camera.main.GetComponent<gameStats> ()._actualWater -= ((_waterNeedsPerDay / (Camera.main.GetComponent<dayToDayCounter> ()._dayLength * 2)) * Time.deltaTime) * ((_level / 2) + 1);
 		}
 
 		if (_electricityNeedsPerDay != 0) {
-			Camera.main.GetComponent<gameStats> ()._actualElectricity -= ((_electricityNeedsPerDay / (Camera.main.GetComponent<dayToDayCounter> ()._dayLength * 2)) * Time.deltaTime);
+			Camera.main.GetComponent<gameStats> ()._actualElectricity -= ((_electricityNeedsPerDay / (Camera.main.GetComponent<dayToDayCounter> ()._dayLength * 2)) * Time.deltaTime) * ((_level / 2) + 1);
 		}
 
 		/*if (_CO2NeedsPerDay != 0) {
-			//Camera.main.GetComponent<gameStats> (). -= ((_CO2NeedsPerDay / (this.GetComponent<dayToDayCounter> ()._dayLength * 2)) * Time.deltaTime);
+			//Camera.main.GetComponent<gameStats> (). -= ((_CO2NeedsPerDay / (this.GetComponent<dayToDayCounter> ()._dayLength * 2)) * Time.deltaTime) * ((_level / 2) + 1);
 		}*/
 
 		if (_O2NeedsPerDay != 0) {
-			Camera.main.GetComponent<gameStats> ()._actualOxygen -= ((_O2NeedsPerDay / (Camera.main.GetComponent<dayToDayCounter> ()._dayLength * 2)) * Time.deltaTime);
+			Camera.main.GetComponent<gameStats> ()._actualOxygen -= ((_O2NeedsPerDay / (Camera.main.GetComponent<dayToDayCounter> ()._dayLength * 2)) * Time.deltaTime) * ((_level / 2) + 1);
 		}
 
 		if (_mineralsNeedsPerDay != 0) {
-			Camera.main.GetComponent<gameStats> ()._actualMineral -= ((_mineralsNeedsPerDay / (Camera.main.GetComponent<dayToDayCounter> ()._dayLength * 2)) * Time.deltaTime);
+			Camera.main.GetComponent<gameStats> ()._actualMineral -= ((_mineralsNeedsPerDay / (Camera.main.GetComponent<dayToDayCounter> ()._dayLength * 2)) * Time.deltaTime) * ((_level / 2) + 1);
 		}
 
 		if (_foodNeedsPerDay != 0) {
-			Camera.main.GetComponent<gameStats> ()._actualFood -= ((_foodNeedsPerDay / (Camera.main.GetComponent<dayToDayCounter> ()._dayLength * 2)) * Time.deltaTime);
+			Camera.main.GetComponent<gameStats> ()._actualFood -= ((_foodNeedsPerDay / (Camera.main.GetComponent<dayToDayCounter> ()._dayLength * 2)) * Time.deltaTime) * ((_level / 2) + 1);
 		}
 	}
 	#endregion
@@ -104,27 +104,27 @@ public class ProductionAndNeeds : MonoBehaviour
 	void production ()
 	{
 		if (_waterProductionPerDay != 0) {
-			Camera.main.GetComponent<gameStats> ()._actualWater += ((_waterProductionPerDay / (Camera.main.GetComponent<dayToDayCounter> ()._dayLength * 2)) * Time.deltaTime);
+			Camera.main.GetComponent<gameStats> ()._actualWater += ((_waterProductionPerDay / (Camera.main.GetComponent<dayToDayCounter> ()._dayLength * 2)) * Time.deltaTime) * _level;
 		}
 		
 		if (_electricityProductionPerDay != 0) {
-			Camera.main.GetComponent<gameStats> ()._actualElectricity += ((_electricityProductionPerDay / (Camera.main.GetComponent<dayToDayCounter> ()._dayLength * 2)) * Time.deltaTime);
+			Camera.main.GetComponent<gameStats> ()._actualElectricity += ((_electricityProductionPerDay / (Camera.main.GetComponent<dayToDayCounter> ()._dayLength * 2)) * Time.deltaTime) * _level;
 		}
 		
 		/*if (_CO2NeedsPerDay != 0) {
-			//Camera.main.GetComponent<gameStats> (). -= ((_CO2NeedsPerDay / (this.GetComponent<dayToDayCounter> ()._dayLength * 2)) * Time.deltaTime);
+			//Camera.main.GetComponent<gameStats> (). -= ((_CO2NeedsPerDay / (this.GetComponent<dayToDayCounter> ()._dayLength * 2)) * Time.deltaTime) * _level;
 		}*/
 		
 		if (_O2ProductionPerDay != 0) {
-			Camera.main.GetComponent<gameStats> ()._actualOxygen += ((_O2ProductionPerDay / (Camera.main.GetComponent<dayToDayCounter> ()._dayLength * 2)) * Time.deltaTime);
+			Camera.main.GetComponent<gameStats> ()._actualOxygen += ((_O2ProductionPerDay / (Camera.main.GetComponent<dayToDayCounter> ()._dayLength * 2)) * Time.deltaTime) * _level;
 		}
 		
 		if (_mineralsProductionPerDay != 0) {
-			Camera.main.GetComponent<gameStats> ()._actualMineral += ((_mineralsProductionPerDay / (Camera.main.GetComponent<dayToDayCounter> ()._dayLength * 2)) * Time.deltaTime);
+			Camera.main.GetComponent<gameStats> ()._actualMineral += ((_mineralsProductionPerDay / (Camera.main.GetComponent<dayToDayCounter> ()._dayLength * 2)) * Time.deltaTime) * _level;
 		}
 
 		if (_foodProductionPerDay != 0) {
-			Camera.main.GetComponent<gameStats> ()._actualFood += ((_foodProductionPerDay / (Camera.main.GetComponent<dayToDayCounter> ()._dayLength * 2)) * Time.deltaTime);
+			Camera.main.GetComponent<gameStats> ()._actualFood += ((_foodProductionPerDay / (Camera.main.GetComponent<dayToDayCounter> ()._dayLength * 2)) * Time.deltaTime) * _level;
 		}
 	}
 	#endregion
