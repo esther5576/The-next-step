@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using UnityEngine.UI;
+using UnityEngine.Events;
 
 public class BuildingUiCanvas : MonoBehaviour
 {
@@ -41,16 +43,19 @@ public class BuildingUiCanvas : MonoBehaviour
 	
 	}
 
-	public void Display (int NeedsNumber, int ProductsNumber)
+	public void Display (int NeedsNumber, int ProductsNumber, List<Button.ButtonClickedEvent> NeedsEvents, List<Button.ButtonClickedEvent> ProductsEvents, Button.ButtonClickedEvent PowerEvents)
 	{
 		for (int i = 0; i < NeedsNumber; i++) {
 			_needs [i].SetActive (true);
+			_needs [i].GetComponent<Button> ().onClick = NeedsEvents [i];
 		}
 		for (int i = 0; i < ProductsNumber; i++) {
 			_products [i].SetActive (true);
+			_products [i].GetComponent<Button> ().onClick = ProductsEvents [i];
 		}
 
 		_power.SetActive (true);
+		_power.GetComponent<Button> ().onClick = PowerEvents;	
 		_information.SetActive (true);
 	}
 

@@ -1,12 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using UnityEngine.Events;
+using System.Collections.Generic;
 
 public class BuildingUi : MonoBehaviour
 {
 	[Range(0,4)]
 	public int
 		Needs, Production;
+	public Button.ButtonClickedEvent PowerLinks;
+	public List<Button.ButtonClickedEvent> NeedEvents, ProductionEvents;
 	
 	private BuildingUiCanvas _canvas;
 	private bool _displayed;
@@ -17,6 +21,10 @@ public class BuildingUi : MonoBehaviour
 	{
 		_canvas = GameObject.Find ("BuildingUi").GetComponent<BuildingUiCanvas> ();
 		_scale = GameObject.Find ("BuildingNeedsAndProduction").GetComponent<CanvasScaler> ();
+		if (NeedEvents.Count != Needs)
+			Debug.LogError ("The number of need is different to the number of Needs Event");
+		if (ProductionEvents.Count != Production)
+			Debug.LogError ("The number of production is different to the number of Production Event");
 	}
 	
 	// Update is called once per frame
@@ -35,7 +43,7 @@ public class BuildingUi : MonoBehaviour
 	
 	IEnumerator DisplayUi ()
 	{
-		_canvas.Display (Needs, Production);
+		_canvas.Display (Needs, Production, NeedEvents, ProductionEvents, PowerLinks);
 		_displayed = true;
 		while (_displayed) {
 			Vector3 screenPos = Camera.main.WorldToScreenPoint (transform.position);
