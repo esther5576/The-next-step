@@ -1,0 +1,192 @@
+fileFormatVersion: 2
+guid: 587da76ee88409040b74b538c9357ee8
+timeCreated: 1437661687
+licenseType: Free
+ModelImporter:
+  serializedVersion: 18
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: resourbuildes_and:pCylinder85
+    100004: resourbuildes_and:resourbuildes_and:pCylinder100
+    100006: resourbuildes_and:resourbuildes_and:pCylinder101
+    100008: resourbuildes_and:resourbuildes_and:pCylinder102
+    100010: resourbuildes_and:resourbuildes_and:pCylinder103
+    100012: resourbuildes_and:resourbuildes_and:pCylinder104
+    100014: resourbuildes_and:resourbuildes_and:pCylinder105
+    100016: resourbuildes_and:resourbuildes_and:pCylinder353
+    100018: resourbuildes_and:resourbuildes_and:pCylinder86
+    100020: resourbuildes_and:resourbuildes_and:pCylinder87
+    100022: resourbuildes_and:resourbuildes_and:pCylinder88
+    100024: resourbuildes_and:resourbuildes_and:pCylinder89
+    100026: resourbuildes_and:resourbuildes_and:pCylinder90
+    100028: resourbuildes_and:resourbuildes_and:pCylinder91
+    100030: resourbuildes_and:resourbuildes_and:pCylinder92
+    100032: resourbuildes_and:resourbuildes_and:pCylinder93
+    100034: resourbuildes_and:resourbuildes_and:pCylinder94
+    100036: resourbuildes_and:resourbuildes_and:pCylinder95
+    100038: resourbuildes_and:resourbuildes_and:pCylinder96
+    100040: resourbuildes_and:resourbuildes_and:pCylinder97
+    100042: resourbuildes_and:resourbuildes_and:pCylinder98
+    100044: resourbuildes_and:resourbuildes_and:pCylinder99
+    100046: resourbuildes_and:resourbuildes_and:resourbuildes_and:resourbuildes_and:pCylinder106
+    100048: resourbuildes_and:resourbuildes_and:resourbuildes_and:resourbuildes_and:pCylinder333
+    400000: //RootNode
+    400002: resourbuildes_and:pCylinder85
+    400004: resourbuildes_and:resourbuildes_and:pCylinder100
+    400006: resourbuildes_and:resourbuildes_and:pCylinder101
+    400008: resourbuildes_and:resourbuildes_and:pCylinder102
+    400010: resourbuildes_and:resourbuildes_and:pCylinder103
+    400012: resourbuildes_and:resourbuildes_and:pCylinder104
+    400014: resourbuildes_and:resourbuildes_and:pCylinder105
+    400016: resourbuildes_and:resourbuildes_and:pCylinder353
+    400018: resourbuildes_and:resourbuildes_and:pCylinder86
+    400020: resourbuildes_and:resourbuildes_and:pCylinder87
+    400022: resourbuildes_and:resourbuildes_and:pCylinder88
+    400024: resourbuildes_and:resourbuildes_and:pCylinder89
+    400026: resourbuildes_and:resourbuildes_and:pCylinder90
+    400028: resourbuildes_and:resourbuildes_and:pCylinder91
+    400030: resourbuildes_and:resourbuildes_and:pCylinder92
+    400032: resourbuildes_and:resourbuildes_and:pCylinder93
+    400034: resourbuildes_and:resourbuildes_and:pCylinder94
+    400036: resourbuildes_and:resourbuildes_and:pCylinder95
+    400038: resourbuildes_and:resourbuildes_and:pCylinder96
+    400040: resourbuildes_and:resourbuildes_and:pCylinder97
+    400042: resourbuildes_and:resourbuildes_and:pCylinder98
+    400044: resourbuildes_and:resourbuildes_and:pCylinder99
+    400046: resourbuildes_and:resourbuildes_and:resourbuildes_and:resourbuildes_and:pCylinder106
+    400048: resourbuildes_and:resourbuildes_and:resourbuildes_and:resourbuildes_and:pCylinder333
+    2300000: resourbuildes_and:pCylinder85
+    2300002: resourbuildes_and:resourbuildes_and:pCylinder100
+    2300004: resourbuildes_and:resourbuildes_and:pCylinder101
+    2300006: resourbuildes_and:resourbuildes_and:pCylinder102
+    2300008: resourbuildes_and:resourbuildes_and:pCylinder103
+    2300010: resourbuildes_and:resourbuildes_and:pCylinder104
+    2300012: resourbuildes_and:resourbuildes_and:pCylinder105
+    2300014: resourbuildes_and:resourbuildes_and:pCylinder353
+    2300016: resourbuildes_and:resourbuildes_and:pCylinder86
+    2300018: resourbuildes_and:resourbuildes_and:pCylinder87
+    2300020: resourbuildes_and:resourbuildes_and:pCylinder88
+    2300022: resourbuildes_and:resourbuildes_and:pCylinder89
+    2300024: resourbuildes_and:resourbuildes_and:pCylinder90
+    2300026: resourbuildes_and:resourbuildes_and:pCylinder91
+    2300028: resourbuildes_and:resourbuildes_and:pCylinder92
+    2300030: resourbuildes_and:resourbuildes_and:pCylinder93
+    2300032: resourbuildes_and:resourbuildes_and:pCylinder94
+    2300034: resourbuildes_and:resourbuildes_and:pCylinder95
+    2300036: resourbuildes_and:resourbuildes_and:pCylinder96
+    2300038: resourbuildes_and:resourbuildes_and:pCylinder97
+    2300040: resourbuildes_and:resourbuildes_and:pCylinder98
+    2300042: resourbuildes_and:resourbuildes_and:pCylinder99
+    2300044: resourbuildes_and:resourbuildes_and:resourbuildes_and:resourbuildes_and:pCylinder106
+    2300046: resourbuildes_and:resourbuildes_and:resourbuildes_and:resourbuildes_and:pCylinder333
+    3300000: resourbuildes_and:pCylinder85
+    3300002: resourbuildes_and:resourbuildes_and:pCylinder100
+    3300004: resourbuildes_and:resourbuildes_and:pCylinder101
+    3300006: resourbuildes_and:resourbuildes_and:pCylinder102
+    3300008: resourbuildes_and:resourbuildes_and:pCylinder103
+    3300010: resourbuildes_and:resourbuildes_and:pCylinder104
+    3300012: resourbuildes_and:resourbuildes_and:pCylinder105
+    3300014: resourbuildes_and:resourbuildes_and:pCylinder353
+    3300016: resourbuildes_and:resourbuildes_and:pCylinder86
+    3300018: resourbuildes_and:resourbuildes_and:pCylinder87
+    3300020: resourbuildes_and:resourbuildes_and:pCylinder88
+    3300022: resourbuildes_and:resourbuildes_and:pCylinder89
+    3300024: resourbuildes_and:resourbuildes_and:pCylinder90
+    3300026: resourbuildes_and:resourbuildes_and:pCylinder91
+    3300028: resourbuildes_and:resourbuildes_and:pCylinder92
+    3300030: resourbuildes_and:resourbuildes_and:pCylinder93
+    3300032: resourbuildes_and:resourbuildes_and:pCylinder94
+    3300034: resourbuildes_and:resourbuildes_and:pCylinder95
+    3300036: resourbuildes_and:resourbuildes_and:pCylinder96
+    3300038: resourbuildes_and:resourbuildes_and:pCylinder97
+    3300040: resourbuildes_and:resourbuildes_and:pCylinder98
+    3300042: resourbuildes_and:resourbuildes_and:pCylinder99
+    3300044: resourbuildes_and:resourbuildes_and:resourbuildes_and:resourbuildes_and:pCylinder106
+    3300046: resourbuildes_and:resourbuildes_and:resourbuildes_and:resourbuildes_and:pCylinder333
+    4300000: resourbuildes_and:pCylinder85
+    4300002: resourbuildes_and:resourbuildes_and:pCylinder86
+    4300004: resourbuildes_and:resourbuildes_and:pCylinder87
+    4300006: resourbuildes_and:resourbuildes_and:pCylinder88
+    4300008: resourbuildes_and:resourbuildes_and:pCylinder89
+    4300010: resourbuildes_and:resourbuildes_and:pCylinder90
+    4300012: resourbuildes_and:resourbuildes_and:pCylinder91
+    4300014: resourbuildes_and:resourbuildes_and:pCylinder92
+    4300016: resourbuildes_and:resourbuildes_and:pCylinder93
+    4300018: resourbuildes_and:resourbuildes_and:pCylinder94
+    4300020: resourbuildes_and:resourbuildes_and:pCylinder95
+    4300022: resourbuildes_and:resourbuildes_and:pCylinder96
+    4300024: resourbuildes_and:resourbuildes_and:pCylinder97
+    4300026: resourbuildes_and:resourbuildes_and:pCylinder98
+    4300028: resourbuildes_and:resourbuildes_and:pCylinder99
+    4300030: resourbuildes_and:resourbuildes_and:pCylinder100
+    4300032: resourbuildes_and:resourbuildes_and:pCylinder101
+    4300034: resourbuildes_and:resourbuildes_and:pCylinder102
+    4300036: resourbuildes_and:resourbuildes_and:pCylinder103
+    4300038: resourbuildes_and:resourbuildes_and:pCylinder104
+    4300040: resourbuildes_and:resourbuildes_and:pCylinder105
+    4300042: resourbuildes_and:resourbuildes_and:resourbuildes_and:resourbuildes_and:pCylinder333
+    4300044: resourbuildes_and:resourbuildes_and:pCylinder353
+    4300046: resourbuildes_and:resourbuildes_and:resourbuildes_and:resourbuildes_and:pCylinder106
+    9500000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
