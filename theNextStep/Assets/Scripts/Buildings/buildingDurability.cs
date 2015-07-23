@@ -38,4 +38,8 @@ public class buildingDurability : MonoBehaviour
 			this.GetComponent<ProductionAndNeeds> ()._buildingBroken = false;
 		}
 	}
+
+	//100 a 25 produit au 100%
+	//25 a 0 produit 50%
+	//0inutilisable et le cout de reparation est beaucoup plus cher
 }
