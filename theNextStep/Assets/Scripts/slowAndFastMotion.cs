@@ -8,7 +8,7 @@ public class slowAndFastMotion : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-		Time.timeScale = _speed;
+		/*Time.timeScale = _speed;
 
 		if (_speed != 1) {
 			_cameraController.GetComponent<cameraController> ().MoveEnabled = false;
@@ -16,7 +16,9 @@ public class slowAndFastMotion : MonoBehaviour
 		} else {
 			_cameraController.GetComponent<cameraController> ().MoveEnabled = true;
 			_cameraController.GetComponent<cameraController> ().CombinedMovement = true;
-		}
+		}*/
+
+		Camera.main.GetComponent<DayNightController> ().timeMultiplier = _speed;
 
 	}
 

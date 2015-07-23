@@ -5,7 +5,8 @@ public class buildingDurability : MonoBehaviour
 {
 	public float _actualDurability = 100;
 	public float _maximumDurability = 100;
-	public float _durabilityBroken = 25;
+	public float _durabilityHalfProduction = 25;
+	public float _durabilityBroken = 0;
 
 	public float secondsInFullDay = 120f;
 	public float currentTimeOfDay = 0;
@@ -13,6 +14,10 @@ public class buildingDurability : MonoBehaviour
 	[HideInInspector]
 	public float
 		timeMultiplier = 1f;
+
+	[HideInInspector]
+	public bool
+		_halfProd;
 	// Use this for initialization
 	void Start ()
 	{
@@ -29,6 +34,12 @@ public class buildingDurability : MonoBehaviour
 		if (currentTimeOfDay >= 1) {
 			currentTimeOfDay = 0;
 			_actualDurability--;
+		}
+
+		if (_actualDurability < _durabilityHalfProduction) {
+			_halfProd = true;
+		} else {
+			_halfProd = false;
 		}
 
 		if (_actualDurability < _durabilityBroken) {

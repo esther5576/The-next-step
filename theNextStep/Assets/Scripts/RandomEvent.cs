@@ -29,12 +29,12 @@ public class RandomEvent : MonoBehaviour
 		//float randomPoint = Random.value * 10;
 		//Debug.Log (Mathf.CeilToInt (randomPoint));
 		if (_activateRandomEvent == false) {
-			_dayEvent = (Random.Range (_minDay, _maxDay)) + this.GetComponent<dayToDayCounter> ()._days;
+			_dayEvent = (Random.Range (_minDay, _maxDay)) + this.GetComponent<DayNightController> ()._days;
 			_activateRandomEvent = true;
 			//Debug.Log (_dayEvent);
 		}
 
-		if (_dayEvent == this.GetComponent<dayToDayCounter> ()._days) {
+		if (_dayEvent == this.GetComponent<DayNightController> ()._days) {
 			_activateRandomEvent = false;
 			_randomEvent = Mathf.FloorToInt (Random.value * (_nameEvent.Count));
 			crisisEvents ();

@@ -33,6 +33,7 @@ public class DayNightController : MonoBehaviour
 
 	public int _days;
 	private bool _dayMorningNight = true;
+
 	void Start ()
 	{
 		sunInitialIntensity = sun.intensity;
@@ -49,9 +50,24 @@ public class DayNightController : MonoBehaviour
 
 		// If currentTimeOfDay is 1 (midnight) set it to 0 again so we start a new day.
 		if (currentTimeOfDay >= 1) {
+			_days ++;
 			currentTimeOfDay = 0;
 		}
 
+		//Day or night detection
+		if (currentTimeOfDay > 0.22f && currentTimeOfDay < 0.75f) {
+			_dayMorningNight = true;
+		} else {
+			_dayMorningNight = false;
+		}
+
+		//Sand effect activation
+		if (_dayMorningNight == true) {
+			_sandEffect.SetActive (true);
+		}
+		if (_dayMorningNight == false) {
+			_sandEffect.SetActive (false);
+		}
 	}
 
 	void UpdateSun ()
@@ -92,5 +108,20 @@ public class DayNightController : MonoBehaviour
 
 		// Multiply the intensity of the sun according to the time of day.
 		sun.intensity = sunInitialIntensity * intensityMultiplier;
+	}
+
+	void OnGUI ()
+	{
+		GUIStyle myStyle = new GUIStyle ();
+		myStyle.fontSize = 30;
+		myStyle.normal.textColor = Color.white;
+		
+		if (_dayMorningNight == true) {
+			GUI.Label (new Rect (Screen.width - 100, 20, 100, 30), "DAY", myStyle);
+		}
+		if (_dayMorningNight == false) {
+			GUI.Label (new Rect (Screen.width - 100, 20, 100, 30), "NIGHT", myStyle);
+		}
+		GUI.Label (new Rect (Screen.width - 75, 50, 100, 30), "" + _days, myStyle);
 	}
 }
