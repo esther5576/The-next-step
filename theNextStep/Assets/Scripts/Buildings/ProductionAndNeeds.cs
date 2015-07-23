@@ -33,6 +33,20 @@ public class ProductionAndNeeds : MonoBehaviour
 	[HideInInspector]
 	public bool
 		_buildingBroken;
+
+	public int Level {
+		get{ return _level;} 
+		set { 
+			if (_level > _maxLevel) {
+				_level = _maxLevel;
+			} else {
+				_level = Level;
+			}
+		}
+	}
+
+	public int _level;
+	public int _maxLevel = 5;
 	// Use this for initialization
 	void Start ()
 	{
