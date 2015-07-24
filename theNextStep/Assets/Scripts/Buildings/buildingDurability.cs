@@ -5,18 +5,23 @@ public class buildingDurability : MonoBehaviour
 {
 	public float _actualDurability = 100;
 	public float _maximumDurability = 100;
-	public float _durabilityBroken = 25;
-
+	public float _durabilityHalfProduction = 25;
+	public float _durabilityBroken = 0;
+	
 	public float secondsInFullDay = 120f;
 	public float currentTimeOfDay = 0;
 	// A multiplier other scripts can use to speed up and slow down the passing of time.
 	[HideInInspector]
 	public float
 		timeMultiplier = 1f;
+	
+	[HideInInspector]
+	public bool
+		_halfProd;
 	// Use this for initialization
 	void Start ()
 	{
-	
+		
 	}
 	
 	// Update is called once per frame
@@ -30,7 +35,13 @@ public class buildingDurability : MonoBehaviour
 			currentTimeOfDay = 0;
 			_actualDurability--;
 		}
-
+		
+		if (_actualDurability < _durabilityHalfProduction) {
+			_halfProd = true;
+		} else {
+			_halfProd = false;
+		}
+		
 		if (_actualDurability < _durabilityBroken) {
 			Debug.Log ("buildingNotWorking");
 			this.GetComponent<ProductionAndNeeds> ()._buildingBroken = true;
@@ -38,7 +49,7 @@ public class buildingDurability : MonoBehaviour
 			this.GetComponent<ProductionAndNeeds> ()._buildingBroken = false;
 		}
 	}
-
+	
 	//100 a 25 produit au 100%
 	//25 a 0 produit 50%
 	//0inutilisable et le cout de reparation est beaucoup plus cher

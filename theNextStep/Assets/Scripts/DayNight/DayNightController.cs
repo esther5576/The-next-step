@@ -3,14 +3,14 @@ using System.Collections;
 
 public class DayNightController : MonoBehaviour
 {
-
+	
 	// The directional light which we manipulate as our sun.
 	public Light sun;
-
+	
 	// The number of real-world seconds in one full game day.
 	// Set this to 86400 for a 24-hour realtime day.
 	public float secondsInFullDay = 120f;
-
+	
 	// The value we use to calculate the current time of day.
 	// Goes from 0 (midnight) through 0.25 (sunrise), 0.5 (midday), 0.75 (sunset) to 1 (midnight).
 	// We define ourself what value the sunrise sunrise should be etc., but I thought these 
@@ -18,42 +18,58 @@ public class DayNightController : MonoBehaviour
 	[Range(0,1)]
 	public float
 		currentTimeOfDay = 0;
-
-
+	
+	
 	// A multiplier other scripts can use to speed up and slow down the passing of time.
 	[HideInInspector]
 	public float
 		timeMultiplier = 1f;
-
-
+	
+	
 	// Get the initial intensity of the sun so we remember it.
 	float sunInitialIntensity;
-
+	
 	public GameObject _sandEffect;
-
+	
 	public int _days;
 	private bool _dayMorningNight = true;
+	
 	void Start ()
 	{
 		sunInitialIntensity = sun.intensity;
 		_sandEffect = GameObject.Find ("DustStormEsther");
 	}
-
+	
 	void Update ()
 	{
 		// Updates the sun's rotation and intensity according to the current time of day.
 		UpdateSun ();
-
+		
 		// This makes currentTimeOfDay go from 0 to 1 in the number of seconds we've specified.
 		currentTimeOfDay += (Time.deltaTime / secondsInFullDay) * timeMultiplier;
-
+		
 		// If currentTimeOfDay is 1 (midnight) set it to 0 again so we start a new day.
 		if (currentTimeOfDay >= 1) {
+			_days ++;
 			currentTimeOfDay = 0;
 		}
-
+		
+		//Day or night detection
+		if (currentTimeOfDay > 0.22f && currentTimeOfDay < 0.75f) {
+			_dayMorningNight = true;
+		} else {
+			_dayMorningNight = false;
+		}
+		
+		//Sand effect activation
+		if (_dayMorningNight == true) {
+			_sandEffect.SetActive (true);
+		}
+		if (_dayMorningNight == false) {
+			_sandEffect.SetActive (false);
+		}
 	}
-
+	
 	void UpdateSun ()
 	{
 		// Rotate the sun 360 degrees around the x-axis according to the current time of day.
@@ -62,21 +78,21 @@ public class DayNightController : MonoBehaviour
 		// The y-axis determines where on the horizon the sun will rise and set.
 		// The z-axis does nothing.
 		sun.transform.localRotation = Quaternion.Euler ((currentTimeOfDay * 360f) - 90, 170, 0);
-
+		
 		// The following determines the sun's intensity according to current time of day.
 		// You'll notice I have hardcoded a bunch of values here. They were just the values
 		// I felt worked best. This can obviously be made to be user configurable.
 		// Also with some more clever code you can have different lengths for the day and
 		// night as well.
-
+		
 		// The sun is full intensity during the day.
 		float intensityMultiplier = 1;
 		// Set intensity to 0 during the night night.
 		if (currentTimeOfDay <= 0.23f || currentTimeOfDay >= 0.75f) {
 			intensityMultiplier = 0;
 		}
-        // Fade in the sun when it rises.
-        else if (currentTimeOfDay <= 0.25f) {
+		// Fade in the sun when it rises.
+		else if (currentTimeOfDay <= 0.25f) {
 			// 0.02 is the amount of time between sunrise and the time we start fading out
 			// the intensity (0.25 - 0.23). By dividing 1 by that value we we get get 50.
 			// This tells us that we have to fade in the intensity 50 times faster than the
@@ -85,12 +101,27 @@ public class DayNightController : MonoBehaviour
 			// a perfect fade.
 			intensityMultiplier = Mathf.Clamp01 ((currentTimeOfDay - 0.23f) * (1 / 0.02f));
 		}
-        // And fade it out when it sets.
-        else if (currentTimeOfDay >= 0.73f) {
+		// And fade it out when it sets.
+		else if (currentTimeOfDay >= 0.73f) {
 			intensityMultiplier = Mathf.Clamp01 (1 - ((currentTimeOfDay - 0.73f) * (1 / 0.02f)));
 		}
-
+		
 		// Multiply the intensity of the sun according to the time of day.
 		sun.intensity = sunInitialIntensity * intensityMultiplier;
+	}
+	
+	void OnGUI ()
+	{
+		GUIStyle myStyle = new GUIStyle ();
+		myStyle.fontSize = 30;
+		myStyle.normal.textColor = Color.white;
+		
+		if (_dayMorningNight == true) {
+			GUI.Label (new Rect (Screen.width - 100, 20, 100, 30), "DAY", myStyle);
+		}
+		if (_dayMorningNight == false) {
+			GUI.Label (new Rect (Screen.width - 100, 20, 100, 30), "NIGHT", myStyle);
+		}
+		GUI.Label (new Rect (Screen.width - 75, 50, 100, 30), "" + _days, myStyle);
 	}
 }
