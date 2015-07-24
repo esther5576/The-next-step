@@ -8,20 +8,6 @@ public class cameraController : MonoBehaviour
 	public float verticalScrollSpeed = 10f;
 	public float horizontalScrollSpeed = 10f;
 	
-	public void EnableControls (bool _enable)
-	{
-		
-		if (_enable) {
-			ZoomEnabled = true;
-			MoveEnabled = true;
-			CombinedMovement = true;
-		} else {
-			ZoomEnabled = false;
-			MoveEnabled = false;
-			CombinedMovement = false;
-		}
-	}
-	
 	public bool ZoomEnabled = true;
 	public bool MoveEnabled = true;
 	public bool CombinedMovement = true;
@@ -34,11 +20,13 @@ public class cameraController : MonoBehaviour
 	
 	void Update ()
 	{
-		if (Input.GetKeyDown (KeyCode.Space)) {
+		if (Input.GetKey (KeyCode.Space)) {
+			Debug.Log ("hi");
 			MoveEnabled = false;
 			CombinedMovement = false;
 		}
 		if (Input.GetKeyUp (KeyCode.Space)) {
+			Debug.Log ("stop");
 			MoveEnabled = true;
 			CombinedMovement = true;
 		}

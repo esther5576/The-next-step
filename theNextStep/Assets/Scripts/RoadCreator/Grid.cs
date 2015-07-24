@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class Grid : MonoBehaviour
 {
+
 	public Node[,] Map {
 		get {
 			return _map;

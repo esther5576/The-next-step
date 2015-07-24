@@ -4,7 +4,8 @@ using System.Collections;
 public class cameraFocus : MonoBehaviour
 {
 	public float _speed;
-	public Vector3 _target = new Vector3 (); 
+	public Vector3 Offset;
+	private Vector3 _target = new Vector3 ();
 	
 	private bool _activeFocus;
 
@@ -23,7 +24,8 @@ public class cameraFocus : MonoBehaviour
 			if (Physics.Raycast (ray, out hit)) {
 				if (hit.rigidbody != null) {
 					_activeFocus = true;
-					_target = new Vector3 (hit.rigidbody.position.x - 2, this.transform.position.y, hit.rigidbody.position.z - 2);
+					_target = new Vector3 (hit.rigidbody.position.x, this.transform.position.y, hit.rigidbody.position.z);
+					_target += Offset;
 				}
 			}
 		}

@@ -8,7 +8,7 @@ using UnityEngine.Events;
 public class BuildingUiCanvas : MonoBehaviour
 {
 	private GameObject[] _needs, _products;
-	private GameObject _power, _information;
+	private GameObject _power, _information, _upgrade, _repair;
 	// Use this for initialization
 	void Start ()
 	{
@@ -21,6 +21,8 @@ public class BuildingUiCanvas : MonoBehaviour
 		//Member assignation
 		_power = GameObject.Find ("Power");
 		_information = GameObject.Find ("Informations");
+		_repair = GameObject.Find ("Repair");
+		_upgrade = GameObject.Find ("Upgrade");
 
 		//initialisation and order
 		for (int i = 0; i < _needs.Length; i++) {
@@ -33,6 +35,8 @@ public class BuildingUiCanvas : MonoBehaviour
 		}
 		_power.SetActive (false);
 		_information.SetActive (false);
+		_repair.SetActive (false);
+		_upgrade.SetActive (false);
 
 		//Display (4, 2);
 	}
@@ -57,12 +61,16 @@ public class BuildingUiCanvas : MonoBehaviour
 		_power.SetActive (true);
 		_power.GetComponent<Button> ().onClick = PowerEvents;	
 		_information.SetActive (true);
+		_repair.SetActive (true);
+		_upgrade.SetActive (true);
 	}
 
 	public void SwitchOff ()
 	{
 		_power.SetActive (false);
 		_information.SetActive (false);
+		_repair.SetActive (false);
+		_upgrade.SetActive (false);
 		foreach (var Ui in _needs) {
 			Ui.SetActive (false);
 		}
