@@ -7,6 +7,7 @@ public class cameraController : MonoBehaviour
 	public float horizontalScrollArea = 10f;
 	public float verticalScrollSpeed = 10f;
 	public float horizontalScrollSpeed = 10f;
+	public float RotateSpeed = 35f;
 	
 	public bool ZoomEnabled = true;
 	public bool MoveEnabled = true;
@@ -21,12 +22,10 @@ public class cameraController : MonoBehaviour
 	void Update ()
 	{
 		if (Input.GetKey (KeyCode.Space)) {
-			Debug.Log ("hi");
 			MoveEnabled = false;
 			CombinedMovement = false;
 		}
 		if (Input.GetKeyUp (KeyCode.Space)) {
-			Debug.Log ("stop");
 			MoveEnabled = true;
 			CombinedMovement = true;
 		}
@@ -98,6 +97,23 @@ public class cameraController : MonoBehaviour
 		
 		//move the object
 		MoveMe (_xMove, _yMove, _zMove);
+		
+		if (Input.GetKey (KeyCode.Q) && !Input.GetKey (KeyCode.E)) {
+			
+			Ray r = new Ray (Camera.main.transform.position, Camera.main.transform.forward);
+			RaycastHit hit;
+			if (Physics.Raycast (r, out hit)) {
+				transform.RotateAround (hit.point, Vector3.up, RotateSpeed * Time.deltaTime);
+			}
+		}
+		if (Input.GetKey (KeyCode.E) && !Input.GetKey (KeyCode.Q)) {
+			
+			Ray r = new Ray (Camera.main.transform.position, Camera.main.transform.forward);
+			RaycastHit hit;
+			if (Physics.Raycast (r, out hit)) {
+				transform.RotateAround (hit.point, Vector3.up, -RotateSpeed * Time.deltaTime);
+			}
+		}
 	}
 	
 	private void MoveMe (float x, float y, float z)
@@ -105,6 +121,6 @@ public class cameraController : MonoBehaviour
 		_moveVector = (new Vector3 (x * horizontalScrollSpeed + z * horizontalScrollSpeed,
 		                            y * horizontalScrollSpeed, z * horizontalScrollSpeed - x * horizontalScrollSpeed) * Time.deltaTime);
 
-		transform.Translate (_moveVector, Space.World);
+		transform.Translate (_moveVector, Space.Self);
 	}
 }

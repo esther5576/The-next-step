@@ -23,30 +23,23 @@ public class cameraFocus : MonoBehaviour
 			Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
 			if (Physics.Raycast (ray, out hit)) {
 				if (hit.rigidbody != null) {
-					_activeFocus = true;
-					_target = new Vector3 (hit.rigidbody.position.x, this.transform.position.y, hit.rigidbody.position.z);
-					_target += Offset;
+					StopCoroutine ("FocusOn");
+					StartCoroutine (FocusOn (hit.transform));
 				}
 			}
 		}
 
-		if (_activeFocus == true) {
-			float _step = _speed * Time.deltaTime;
-			transform.position = Vector3.MoveTowards (transform.position, _target, _step);
-
-			if (Camera.main.GetComponent<cameraBehaviour> ()._zoomNumber < 0.5f) {
-				Camera.main.GetComponent<cameraBehaviour> ()._zoomNumber += 1 * Time.deltaTime;
-			}
-			if (Camera.main.GetComponent<cameraBehaviour> ()._zoomNumber >= 0.5f) {
-				Camera.main.GetComponent<cameraBehaviour> ()._zoomNumber = 0.5f;
-			}
-			
-
-			//Camera.main.GetComponent<cameraBehaviour> ()._animation.SetFloat ("cameraType", _cameraStep);
-			if (transform.position == _target) {
-				_activeFocus = false;
-			}
+	}
+	
+	IEnumerator FocusOn (Transform target)
+	{
+		Vector3 targetVect = target.position;
+		targetVect.y = transform.position.y;
+		while (targetVect != transform.position) {
+			transform.position = Vector3.MoveTowards (transform.position, targetVect, _speed * Time.deltaTime);
+			yield return null;
 		}
-
+		Debug.Log ("End!");
+		yield return null;
 	}
 }

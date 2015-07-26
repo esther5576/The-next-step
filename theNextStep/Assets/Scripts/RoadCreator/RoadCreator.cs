@@ -37,7 +37,7 @@ public class RoadCreator : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-		if (Input.GetKeyDown (KeyCode.Z) && !_onCreation) {
+		if (Input.GetKeyDown (KeyCode.F2) && !_onCreation) {
 			_onCreation = true;
 			Ray r = Camera.main.ScreenPointToRay (Input.mousePosition);
 			RaycastHit hit;
