@@ -12,7 +12,10 @@ public class gameStats : MonoBehaviour
 	public float _actualOxygen = 12000f;
 	public float _actualWater = 6000f;
 	public float _actualFood = 900000f;
-	public float _actualMineral = 500f;
+
+	public float _actualConstructionMaterials = 100f;
+	public float _actualReparationMaterials = 100f;
+	public float _actualUpgradeMaterials = 100f;
 	//Actual amount of material that the player has ====================================================================================================================================================================
 	#endregion
 
@@ -25,7 +28,10 @@ public class gameStats : MonoBehaviour
 	public float _minOxygen = 1f;
 	public float _minWater = 1f;
 	public float _minFood = 1f;
-	public float _minMineral = 1f;
+
+	public float _minConstructionMaterials = 1f;
+	public float _minReparationMaterials = 1f;
+	public float _minUpgradeMaterials = 1f;
 	//The minimum amount of energy needed so that everything works =====================================================================================================================================================
 	#endregion
 
@@ -38,7 +44,10 @@ public class gameStats : MonoBehaviour
 	public float _maxOxygen = 12000f;
 	public float _maxWater = 6000f;
 	public float _maxFood = 900000f;
-	public float _maxMineral = 500f;
+
+	public float _maxConstructionMaterials = 1000f;
+	public float _maxReparationMaterials = 1000f;
+	public float _maxUpgradeMaterials = 1000f;
 	//The minimum amount of energy needed so that everything works =====================================================================================================================================================
 	#endregion
 
@@ -69,8 +78,16 @@ public class gameStats : MonoBehaviour
 			_actualTemperature = _maxTemperature;
 		}
 
-		if (_actualMineral > _maxMineral) {
-			_actualMineral = _maxMineral;
+		if (_actualConstructionMaterials > _maxConstructionMaterials) {
+			_actualConstructionMaterials = _maxConstructionMaterials;
+		}
+
+		if (_actualReparationMaterials > _maxReparationMaterials) {
+			_actualReparationMaterials = _maxReparationMaterials;
+		}
+
+		if (_actualUpgradeMaterials > _maxUpgradeMaterials) {
+			_actualUpgradeMaterials = _maxUpgradeMaterials;
 		}
 	}
 }

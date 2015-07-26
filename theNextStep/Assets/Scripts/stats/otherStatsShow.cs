@@ -24,7 +24,7 @@ public class otherStatsShow : MonoBehaviour
 
 		GUI.Label (new Rect (25, 20, 500, 30), "Humans: " + this.GetComponent<gameStats> ()._actualHumans, myStyle);
 		GUI.Label (new Rect (25, 50, 500, 30), "Electricity: " + this.GetComponent<gameStats> ()._actualElectricity, myStyle);
-		GUI.Label (new Rect (25, 80, 500, 30), "Minerals: " + this.GetComponent<gameStats> ()._actualMineral, myStyle);
+		//GUI.Label (new Rect (25, 80, 500, 30), "Minerals: " + this.GetComponent<gameStats> ()._actualMineral, myStyle);
 
 		GUI.Label (new Rect (25, 110, 500, 30), "Temperature: " + this.GetComponent<gameStats> ()._actualTemperature, myStyle);
 	}
