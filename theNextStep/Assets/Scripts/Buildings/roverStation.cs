@@ -111,7 +111,7 @@ public class roverStation : MonoBehaviour
 			RaycastHit hit;
 			Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
 			if (Physics.Raycast (ray, out hit)) {
-				if (hit.rigidbody != null && (hit.transform.name == "RoverStation(Clone)" || hit.transform.name == "RoverStation")) {
+				if (hit.rigidbody != null && (hit.transform.tag == "RoverStation")) {
 					if (_roverOut == false) {
 						_roverCanvas.GetComponent<CanvasGroup> ().alpha = 1;
 						_roverCanvas.GetComponent<CanvasGroup> ().interactable = true;
@@ -167,7 +167,7 @@ public class roverStation : MonoBehaviour
 			_RoverOut.GetComponent<CanvasGroup> ().interactable = false;
 			_RoverOut.GetComponent<CanvasGroup> ().blocksRaycasts = false;
 
-			_roverCanvas.GetComponent<MapRover> ()._actualBuildingSelected = null;
+			//_roverCanvas.GetComponent<MapRover> ()._actualBuildingSelected = null;
 		}
 	}
 
