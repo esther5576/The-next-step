@@ -46,6 +46,10 @@ public class ProductionAndNeeds : MonoBehaviour
 	[HideInInspector]
 	public bool
 		_buildingHalfProd;
+
+	[HideInInspector]
+	public bool
+		_buildingElectricity = true;
 	// Use this for initialization
 	void Start ()
 	{
@@ -58,11 +62,19 @@ public class ProductionAndNeeds : MonoBehaviour
 	{
 		//Les needs et productions sont actifs si le batiment n'est pas une visualisation(=quand on va placer le batiment)
 		//et la bool buildingSwitch est true
-		if (this.name != "visualisation" && _buildingSwitch == true && _buildingBroken == false) {
+		if (this.name != "visualisation" && _buildingSwitch == true && _buildingBroken == false && _buildingElectricity == true) {
 			needs ();
 			production ();
 		}
-		
+
+		//building can have electricity
+		if (Camera.main.GetComponent<gameStats> ()._actualElectricity <= 0) {
+			_buildingElectricity = false;
+		} else {
+			_buildingElectricity = true;
+			Camera.main.GetComponent<gameStats> ()._actualElectricity = 0;
+		}
+
 		//Change production with the building durability
 		if (this.GetComponent<buildingDurability> ()._halfProd == true) {
 			_actualWaterProductionPerDay = _waterProductionPerDay / 2;
