@@ -1,0 +1,275 @@
+fileFormatVersion: 2
+guid: beb8a1bf4ae3de24bb3e9c2cce5f8de9
+timeCreated: 1437990161
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: Ui_2_0
+    21300002: Ui_2_1
+    21300004: Ui_2_2
+    21300006: Ui_2_3
+    21300008: Ui_2_4
+    21300010: Ui_2_5
+    21300012: Ui_2_6
+    21300014: Ui_2_7
+    21300016: Ui_2_8
+    21300018: Ui_2_9
+    21300020: Ui_2_10
+    21300022: Ui_2_11
+    21300024: Ui_2_12
+    21300026: Ui_2_13
+    21300028: Ui_2_14
+    21300030: Ui_2_15
+    21300032: Ui_2_16
+    21300034: Ui_2_17
+    21300036: Ui_2_18
+    21300038: Ui_2_19
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 8
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 4096
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 72
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: Ui_2_0
+      rect:
+        serializedVersion: 2
+        x: 1142
+        y: 2144
+        width: 256
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Ui_2_1
+      rect:
+        serializedVersion: 2
+        x: 775
+        y: 2040
+        width: 300
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Ui_2_2
+      rect:
+        serializedVersion: 2
+        x: 1100
+        y: 2041
+        width: 300
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Ui_2_3
+      rect:
+        serializedVersion: 2
+        x: 1424
+        y: 2041
+        width: 300
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Ui_2_4
+      rect:
+        serializedVersion: 2
+        x: 817
+        y: 1993
+        width: 252
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Ui_2_5
+      rect:
+        serializedVersion: 2
+        x: 1142
+        y: 1993
+        width: 252
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Ui_2_6
+      rect:
+        serializedVersion: 2
+        x: 1466
+        y: 1992
+        width: 252
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Ui_2_7
+      rect:
+        serializedVersion: 2
+        x: 2348
+        y: 1944
+        width: 100
+        height: 85
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Ui_2_8
+      rect:
+        serializedVersion: 2
+        x: 2468
+        y: 1941
+        width: 100
+        height: 85
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Ui_2_9
+      rect:
+        serializedVersion: 2
+        x: 2588
+        y: 1940
+        width: 104
+        height: 86
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Ui_2_10
+      rect:
+        serializedVersion: 2
+        x: 1039
+        y: 1861
+        width: 31
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Ui_2_11
+      rect:
+        serializedVersion: 2
+        x: 1100
+        y: 1856
+        width: 330
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Ui_2_12
+      rect:
+        serializedVersion: 2
+        x: 2348
+        y: 1842
+        width: 100
+        height: 85
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Ui_2_13
+      rect:
+        serializedVersion: 2
+        x: 2468
+        y: 1844
+        width: 100
+        height: 85
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Ui_2_14
+      rect:
+        serializedVersion: 2
+        x: 2591
+        y: 1844
+        width: 98
+        height: 85
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Ui_2_15
+      rect:
+        serializedVersion: 2
+        x: 1142
+        y: 1712
+        width: 81
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Ui_2_16
+      rect:
+        serializedVersion: 2
+        x: 1228
+        y: 1712
+        width: 78
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Ui_2_17
+      rect:
+        serializedVersion: 2
+        x: 2348
+        y: 1744
+        width: 100
+        height: 86
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Ui_2_18
+      rect:
+        serializedVersion: 2
+        x: 2468
+        y: 1743
+        width: 99
+        height: 85
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Ui_2_19
+      rect:
+        serializedVersion: 2
+        x: 2588
+        y: 1740
+        width: 104
+        height: 86
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

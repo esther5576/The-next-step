@@ -8,7 +8,7 @@ using UnityEngine.Events;
 public class BuildingUiCanvas : MonoBehaviour
 {
 	private GameObject[] _needs, _products;
-	private GameObject _power, _information, _upgrade, _repair;
+	private GameObject _power, _information, _upgrade, _repair, _energy;
 	// Use this for initialization
 	void Start ()
 	{
@@ -23,6 +23,7 @@ public class BuildingUiCanvas : MonoBehaviour
 		_information = GameObject.Find ("Informations");
 		_repair = GameObject.Find ("Repair");
 		_upgrade = GameObject.Find ("Upgrade");
+		_energy = GameObject.Find ("Power and Humans");
 
 		//initialisation and order
 		for (int i = 0; i < _needs.Length; i++) {
@@ -30,13 +31,14 @@ public class BuildingUiCanvas : MonoBehaviour
 			Needs [i].SetActive (false);
 		}
 		for (int i = 0; i < _products.Length; i++) {
-			_products [Convert.ToInt32 (Products [i].transform.name.Remove (0, 8)) - 1] = Products [i];
+			_products [Convert.ToInt32 (Products [i].transform.name.Remove (0, 11)) - 1] = Products [i];
 			Products [i].SetActive (false);
 		}
 		_power.SetActive (false);
 		_information.SetActive (false);
 		_repair.SetActive (false);
 		_upgrade.SetActive (false);
+		_energy.SetActive (false);
 
 		//Display (4, 2);
 	}
@@ -47,15 +49,15 @@ public class BuildingUiCanvas : MonoBehaviour
 	
 	}
 
-	public void Display (int NeedsNumber, int ProductsNumber, List<Button.ButtonClickedEvent> NeedsEvents, List<Button.ButtonClickedEvent> ProductsEvents, Button.ButtonClickedEvent PowerEvents)
+	public void Display (int NeedsNumber, int ProductsNumber, Button.ButtonClickedEvent PowerEvents, List<Sprite> NeedsSprites, List<Sprite> ProductionSprites, int PowerNeeds, int HumanNeed)
 	{
 		for (int i = 0; i < NeedsNumber; i++) {
 			_needs [i].SetActive (true);
-			_needs [i].GetComponent<Button> ().onClick = NeedsEvents [i];
+			_needs [i].GetComponent<Image> ().sprite = NeedsSprites [i];
 		}
 		for (int i = 0; i < ProductsNumber; i++) {
 			_products [i].SetActive (true);
-			_products [i].GetComponent<Button> ().onClick = ProductsEvents [i];
+			_products [i].GetComponent<Image> ().sprite = ProductionSprites [i];
 		}
 
 		_power.SetActive (true);
@@ -63,6 +65,9 @@ public class BuildingUiCanvas : MonoBehaviour
 		_information.SetActive (true);
 		_repair.SetActive (true);
 		_upgrade.SetActive (true);
+		_energy.SetActive (true);
+		_energy.transform.GetChild (0).gameObject.GetComponent<Text> ().text = PowerNeeds.ToString ();
+		_energy.transform.GetChild (1).gameObject.GetComponent<Text> ().text = HumanNeed.ToString ();
 	}
 
 	public void SwitchOff ()
@@ -71,6 +76,7 @@ public class BuildingUiCanvas : MonoBehaviour
 		_information.SetActive (false);
 		_repair.SetActive (false);
 		_upgrade.SetActive (false);
+		_energy.SetActive (false);
 		foreach (var Ui in _needs) {
 			Ui.SetActive (false);
 		}
