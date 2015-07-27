@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class gameStats : MonoBehaviour
 {
@@ -51,9 +52,35 @@ public class gameStats : MonoBehaviour
 	//The minimum amount of energy needed so that everything works =====================================================================================================================================================
 	#endregion
 
-
+	public  List<GameObject> _numberOfWarehouses = new List<GameObject> ();
+	public int _intOfWarehouses;
 	void Update ()
 	{
+		#region Tout ceci est pour les warehouses et leurs effets
+		//Tout ceci est pour les warehouses et leurs effets
+		for (var i = _numberOfWarehouses.Count - 1; i > -1; i--) {
+			if (_numberOfWarehouses [i] == null)
+				_numberOfWarehouses.RemoveAt (i);
+		}
+
+		_intOfWarehouses = _numberOfWarehouses.Count;
+
+		_maxElectricity = 500f + (500f / 20) * _intOfWarehouses;
+		_maxOxygen = 12000f + (12000f / 20) * _intOfWarehouses;
+		_maxWater = 6000f + (6000f / 20) * _intOfWarehouses;
+		_maxFood = 900000f + (900000f / 20) * _intOfWarehouses;
+		_maxConstructionMaterials = 1000f + (1000f / 20) * _intOfWarehouses;
+		_maxReparationMaterials = 1000f + (1000f / 20) * _intOfWarehouses;
+		_maxUpgradeMaterials = 1000f + (1000f / 20) * _intOfWarehouses;
+		#endregion
+
+		//Redmetrics When the night end send stats
+		if (Camera.main.GetComponent<DayNightController> ().currentTimeOfDay == 0) {
+			RedMetricsManager.get ().sendEvent (TrackingEvent.STATS, "{\"Oxygen\": " + _actualOxygen + ", \"Water\": " + _actualWater + ", \"Food\": " + _actualFood + ", \"Days\": " + Camera.main.GetComponent<DayNightController> ()._days + "}");
+		}
+		//Redmetrics When the night end send stats
+
+
 		if (_actualElectricity > _maxElectricity) {
 			_actualElectricity = _maxElectricity;
 		}

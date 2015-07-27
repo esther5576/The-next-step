@@ -1,0 +1,13 @@
+The game was created successfully. Here is the information related to your game:
+
+Name:
+the next step
+ID:
+d40075c5-92da-4f52-bdf5-b2d6e0ff596d
+Admin key:
+63de73eb-4e48-486a-833a-0a71639e4779
+Please hold onto your admin key to modify your game information, but do not share it with others.
+
+
+V1 ID
+ff2e8f35-38ad-4d1d-9728-74a7f09bf704
