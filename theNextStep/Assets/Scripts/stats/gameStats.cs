@@ -66,12 +66,12 @@ public class gameStats : MonoBehaviour
 		_intOfWarehouses = _numberOfWarehouses.Count;
 
 		_maxElectricity = 500f + (500f / 20) * _intOfWarehouses;
-		_maxOxygen = 12000f + (12000f / 20) * _intOfWarehouses;
-		_maxWater = 6000f + (6000f / 20) * _intOfWarehouses;
-		_maxFood = 900000f + (900000f / 20) * _intOfWarehouses;
-		_maxConstructionMaterials = 1000f + (1000f / 20) * _intOfWarehouses;
-		_maxReparationMaterials = 1000f + (1000f / 20) * _intOfWarehouses;
-		_maxUpgradeMaterials = 1000f + (1000f / 20) * _intOfWarehouses;
+		_maxOxygen = 300f + (300f / 20) * _intOfWarehouses;
+		_maxWater = 300f + (300f / 20) * _intOfWarehouses;
+		_maxFood = 300f + (300f / 20) * _intOfWarehouses;
+		_maxConstructionMaterials = 2000f + (1000f / 20) * _intOfWarehouses;
+		_maxReparationMaterials = 2000f + (1000f / 20) * _intOfWarehouses;
+		_maxUpgradeMaterials = 2000f + (1000f / 20) * _intOfWarehouses;
 		#endregion
 
 		//Redmetrics When the night end send stats

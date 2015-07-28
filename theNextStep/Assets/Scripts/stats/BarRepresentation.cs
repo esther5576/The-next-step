@@ -116,21 +116,18 @@ public class BarRepresentation : MonoBehaviour
 	
 	void Update ()
 	{
-		//Debug.Log (GetComponent<gameStats> ()._actualOxygen / GetComponent<gameStats> ()._maxOxygen);
-		//Debug.Log ("Oxygen: " + GetComponent<gameStats> ()._actualOxygen);
-		Debug.Log ("Max Oxygen: " + GetComponent<gameStats> ()._maxOxygen);
 		//For oxygen ==================================================================================================================================================================================================
-		//_barDisplayOxygen = (GetComponent<gameStats> ()._actualOxygen / GetComponent<gameStats> ()._maxOxygen);
+		_barDisplayOxygen = (GetComponent<gameStats> ()._actualOxygen / GetComponent<gameStats> ()._maxOxygen);
 		//For oxygen ==================================================================================================================================================================================================
 
 
 		//For water ==================================================================================================================================================================================================
-		//_barDisplayWater = (GetComponent<gameStats> ()._actualWater / GetComponent<gameStats> ()._maxWater);
+		_barDisplayWater = (GetComponent<gameStats> ()._actualWater / GetComponent<gameStats> ()._maxWater);
 		//For water ==================================================================================================================================================================================================
 
 
 		//For water ==================================================================================================================================================================================================
-		//_barDisplayFood = (GetComponent<gameStats> ()._actualFood / GetComponent<gameStats> ()._maxFood);
+		_barDisplayFood = (GetComponent<gameStats> ()._actualFood / GetComponent<gameStats> ()._maxFood);
 		//For water ==================================================================================================================================================================================================
 	}
 
