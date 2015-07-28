@@ -87,9 +87,11 @@ public class ProductionAndNeeds : MonoBehaviour
 			_buildingElectricity = false;
 		} else {
 			_buildingElectricity = true;
-			Camera.main.GetComponent<gameStats> ()._actualElectricity = 0;
 		}
 
+		if (Camera.main.GetComponent<gameStats> ()._actualElectricity <= 1) {
+			Camera.main.GetComponent<gameStats> ()._actualElectricity = 0;
+		}
 		//Change production with the building durability
 		if (this.GetComponent<buildingDurability> ()._halfProd == true) {
 			_actualWaterProductionPerDay = _waterProductionPerDay / 2;
@@ -118,19 +120,19 @@ public class ProductionAndNeeds : MonoBehaviour
 	#region Needs
 	void needs ()
 	{
-		if (_waterNeedsPerDay != 0) {
+		if (_waterNeedsPerDay > 0) {
 			Camera.main.GetComponent<gameStats> ()._actualWater -= ((_waterNeedsPerDay / (Camera.main.GetComponent<DayNightController> ().secondsInFullDay / Camera.main.GetComponent<DayNightController> ().timeMultiplier)) * Time.deltaTime) * ((_level / 2) + 1);
 		}
 		
-		if (_electricityNeedsPerDay != 0) {
-			Camera.main.GetComponent<gameStats> ()._actualElectricity -= ((_electricityNeedsPerDay / (Camera.main.GetComponent<DayNightController> ().secondsInFullDay / Camera.main.GetComponent<DayNightController> ().timeMultiplier)) * Time.deltaTime) * ((_level / 2) + 1);
+		if (_electricityNeedsPerDay > 0) {
+			Camera.main.GetComponent<gameStats> ()._actualElectricity -= ((_electricityNeedsPerDay / (Camera.main.GetComponent<DayNightController> ().secondsInFullDay / Camera.main.GetComponent<DayNightController> ().timeMultiplier)) * Time.deltaTime) /* ((_level / 2) + 1)*/;
 		}
 		
 		/*if (_CO2NeedsPerDay != 0) {
 			//Camera.main.GetComponent<gameStats> (). -= ((_CO2NeedsPerDay / (this.GetComponent<dayToDayCounter> ()._dayLength * 2)) * Time.deltaTime);
 		}*/
 		
-		if (_O2NeedsPerDay != 0) {
+		if (_O2NeedsPerDay > 0) {
 			Camera.main.GetComponent<gameStats> ()._actualOxygen -= ((_O2NeedsPerDay / (Camera.main.GetComponent<DayNightController> ().secondsInFullDay / Camera.main.GetComponent<DayNightController> ().timeMultiplier)) * Time.deltaTime) * ((_level / 2) + 1);
 		}
 		
@@ -138,7 +140,7 @@ public class ProductionAndNeeds : MonoBehaviour
 			Camera.main.GetComponent<gameStats> ()._actualMineral -= ((_mineralsNeedsPerDay / (Camera.main.GetComponent<DayNightController> ().secondsInFullDay / Camera.main.GetComponent<DayNightController> ().timeMultiplier)) * Time.deltaTime);
 		}*/
 		
-		if (_foodNeedsPerDay != 0) {
+		if (_foodNeedsPerDay > 0) {
 			Camera.main.GetComponent<gameStats> ()._actualFood -= ((_foodNeedsPerDay / (Camera.main.GetComponent<DayNightController> ().secondsInFullDay / Camera.main.GetComponent<DayNightController> ().timeMultiplier)) * Time.deltaTime) * ((_level / 2) + 1);
 		}
 	}
@@ -147,11 +149,11 @@ public class ProductionAndNeeds : MonoBehaviour
 	#region Production
 	void production ()
 	{
-		if (_waterProductionPerDay != 0) {
+		if (_waterProductionPerDay > 0) {
 			Camera.main.GetComponent<gameStats> ()._actualWater += ((_actualWaterProductionPerDay / (Camera.main.GetComponent<DayNightController> ().secondsInFullDay / Camera.main.GetComponent<DayNightController> ().timeMultiplier)) * Time.deltaTime) * _level;
 		}
 		
-		if (_electricityProductionPerDay != 0) {
+		if (_electricityProductionPerDay > 0) {
 			Camera.main.GetComponent<gameStats> ()._actualElectricity += ((_actualElectricityProductionPerDay / (Camera.main.GetComponent<DayNightController> ().secondsInFullDay / Camera.main.GetComponent<DayNightController> ().timeMultiplier)) * Time.deltaTime) * _level;
 		}
 		
@@ -159,7 +161,7 @@ public class ProductionAndNeeds : MonoBehaviour
 			//Camera.main.GetComponent<gameStats> (). -= ((_actualCO2ProductionPerDay / (Camera.main.GetComponent<DayNightController> ().secondsInFullDay / Camera.main.GetComponent<DayNightController> ().timeMultiplier)) * Time.deltaTime);
 		}*/
 		
-		if (_O2ProductionPerDay != 0) {
+		if (_O2ProductionPerDay > 0) {
 			Camera.main.GetComponent<gameStats> ()._actualOxygen += ((_actualO2ProductionPerDay / (Camera.main.GetComponent<DayNightController> ().secondsInFullDay / Camera.main.GetComponent<DayNightController> ().timeMultiplier)) * Time.deltaTime) * _level;
 		}
 		
@@ -167,7 +169,7 @@ public class ProductionAndNeeds : MonoBehaviour
 			Camera.main.GetComponent<gameStats> ()._actualMineral += ((_actualMineralsProductionPerDay / (Camera.main.GetComponent<DayNightController> ().secondsInFullDay / Camera.main.GetComponent<DayNightController> ().timeMultiplier)) * Time.deltaTime);
 		}*/
 		
-		if (_foodProductionPerDay != 0) {
+		if (_foodProductionPerDay > 0) {
 			Camera.main.GetComponent<gameStats> ()._actualFood += ((_actualFoodProductionPerDay / (Camera.main.GetComponent<DayNightController> ().secondsInFullDay / Camera.main.GetComponent<DayNightController> ().timeMultiplier)) * Time.deltaTime) * _level;
 		}
 	}
