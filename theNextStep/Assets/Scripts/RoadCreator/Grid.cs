@@ -20,10 +20,17 @@ public class Grid : MonoBehaviour
 			return _sizeY;
 		}
 	}
+	public Node MainBuildingNodes {
+		get {
+			return MainBuilding.GetComponent<ProductionAndNeeds> ()._associateNode;
+		}
+	}
 
 	private Node[,] _map;
 	public List<Edge>[,] _edgemap;
 	private int _sizeX, _sizeY;
+
+	public GameObject MainBuilding;
 	// Use this for initialization
 	void Start ()
 	{
@@ -36,6 +43,7 @@ public class Grid : MonoBehaviour
 				_edgemap [i, j] = new List<Edge> ();
 			}
 		}
+		MainBuilding.GetComponent<ProductionAndNeeds> ()._associateNode = AddBuilding (MainBuilding.transform.position, MainBuilding.GetComponent<Collider> ().bounds.size);
 	}
 	
 	// Update is called once per frame
@@ -44,7 +52,7 @@ public class Grid : MonoBehaviour
 	
 	}
 
-	public void AddBuilding (Vector3 position, Vector3 size)
+	public Node AddBuilding (Vector3 position, Vector3 size)
 	{
 		Vector3 A, B, C, D;
 		A = new Vector3 ((position.x - (size.x / 2f)) + 0.5f, 0, (position.z + (size.z / 2f)) - 0.5f);
@@ -62,7 +70,9 @@ public class Grid : MonoBehaviour
 		CreateRoad (B, C);
 		CreateRoad (C, D);
 		CreateRoad (D, A);
-		
+
+
+		return _map [(int)A.x, (int)A.z];
 	}
 	
 	public void RemoveEdge (Edge target)

@@ -97,9 +97,9 @@ public class ModuleCreator : MonoBehaviour
 			}
 			//if we can build on the Terrain and the visualisation object doesn't collide with any other objet we build it and destoy the visualisation object
 			if (Input.GetMouseButtonDown (0) && !visualisation.GetComponent<Visualisation> ().Collide) {
-				Instantiate (ObjectToDeploy, visualisation.transform.position, visualisation.transform.rotation);
+				GameObject module = Instantiate (ObjectToDeploy, visualisation.transform.position, visualisation.transform.rotation) as GameObject;
 				_onDeployement = false;
-				Terrain.activeTerrain.GetComponent<Grid> ().AddBuilding (visualisation.transform.position, visualSize);
+				module.GetComponent<ProductionAndNeeds> ()._associateNode = Terrain.activeTerrain.GetComponent<Grid> ().AddBuilding (visualisation.transform.position, visualSize);
 				//Camera.main.GetComponent<Modules> ()._maximumBuildings --;//tmp
 				Camera.main.GetComponent<gameStats> ()._actualConstructionMaterials -= _price;
 				DestroyImmediate (visualisation);

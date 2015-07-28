@@ -28,9 +28,9 @@ public class Modules : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-		/*if (Input.GetKeyDown (KeyCode.F1) && _maximumBuildings > 0) {
+		if (Input.GetKeyDown (KeyCode.F1)) {
 			Creator.Deploy (Model);
-		}*/
+		}
 	}
 
 	public void MedicalCenter ()

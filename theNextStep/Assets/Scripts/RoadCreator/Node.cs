@@ -138,6 +138,8 @@ public class Node
 	
 	public bool IsConnectedTo (Node Target)
 	{
+		if (Target == this)
+			return true;
 		List<Node> ToChek = new List<Node> ();
 		List<Node> Checked = new List<Node> ();
 		ToChek.Add (this);
