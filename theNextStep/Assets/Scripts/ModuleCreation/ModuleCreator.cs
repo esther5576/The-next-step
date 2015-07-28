@@ -20,7 +20,8 @@ public class ModuleCreator : MonoBehaviour
 	protected bool _onDeployement = false;
 	protected static ModuleCreator _instance;
 	protected float _gridCellSize;
-	
+
+	public float _price;
 
 	// Use this for initialization
 	void Start ()
@@ -99,7 +100,8 @@ public class ModuleCreator : MonoBehaviour
 				Instantiate (ObjectToDeploy, visualisation.transform.position, visualisation.transform.rotation);
 				_onDeployement = false;
 				Terrain.activeTerrain.GetComponent<Grid> ().AddBuilding (visualisation.transform.position, visualSize);
-				Camera.main.GetComponent<Modules> ()._maximumBuildings --;//tmp
+				//Camera.main.GetComponent<Modules> ()._maximumBuildings --;//tmp
+				Camera.main.GetComponent<gameStats> ()._actualConstructionMaterials -= _price;
 				DestroyImmediate (visualisation);
 			}
 			end:

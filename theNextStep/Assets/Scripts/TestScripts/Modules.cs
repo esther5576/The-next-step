@@ -5,79 +5,138 @@ using System.Collections.Generic;
 public class Modules : MonoBehaviour
 {
 
-
 	public GameObject Model;
 	private ModuleCreator Creator;
 
 	public List<GameObject> _buildings = new List<GameObject> ();
-	public int _maximumBuildings = 10;
+
+	public GameObject _buildingsCanvas;
+	public GameObject _sliderTime;
+	public GameObject _constructionCanvas;
 
 	// Use this for initialization
 	void Awake ()
 	{
 		Creator = ModuleCreator.Instance;
 		Creator.Initiate (1f);
+
+		_buildingsCanvas = GameObject.Find ("Buildings");
+		_sliderTime = GameObject.Find ("SlidderForSpeed");
+		_constructionCanvas = GameObject.Find ("Construction");
 	}
 	
 	// Update is called once per frame
 	void Update ()
 	{
-		if (Input.GetKeyDown (KeyCode.F1) && _maximumBuildings > 0) {
+		/*if (Input.GetKeyDown (KeyCode.F1) && _maximumBuildings > 0) {
 			Creator.Deploy (Model);
-		}
+		}*/
 	}
 
-	public void MainBuilding (bool _MainBuilding)
+	public void MedicalCenter ()
 	{
+		Creator._price = 50f;
 		Model = _buildings [0];
 
-		if (_maximumBuildings > 0) {
+		if (Camera.main.GetComponent<gameStats> ()._actualConstructionMaterials >= Creator._price) {
 			Creator.Deploy (Model);
+			canvasOptions ();
 		}
 	}
 
-	public void FoodProduction (bool _FoodProduction)
+	public void FoodProduction ()
 	{
+		Creator._price = 200f;
+
 		Model = _buildings [1];
 
-		if (_maximumBuildings > 0) {
+		if (Camera.main.GetComponent<gameStats> ()._actualConstructionMaterials >= Creator._price) {
 			Creator.Deploy (Model);
+			canvasOptions ();
 		}
 	}
 
-	public void SolarPanels (bool _SolarPanels)
+	public void SolarPanels ()
 	{
+		Creator._price = 200f;
+
 		Model = _buildings [2];
 
-		if (_maximumBuildings > 0) {
+		if (Camera.main.GetComponent<gameStats> ()._actualConstructionMaterials >= Creator._price) {
 			Creator.Deploy (Model);
+			canvasOptions ();
 		}
 	}
 
-	public void HumanHabitats (bool _HumanHabitats)
+	public void HumanHabitats ()
 	{
+		Creator._price = 1000f;
+
 		Model = _buildings [3];
 
-		if (_maximumBuildings > 0) {
+		if (Camera.main.GetComponent<gameStats> ()._actualConstructionMaterials >= Creator._price) {
 			Creator.Deploy (Model);
+			canvasOptions ();
 		}
 	}
 
-	public void WaterExtractionCenter (bool _WaterExtractionCenter)
+	public void WaterExtractionCenter ()
 	{
+		Creator._price = 200f;
+
 		Model = _buildings [4];
 
-		if (_maximumBuildings > 0) {
+		if (Camera.main.GetComponent<gameStats> ()._actualConstructionMaterials >= Creator._price) {
 			Creator.Deploy (Model);
+			canvasOptions ();
 		}
 	}
 
-	public void LandingZone (bool _LandingZone)
+	public void LandingZone ()
 	{
+		Creator._price = 50f;
+
 		Model = _buildings [5];
 
-		if (_maximumBuildings > 0) {
+		if (Camera.main.GetComponent<gameStats> ()._actualConstructionMaterials >= Creator._price) {
 			Creator.Deploy (Model);
+			canvasOptions ();
+		}
+	}
+
+	public void RoverStation ()
+	{
+		Creator._price = 500f;
+
+		Model = _buildings [6];
+		
+		if (Camera.main.GetComponent<gameStats> ()._actualConstructionMaterials >= Creator._price) {
+			Creator.Deploy (Model);
+			canvasOptions ();
+		}
+	}
+
+	public void WareHouse ()
+	{
+		Creator._price = 500f;
+
+		Model = _buildings [7];
+		
+		if (Camera.main.GetComponent<gameStats> ()._actualConstructionMaterials >= Creator._price) {
+			Creator.Deploy (Model);
+			canvasOptions ();
+		}
+	}
+
+	public void ComTower ()
+	{
+		Creator._price = 50f;
+
+		Model = _buildings [8];
+		
+		if (Camera.main.GetComponent<gameStats> ()._actualConstructionMaterials >= Creator._price) {
+			Creator.Deploy (Model);
+			canvasOptions ();
 		}
 	}
 
@@ -86,6 +145,21 @@ public class Modules : MonoBehaviour
 		GUIStyle myStyle = new GUIStyle ();
 		myStyle.fontSize = 25;
 		myStyle.normal.textColor = Color.white;
-		GUI.Label (new Rect (Screen.width - 200, 100, 500, 30), "buildings left: " + _maximumBuildings, myStyle);
+		GUI.Label (new Rect (Screen.width - 400, 100, 500, 30), "buildings materials: " + Camera.main.GetComponent<gameStats> ()._actualConstructionMaterials, myStyle);
+	}
+
+	void canvasOptions ()
+	{
+		_buildingsCanvas.GetComponent<CanvasGroup> ().alpha = 0;
+		_buildingsCanvas.GetComponent<CanvasGroup> ().blocksRaycasts = false;
+		_buildingsCanvas.GetComponent<CanvasGroup> ().interactable = false;
+		
+		_sliderTime.GetComponent<CanvasGroup> ().alpha = 1;
+		_sliderTime.GetComponent<CanvasGroup> ().blocksRaycasts = true;
+		_sliderTime.GetComponent<CanvasGroup> ().interactable = true;
+		
+		_constructionCanvas.GetComponent<CanvasGroup> ().alpha = 1;
+		_constructionCanvas.GetComponent<CanvasGroup> ().blocksRaycasts = true;
+		_constructionCanvas.GetComponent<CanvasGroup> ().interactable = true;
 	}
 }
