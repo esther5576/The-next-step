@@ -6,17 +6,17 @@ public class gameStats : MonoBehaviour
 {
 	#region actual material
 	//Actual amount of material that the player has ====================================================================================================================================================================
-	public float _actualElectricity = 500f;
+	public float _actualElectricity = 300f;
 	public int _actualHumans = 10;
 	public float _actualTemperature = 20f;
 
-	public float _actualOxygen = 12000f;
-	public float _actualWater = 6000f;
-	public float _actualFood = 900000f;
+	public float _actualOxygen = 200f;
+	public float _actualWater = 200f;
+	public float _actualFood = 200f;
 
-	public float _actualConstructionMaterials = 100f;
-	public float _actualReparationMaterials = 100f;
-	public float _actualUpgradeMaterials = 100f;
+	public float _actualConstructionMaterials = 1500f;
+	public float _actualReparationMaterials = 500f;
+	public float _actualUpgradeMaterials = 500f;
 	//Actual amount of material that the player has ====================================================================================================================================================================
 	#endregion
 
@@ -42,13 +42,13 @@ public class gameStats : MonoBehaviour
 	public int _maxHumans = 10;
 	public float _maxTemperature = 60f;
 	
-	public float _maxOxygen = 12000f;
-	public float _maxWater = 6000f;
-	public float _maxFood = 900000f;
+	public float _maxOxygen = 300f;
+	public float _maxWater = 300f;
+	public float _maxFood = 300f;
 
-	public float _maxConstructionMaterials = 1000f;
-	public float _maxReparationMaterials = 1000f;
-	public float _maxUpgradeMaterials = 1000f;
+	public float _maxConstructionMaterials = 2000f;
+	public float _maxReparationMaterials = 2000f;
+	public float _maxUpgradeMaterials = 2000f;
 	//The minimum amount of energy needed so that everything works =====================================================================================================================================================
 	#endregion
 
