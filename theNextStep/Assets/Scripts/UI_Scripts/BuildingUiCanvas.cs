@@ -49,7 +49,7 @@ public class BuildingUiCanvas : MonoBehaviour
 	
 	}
 
-	public void Display (int NeedsNumber, int ProductsNumber, Button.ButtonClickedEvent PowerEvents, List<Sprite> NeedsSprites, List<Sprite> ProductionSprites, int PowerNeeds, int HumanNeed, Button.ButtonClickedEvent RepairEvents)
+	public void Display (int NeedsNumber, int ProductsNumber, Button.ButtonClickedEvent PowerEvents, List<Sprite> NeedsSprites, List<Sprite> ProductionSprites, int PowerNeeds, int HumanNeed, Button.ButtonClickedEvent RepairEvents, Button.ButtonClickedEvent UpgradeEvents)
 	{
 		for (int i = 0; i < NeedsNumber; i++) {
 			_needs [i].SetActive (true);
@@ -66,6 +66,7 @@ public class BuildingUiCanvas : MonoBehaviour
 		_repair.SetActive (true);
 		_repair.GetComponent<Button> ().onClick = RepairEvents;
 		_upgrade.SetActive (true);
+		_upgrade.GetComponent<Button> ().onClick = UpgradeEvents;
 		_energy.SetActive (true);
 		_energy.transform.GetChild (0).gameObject.GetComponent<Text> ().text = PowerNeeds.ToString ();
 		_energy.transform.GetChild (1).gameObject.GetComponent<Text> ().text = HumanNeed.ToString ();
