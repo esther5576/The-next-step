@@ -19,6 +19,8 @@ public class BuildingUi : MonoBehaviour
 	private bool _displayed;
 	private CanvasScaler _scale;
 
+	private static bool _SwitchOff = false;
+
 	// Use this for initialization
 	void Start ()
 	{
@@ -36,12 +38,17 @@ public class BuildingUi : MonoBehaviour
 	void OnMouseDown ()
 	{	
 		if (!_displayed) {
+			_SwitchOff = true;
 			StartCoroutine (DisplayUi ());
 		}
 	}
 	
 	IEnumerator DisplayUi ()
 	{
+		if (_SwitchOff) {
+			yield return new WaitForFixedUpdate ();
+			_SwitchOff = false;
+		}
 		_canvas.Display (Needs, Production, PowerLinks, NeedsSprites, ProductionSprites, PowerNeed, HumanNeed, RepairLinks, UpgradLinks);
 		_displayed = true;
 		while (_displayed) {
@@ -54,8 +61,9 @@ public class BuildingUi : MonoBehaviour
 			screenPos.y *= _scale.referenceResolution.y;
 			_canvas.GetComponent<RectTransform> ().localPosition = screenPos;
 			
-			if (Input.GetMouseButton (1)) {
+			if (Input.GetMouseButton (1) || _SwitchOff) {
 				_displayed = false;
+				_SwitchOff = false;
 				_canvas.SwitchOff ();
 			}
 			yield return null;
