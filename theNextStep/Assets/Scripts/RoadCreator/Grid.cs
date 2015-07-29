@@ -60,10 +60,10 @@ public class Grid : MonoBehaviour
 		C = new Vector3 ((position.x + (size.x / 2f)) - 0.5f, 0, (position.z - (size.z / 2f)) + 0.5f);
 		D = new Vector3 ((position.x - (size.x / 2f)) + 0.5f, 0, (position.z - (size.z / 2f)) + 0.5f);
 
-		Debug.Log (A);
+		/*Debug.Log (A);
 		Debug.Log (B);
 		Debug.Log (C);
-		Debug.Log (D);
+		Debug.Log (D);*/
 		
 
 		CreateRoad (A, B);
@@ -78,8 +78,9 @@ public class Grid : MonoBehaviour
 	public void RemoveEdge (Edge target)
 	{
 		foreach (var item in _edgemap) {
-			if (item.Remove (target))
-				Debug.Log ("RemoveSucces");
+			item.Remove (target);
+			//if (item.Remove (target))
+			//Debug.Log ("RemoveSucces");
 		}
 	}
 	
@@ -513,7 +514,7 @@ public class Grid : MonoBehaviour
 				Vector3 direction = End - Start;
 				direction.Normalize ();
 				if (_edgemap [(int)Start.x, (int)Start.z] [0].getDirection () == (direction.z == 0)) {
-					Debug.Log ("Orthogonal");
+					//Debug.Log ("Orthogonal");
 					Node StartNode = new Node ((int)Start.x, (int)Start.z, this);
 					StartNode.ConnectTo (_edgemap [(int)Start.x, (int)Start.z] [0].A);
 					StartNode.ConnectTo (_edgemap [(int)Start.x, (int)Start.z] [0].B);

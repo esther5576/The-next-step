@@ -84,7 +84,7 @@ public class Node
 		if (Target.ConnectedNodes.Contains (this))
 			return;
 		Target.ConnectTo (this);
-		Debug.Log ("[" + X.ToString () + "," + Y.ToString () + "] [" + Target.X.ToString () + "," + Target.Y.ToString () + "]");
+		//Debug.Log ("[" + X.ToString () + "," + Y.ToString () + "] [" + Target.X.ToString () + "," + Target.Y.ToString () + "]");
 		if (_x == Target.X) {
 			Node A = (_y > Target.Y) ? Target : this;
 			Node B = (A == this) ? Target : this;
