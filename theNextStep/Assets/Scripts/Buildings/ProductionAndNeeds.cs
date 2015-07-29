@@ -115,22 +115,25 @@ public class ProductionAndNeeds : MonoBehaviour
 			Camera.main.GetComponent<gameStats> ()._actualElectricity = 0;
 		}
 		//Change production with the building durability
-		if (this.GetComponent<buildingDurability> ()._halfProd == true) {
-			_actualWaterProductionPerDay = _waterProductionPerDay / 2;
-			_actualElectricityProductionPerDay = _electricityProductionPerDay / 2;
-			_actualCO2ProductionPerDay = _CO2ProductionPerDay / 2;
-			_actualO2ProductionPerDay = _O2ProductionPerDay / 2;
-			_actualMineralsProductionPerDay = _mineralsProductionPerDay / 2;
-			_actualFoodProductionPerDay = _foodProductionPerDay / 2;
+		if (this.GetComponent<buildingDurability> () != null) {
+			if (this.GetComponent<buildingDurability> ()._halfProd == true) {
+				_actualWaterProductionPerDay = _waterProductionPerDay / 2;
+				_actualElectricityProductionPerDay = _electricityProductionPerDay / 2;
+				_actualCO2ProductionPerDay = _CO2ProductionPerDay / 2;
+				_actualO2ProductionPerDay = _O2ProductionPerDay / 2;
+				_actualMineralsProductionPerDay = _mineralsProductionPerDay / 2;
+				_actualFoodProductionPerDay = _foodProductionPerDay / 2;
+			}
+			if (this.GetComponent<buildingDurability> ()._halfProd == false) {
+				_actualWaterProductionPerDay = _waterProductionPerDay;
+				_actualElectricityProductionPerDay = _electricityProductionPerDay;
+				_actualCO2ProductionPerDay = _CO2ProductionPerDay;
+				_actualO2ProductionPerDay = _O2ProductionPerDay;
+				_actualMineralsProductionPerDay = _mineralsProductionPerDay;
+				_actualFoodProductionPerDay = _foodProductionPerDay;
+			}
 		}
-		if (this.GetComponent<buildingDurability> ()._halfProd == false) {
-			_actualWaterProductionPerDay = _waterProductionPerDay;
-			_actualElectricityProductionPerDay = _electricityProductionPerDay;
-			_actualCO2ProductionPerDay = _CO2ProductionPerDay;
-			_actualO2ProductionPerDay = _O2ProductionPerDay;
-			_actualMineralsProductionPerDay = _mineralsProductionPerDay;
-			_actualFoodProductionPerDay = _foodProductionPerDay;
-		}
+			
 	}
 	
 	//Cette fonction est appellee quand le boutton est appuye
