@@ -82,12 +82,19 @@ public class ProductionAndNeeds : MonoBehaviour
 	public int _level = 1;
 	public int _maxLevel = 5;
 
+	public bool Active = true;
+
 
 	// Use this for initialization
 	void Start ()
 	{
 		//au debut le batiment est active
 		_buildingSwitch = true;
+	}
+
+	public void ToggleActive ()
+	{
+		Active = !Active;
 	}
 	
 	// Update is called once per frame
@@ -99,7 +106,7 @@ public class ProductionAndNeeds : MonoBehaviour
 			_connectedToMainBuilding = true;
 		//Les needs et productions sont actifs si le batiment n'est pas une visualisation(=quand on va placer le batiment)
 		//et la bool buildingSwitch est true
-		if (this.name != "visualisation" && _buildingSwitch == true && _buildingBroken == false && _buildingElectricity == true && _connectedToMainBuilding == true) {
+		if (this.name != "visualisation" && _buildingSwitch == true && _buildingBroken == false && _buildingElectricity == true && _connectedToMainBuilding == true && Active) {
 			needs ();
 			production ();
 		}
