@@ -41,7 +41,7 @@ public class roverStation : MonoBehaviour
 	void Update ()
 	{
 
-		_TextRoverOut.GetComponent<Text> ().text = "Days out: " + _daysOutTotal;
+
 
 		if (_daysOutTotal > 0) {
 			_roverOut = true;
@@ -113,6 +113,10 @@ public class roverStation : MonoBehaviour
 			if (Physics.Raycast (ray, out hit)) {
 				if (hit.rigidbody != null && (hit.transform.tag == "RoverStation")) {
 					if (_roverOut == false) {
+						_RoverOut.GetComponent<CanvasGroup> ().alpha = 0;
+						_RoverOut.GetComponent<CanvasGroup> ().interactable = false;
+						_RoverOut.GetComponent<CanvasGroup> ().blocksRaycasts = false;
+
 						_roverCanvas.GetComponent<CanvasGroup> ().alpha = 1;
 						_roverCanvas.GetComponent<CanvasGroup> ().interactable = true;
 						_roverCanvas.GetComponent<CanvasGroup> ().blocksRaycasts = true;
@@ -126,6 +130,7 @@ public class roverStation : MonoBehaviour
 					}
 
 					if (_roverOut == true) {
+						_TextRoverOut.GetComponent<Text> ().text = "Days out: " + _daysOutTotal;
 						_RoverOut.GetComponent<CanvasGroup> ().alpha = 1;
 						_RoverOut.GetComponent<CanvasGroup> ().interactable = true;
 						_RoverOut.GetComponent<CanvasGroup> ().blocksRaycasts = true;
