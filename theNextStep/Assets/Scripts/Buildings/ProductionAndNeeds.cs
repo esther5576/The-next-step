@@ -26,12 +26,24 @@ public class ProductionAndNeeds : MonoBehaviour
 	#endregion
 	
 	#region Material production per day used in the script
-	public float _actualWaterProductionPerDay = 0;
-	public float _actualElectricityProductionPerDay = 0;
-	public float _actualCO2ProductionPerDay = 0;
-	public float _actualO2ProductionPerDay = 0;
-	public float _actualMineralsProductionPerDay = 0;
-	public float _actualFoodProductionPerDay = 0;
+	[HideInInspector]
+	public float
+		_actualWaterProductionPerDay = 0;
+	[HideInInspector]
+	public float
+		_actualElectricityProductionPerDay = 0;
+	[HideInInspector]
+	public float
+		_actualCO2ProductionPerDay = 0;
+	[HideInInspector]
+	public float
+		_actualO2ProductionPerDay = 0;
+	[HideInInspector]
+	public float
+		_actualMineralsProductionPerDay = 0;
+	[HideInInspector]
+	public float
+		_actualFoodProductionPerDay = 0;
 	#endregion
 	
 	//Cette bool correspond au switch on et off du batiment
