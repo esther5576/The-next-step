@@ -49,6 +49,11 @@ public class buildingDurability : MonoBehaviour
 			this.GetComponent<ProductionAndNeeds> ()._buildingBroken = false;
 		}
 	}
+
+	public void Repair ()
+	{
+		_actualDurability = _maximumDurability;
+	}
 	
 	//100 a 25 produit au 100%
 	//25 a 0 produit 50%

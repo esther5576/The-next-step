@@ -117,4 +117,10 @@ public class gameStats : MonoBehaviour
 			_actualUpgradeMaterials = _maxUpgradeMaterials;
 		}
 	}
+
+	public void Repair ()
+	{
+		_actualReparationMaterials -= 200f;
+		Debug.Log ("Repair!!!");
+	}
 }

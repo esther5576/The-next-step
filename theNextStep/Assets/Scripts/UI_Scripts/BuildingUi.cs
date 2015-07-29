@@ -11,6 +11,7 @@ public class BuildingUi : MonoBehaviour
 		Needs, Production;
 	public int PowerNeed, HumanNeed;
 	public Button.ButtonClickedEvent PowerLinks;
+	public Button.ButtonClickedEvent RepairLinks;
 	public List<Sprite> NeedsSprites, ProductionSprites;
 	
 	private BuildingUiCanvas _canvas;
@@ -40,7 +41,7 @@ public class BuildingUi : MonoBehaviour
 	
 	IEnumerator DisplayUi ()
 	{
-		_canvas.Display (Needs, Production, PowerLinks, NeedsSprites, ProductionSprites, PowerNeed, HumanNeed);
+		_canvas.Display (Needs, Production, PowerLinks, NeedsSprites, ProductionSprites, PowerNeed, HumanNeed, RepairLinks);
 		_displayed = true;
 		while (_displayed) {
 			Vector3 screenPos = Camera.main.WorldToScreenPoint (transform.position);
