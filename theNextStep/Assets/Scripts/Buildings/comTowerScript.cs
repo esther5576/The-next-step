@@ -9,7 +9,7 @@ public class comTowerScript : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-		_TowerComCanvas = GameObject.Find ("TowerCom");
+		_TowerComCanvas = GameObject.Find ("TowerComCanvas");
 	}
 	
 	// Update is called once per frame
