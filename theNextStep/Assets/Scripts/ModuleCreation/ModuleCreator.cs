@@ -69,8 +69,8 @@ public class ModuleCreator : MonoBehaviour
 			r.constraints = RigidbodyConstraints.FreezeAll;//we don't want the gameobject to interact with anything following physics, it's a trigger
 			r.GetComponent<Collider> ().isTrigger = true;
 		}
-		Material visualMat = visualisation.GetComponent<Renderer> ().material;
-		visualMat.color = new Color (visualMat.color.r, visualMat.color.g, visualMat.color.b, 0.4f);//we change the color of the GameObject to make it transparent
+		//Material visualMat = visualisation.GetComponent<Renderer> ().material;
+		//visualMat.color = new Color (visualMat.color.r, visualMat.color.g, visualMat.color.b, 0.4f);//we change the color of the GameObject to make it transparent
 
 		Vector3 visualSize = visualisation.GetComponent<Collider> ().bounds.size;//we store the size of the bounding box of the object for Terrain checking
 		visualisation.GetComponent<BoxCollider> ().size *= 0.9f;
@@ -97,9 +97,9 @@ public class ModuleCreator : MonoBehaviour
 			}
 			//if we can build on the Terrain and the visualisation object doesn't collide with any other objet we build it and destoy the visualisation object
 			if (Input.GetMouseButtonDown (0) && !visualisation.GetComponent<Visualisation> ().Collide) {
-				GameObject module = Instantiate (ObjectToDeploy, visualisation.transform.position, visualisation.transform.rotation) as GameObject;
+				GameObject module = Instantiate (ObjectToDeploy, new Vector3 (visualisation.transform.position.x, visualisation.transform.position.y - 1, visualisation.transform.position.z), visualisation.transform.rotation) as GameObject;
 				_onDeployement = false;
-				module.GetComponent<ProductionAndNeeds> ()._associateNode = Terrain.activeTerrain.GetComponent<Grid> ().AddBuilding (visualisation.transform.position, visualSize);
+				module.GetComponent<ProductionAndNeeds> ()._associateNode = Terrain.activeTerrain.GetComponent<Grid> ().AddBuilding (new Vector3 (visualisation.transform.position.x, visualisation.transform.position.y - 1, visualisation.transform.position.z), visualSize);
 				//Camera.main.GetComponent<Modules> ()._maximumBuildings --;//tmp
 				Camera.main.GetComponent<gameStats> ()._actualConstructionMaterials -= _price;
 				DestroyImmediate (visualisation);

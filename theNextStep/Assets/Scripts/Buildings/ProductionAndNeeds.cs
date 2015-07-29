@@ -100,13 +100,13 @@ public class ProductionAndNeeds : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-		if (!IsMainBuilding)
+		/*if (!IsMainBuilding)
 			_connectedToMainBuilding = _associateNode.IsConnectedTo (Terrain.activeTerrain.GetComponent<Grid> ().MainBuildingNodes);
 		else
-			_connectedToMainBuilding = true;
+			_connectedToMainBuilding = true;*/
 		//Les needs et productions sont actifs si le batiment n'est pas une visualisation(=quand on va placer le batiment)
 		//et la bool buildingSwitch est true
-		if (this.name != "visualisation" && _buildingSwitch == true && _buildingBroken == false && _buildingElectricity == true && _connectedToMainBuilding == true && Active) {
+		if (this.name != "visualisation" && _buildingSwitch == true && _buildingBroken == false && _buildingElectricity == true /*&& _connectedToMainBuilding == true*/ && Active) {
 			needs ();
 			production ();
 		}

@@ -35,7 +35,7 @@ public class RandomEvent : MonoBehaviour
 			//Debug.Log (_dayEvent);
 		}
 		
-		if (_dayEvent == this.GetComponent<DayNightController> ()._days) {
+		if (_dayEvent == this.GetComponent<DayNightController> ()._days && _activateRandomEvent == true) {
 			_activateRandomEvent = false;
 			_randomEvent = Mathf.FloorToInt (Random.value * (_nameEvent.Count));
 			crisisEvents ();
