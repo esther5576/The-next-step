@@ -83,7 +83,7 @@ public class ProductionAndNeeds : MonoBehaviour
 		_connectedToMainBuilding = _associateNode.IsConnectedTo (Terrain.activeTerrain.GetComponent<Grid> ().MainBuildingNodes);
 		//Les needs et productions sont actifs si le batiment n'est pas une visualisation(=quand on va placer le batiment)
 		//et la bool buildingSwitch est true
-		if (this.name != "visualisation" && _buildingSwitch == true && _buildingBroken == false && _buildingElectricity == true) {
+		if (this.name != "visualisation" && _buildingSwitch == true && _buildingBroken == false && _buildingElectricity == true && _connectedToMainBuilding == true) {
 			needs ();
 			production ();
 		}
