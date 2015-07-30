@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 public class RoadCreator : MonoBehaviour
 {
@@ -122,13 +123,16 @@ public class RoadCreator : MonoBehaviour
 				StartPoint = ActivePath [ActivePath.Count - 1].transform.position;
 				StartPoint.y = 0;
 			} else if (Input.GetMouseButtonDown (0)) {
-				foreach (var item in ActivePath) {
-					if (item == null)
+
+				foreach (var item in ActivePath.ToArray()) {
+					if (item == null) {
+						ActivePath.Remove (item);
 						continue;
+					}
 					item.transform.parent = transform;
 					item.layer = 0;
 				}
-				_grid.CreateRoad (StartPoint, ActivePath [ActivePath.Count - 1].transform.position);
+				_grid.CreateRoad (StartPoint, ActivePath.Last ().transform.position);
 				break;
 			}
 			yield return null;
