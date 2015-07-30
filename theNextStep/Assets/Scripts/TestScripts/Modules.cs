@@ -14,6 +14,9 @@ public class Modules : MonoBehaviour
 	public GameObject _sliderTime;
 	public GameObject _constructionCanvas;
 
+	public bool _landingZoneCreated;
+
+	public GameObject _buttonLandingZone;
 	// Use this for initialization
 	void Awake ()
 	{
@@ -24,7 +27,7 @@ public class Modules : MonoBehaviour
 		_buildingsCanvas = GameObject.Find ("Buildings");
 		_sliderTime = GameObject.Find ("SlidderForSpeed");
 		_constructionCanvas = GameObject.Find ("Construction");
-
+		_buttonLandingZone = GameObject.Find ("LandingZoneButton");
 	}
 	
 	// Update is called once per frame
@@ -32,6 +35,12 @@ public class Modules : MonoBehaviour
 	{
 		if (Input.GetKeyDown (KeyCode.F1)) {
 			Creator.Deploy (Model);
+		}
+
+		if (_landingZoneCreated == true) {
+			_buttonLandingZone.GetComponent<CanvasGroup> ().alpha = 0;
+			_buttonLandingZone.GetComponent<CanvasGroup> ().interactable = false;
+			_buttonLandingZone.GetComponent<CanvasGroup> ().blocksRaycasts = false;
 		}
 	}
 
@@ -96,6 +105,8 @@ public class Modules : MonoBehaviour
 
 	public void LandingZone ()
 	{
+		_landingZoneCreated = true;
+
 		Creator._price = 50f;
 
 		Model = _buildings [5];

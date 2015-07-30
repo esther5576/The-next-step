@@ -50,50 +50,50 @@ public class roverStation : MonoBehaviour
 				_daysOut --;
 				_daysOutTotal --;
 
-				if (_daysOut > 0) {
+				if (_daysOutTotal > 0) {
 					if (_roverOut == true) {
 						int _materialCollected = (Random.Range (0, 101));
 
 						switch (_zoneOut) {
 						case 1:
 							if (_materialCollected >= 0 && _materialCollected <= 20) {
-								Camera.main.GetComponent<gameStats> ()._actualReparationMaterials += 20;
+								Camera.main.GetComponent<gameStats> ()._actualReparationMaterials += 20 * (_daysOutTotal / 10);
 							}
 							if (_materialCollected >= 20 && _materialCollected <= 70) {
-								Camera.main.GetComponent<gameStats> ()._actualConstructionMaterials += 30;
+								Camera.main.GetComponent<gameStats> ()._actualConstructionMaterials += 40 * (_daysOutTotal / 10);
 							}
 							break;
 							
 							
 						case 2:
 							if (_materialCollected >= 0 && _materialCollected <= 20) {
-								Camera.main.GetComponent<gameStats> ()._actualReparationMaterials += 20;
+								Camera.main.GetComponent<gameStats> ()._actualReparationMaterials += 20 * (_daysOutTotal / 10);
 							}
 							if (_materialCollected >= 20 && _materialCollected <= 70) {
-								Camera.main.GetComponent<gameStats> ()._actualUpgradeMaterials += 30;
+								Camera.main.GetComponent<gameStats> ()._actualUpgradeMaterials += 40 * (_daysOutTotal / 10);
 							}
 							break;
 							
 							
 						case 3:
 							if (_materialCollected >= 0 && _materialCollected <= 20) {
-								Camera.main.GetComponent<gameStats> ()._actualConstructionMaterials += 20;
+								Camera.main.GetComponent<gameStats> ()._actualConstructionMaterials += 20 * (_daysOutTotal / 10);
 							}
 							if (_materialCollected >= 20 && _materialCollected <= 90) {
-								Camera.main.GetComponent<gameStats> ()._actualReparationMaterials += 40;
+								Camera.main.GetComponent<gameStats> ()._actualReparationMaterials += 40 * (_daysOutTotal / 10);
 							}
 							break;
 							
 							
 						case 4:
 							if (_materialCollected >= 0 && _materialCollected <= 30) {
-								Camera.main.GetComponent<gameStats> ()._actualConstructionMaterials += 30;
+								Camera.main.GetComponent<gameStats> ()._actualConstructionMaterials += 20 * (_daysOutTotal / 10);
 							}
 							if (_materialCollected >= 30 && _materialCollected <= 60) {
-								Camera.main.GetComponent<gameStats> ()._actualReparationMaterials += 30;
+								Camera.main.GetComponent<gameStats> ()._actualReparationMaterials += 20 * (_daysOutTotal / 10);
 							}
 							if (_materialCollected >= 60 && _materialCollected <= 90) {
-								Camera.main.GetComponent<gameStats> ()._actualUpgradeMaterials += 30;
+								Camera.main.GetComponent<gameStats> ()._actualUpgradeMaterials += 20 * (_daysOutTotal / 10);
 							}
 							break;
 						}
