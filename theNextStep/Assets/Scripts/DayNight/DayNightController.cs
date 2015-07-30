@@ -3,7 +3,7 @@ using System.Collections;
 
 public class DayNightController : MonoBehaviour
 {
-	
+	public GameObject _PointLightNight;
 	// The directional light which we manipulate as our sun.
 	public Light sun;
 	
@@ -38,6 +38,7 @@ public class DayNightController : MonoBehaviour
 	{
 		sunInitialIntensity = sun.intensity;
 		_sandEffect = GameObject.Find ("DustStormEsther");
+		_PointLightNight = GameObject.Find ("PointLightNight");
 	}
 	
 	void Update ()
@@ -55,7 +56,7 @@ public class DayNightController : MonoBehaviour
 		}
 		
 		//Day or night detection
-		if (currentTimeOfDay > 0.22f && currentTimeOfDay < 0.75f) {
+		if (currentTimeOfDay > 0.22f && currentTimeOfDay < 0.73f) {
 			_dayMorningNight = true;
 		} else {
 			_dayMorningNight = false;
@@ -64,9 +65,19 @@ public class DayNightController : MonoBehaviour
 		//Sand effect activation
 		if (_dayMorningNight == true) {
 			_sandEffect.SetActive (true);
+			if (_PointLightNight.GetComponent<Light> ().intensity <= 0) {
+				_PointLightNight.GetComponent<Light> ().intensity = 0;
+			} else {
+				_PointLightNight.GetComponent<Light> ().intensity -= 0.8f * Time.deltaTime;
+			}
 		}
 		if (_dayMorningNight == false) {
 			_sandEffect.SetActive (false);
+			if (_PointLightNight.GetComponent<Light> ().intensity >= 1.5f) {
+				_PointLightNight.GetComponent<Light> ().intensity = 1.5f;
+			} else {
+				_PointLightNight.GetComponent<Light> ().intensity += 0.8f * Time.deltaTime;
+			}
 		}
 	}
 	
