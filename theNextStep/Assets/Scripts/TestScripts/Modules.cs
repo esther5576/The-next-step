@@ -17,12 +17,14 @@ public class Modules : MonoBehaviour
 	// Use this for initialization
 	void Awake ()
 	{
+
 		Creator = ModuleCreator.Instance;
 		Creator.Initiate (1f);
 
 		_buildingsCanvas = GameObject.Find ("Buildings");
 		_sliderTime = GameObject.Find ("SlidderForSpeed");
 		_constructionCanvas = GameObject.Find ("Construction");
+
 	}
 	
 	// Update is called once per frame

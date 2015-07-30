@@ -112,7 +112,10 @@ public class roverStation : MonoBehaviour
 			Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
 			if (Physics.Raycast (ray, out hit)) {
 				if (hit.rigidbody != null && (hit.transform.tag == "RoverStation")) {
-					if (_roverOut == false) {
+
+					GameObject _thisRover = hit.transform.gameObject;
+
+					if (_thisRover.GetComponent<roverStation> ()._roverOut == false) {
 						_RoverOut.GetComponent<CanvasGroup> ().alpha = 0;
 						_RoverOut.GetComponent<CanvasGroup> ().interactable = false;
 						_RoverOut.GetComponent<CanvasGroup> ().blocksRaycasts = false;
@@ -126,11 +129,12 @@ public class roverStation : MonoBehaviour
 						_sliderTime.GetComponent<CanvasGroup> ().interactable = false;
 						_sliderTime.GetComponent<CanvasGroup> ().blocksRaycasts = false;
 
-						_wholeCanvas.GetComponent<MapRover> ()._actualBuildingSelected = this.gameObject;
+						_wholeCanvas.GetComponent<MapRover> ()._actualBuildingSelected = _thisRover.gameObject;
 					}
 
-					if (_roverOut == true) {
-						_TextRoverOut.GetComponent<Text> ().text = "Days out: " + _daysOutTotal;
+					if (_thisRover.GetComponent<roverStation> ()._roverOut == true) {
+
+						_TextRoverOut.GetComponent<Text> ().text = "Days out: " + _thisRover.GetComponent<roverStation> ()._daysOutTotal;
 						_RoverOut.GetComponent<CanvasGroup> ().alpha = 1;
 						_RoverOut.GetComponent<CanvasGroup> ().interactable = true;
 						_RoverOut.GetComponent<CanvasGroup> ().blocksRaycasts = true;

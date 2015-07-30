@@ -55,7 +55,7 @@ public class MapRover : MonoBehaviour
 	{
 		if (_numberDays != (int)_slidderNextPart.GetComponent<Slider> ().value && _changeDaysNumber == true) {
 			_numberDays = (int)_slidderNextPart.GetComponent<Slider> ().value;
-			_textDays.GetComponent<Text> ().text = "Number of days: " + _numberDays;
+			_textDays.GetComponent<Text> ().text = "Number of days: " + _numberDays * 2;
 		}
 
 	}
