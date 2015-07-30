@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class DayNightController : MonoBehaviour
 {
@@ -33,16 +34,26 @@ public class DayNightController : MonoBehaviour
 	
 	public int _days;
 	private bool _dayMorningNight = true;
-	
+
+	public GameObject _HudstatsRight;
 	void Start ()
 	{
 		sunInitialIntensity = sun.intensity;
 		_sandEffect = GameObject.Find ("DustStormEsther");
 		_PointLightNight = GameObject.Find ("PointLightNight");
+		_HudstatsRight = GameObject.Find ("HUDstatsTextRight");
 	}
 	
 	void Update ()
 	{
+		if (_dayMorningNight == true) {
+			_HudstatsRight.GetComponent<Text> ().text = "DAY\n" + "_   " + _days + "   _";
+		}
+		if (_dayMorningNight == false) {
+			_HudstatsRight.GetComponent<Text> ().text = "NIGHT\n" + "_   " + _days + "   _";
+		}
+
+
 		// Updates the sun's rotation and intensity according to the current time of day.
 		UpdateSun ();
 		
@@ -121,7 +132,7 @@ public class DayNightController : MonoBehaviour
 		sun.intensity = sunInitialIntensity * intensityMultiplier;
 	}
 	
-	void OnGUI ()
+	/*void OnGUI ()
 	{
 		GUIStyle myStyle = new GUIStyle ();
 		myStyle.fontSize = 30;
@@ -134,5 +145,5 @@ public class DayNightController : MonoBehaviour
 			GUI.Label (new Rect (Screen.width - 100, 20, 100, 30), "NIGHT", myStyle);
 		}
 		GUI.Label (new Rect (Screen.width - 75, 50, 100, 30), "" + _days, myStyle);
-	}
+	}*/
 }

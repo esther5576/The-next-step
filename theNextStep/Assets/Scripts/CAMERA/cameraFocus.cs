@@ -23,7 +23,7 @@ public class cameraFocus : MonoBehaviour
 			Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
 			if (Physics.Raycast (ray, out hit)) {
 				if (hit.rigidbody != null) {
-					StopCoroutine ("FocusOn");
+					StopAllCoroutines ();
 					StartCoroutine (FocusOn (hit.transform));
 				}
 			}

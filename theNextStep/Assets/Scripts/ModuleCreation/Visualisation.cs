@@ -15,7 +15,7 @@ public class Visualisation : MonoBehaviour
 	void Start ()
 	{
 		BuildAble = true;
-		_initialColor = GetComponent<Renderer> ().material.color;
+		//_initialColor = GetComponent<Renderer> ().material.color;
 		GetComponent<Renderer> ().material.color = _initialColor * Color.green;
 	}
 	
@@ -23,7 +23,7 @@ public class Visualisation : MonoBehaviour
 	void Update ()
 	{
 
-		GetComponent<Renderer> ().material.color = _initialColor * ((!_collide && BuildAble) ? Color.green : Color.red);
+		//GetComponent<Renderer> ().material.color = _initialColor * ((!_collide && BuildAble) ? Color.green : Color.red);
 	}
 
 	void OnTriggerEnter (Collider col)

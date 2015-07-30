@@ -17,6 +17,8 @@ public class Modules : MonoBehaviour
 	public bool _landingZoneCreated;
 
 	public GameObject _buttonLandingZone;
+
+	public AudioSource _audio;
 	// Use this for initialization
 	void Awake ()
 	{
@@ -33,6 +35,11 @@ public class Modules : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
+		if (Creator._OnSound == true) {
+			_audio.Play ();
+			Creator._OnSound = false;
+		}
+
 		if (Input.GetKeyDown (KeyCode.F1)) {
 			Creator.Deploy (Model);
 		}

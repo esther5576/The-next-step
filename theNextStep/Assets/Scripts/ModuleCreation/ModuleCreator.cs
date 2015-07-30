@@ -23,6 +23,7 @@ public class ModuleCreator : MonoBehaviour
 
 	public float _price;
 
+	public bool _OnSound;
 	// Use this for initialization
 	void Start ()
 	{
@@ -86,7 +87,7 @@ public class ModuleCreator : MonoBehaviour
 				pos.x = (pos.x % _gridCellSize < _gridCellSize / 2f) ? _gridCellSize * ((int)(pos.x / _gridCellSize)) : _gridCellSize * ((int)(pos.x / _gridCellSize) + 1);
 				pos.z = (pos.z % _gridCellSize < _gridCellSize / 2f) ? _gridCellSize * ((int)(pos.z / _gridCellSize)) : _gridCellSize * ((int)(pos.z / _gridCellSize) + 1);
 				pos += visualSize / 2;
-				visualisation.transform.position = pos + Vector3.up * 1.0f;//we move the object according to the cursor				
+				visualisation.transform.position = pos;//we move the object according to the cursor				
 
 				pos -= visualSize / 2;//to get the left bottom corner of the bounding box
 				pos.y += visualSize.y;
@@ -97,12 +98,14 @@ public class ModuleCreator : MonoBehaviour
 			}
 			//if we can build on the Terrain and the visualisation object doesn't collide with any other objet we build it and destoy the visualisation object
 			if (Input.GetMouseButtonDown (0) && !visualisation.GetComponent<Visualisation> ().Collide) {
-				GameObject module = Instantiate (ObjectToDeploy, new Vector3 (visualisation.transform.position.x, visualisation.transform.position.y - 1, visualisation.transform.position.z), visualisation.transform.rotation) as GameObject;
+				GameObject module = Instantiate (ObjectToDeploy, new Vector3 (visualisation.transform.position.x, visualisation.transform.position.y, visualisation.transform.position.z), visualisation.transform.rotation) as GameObject;
 				_onDeployement = false;
-				module.GetComponent<ProductionAndNeeds> ()._associateNode = Terrain.activeTerrain.GetComponent<Grid> ().AddBuilding (new Vector3 (visualisation.transform.position.x, visualisation.transform.position.y - 1, visualisation.transform.position.z), visualSize);
+				Debug.Log (module);
+				module.GetComponent<ProductionAndNeeds> ()._associateNode = Terrain.activeTerrain.GetComponent<Grid> ().AddBuilding (new Vector3 (visualisation.transform.position.x, visualisation.transform.position.y, visualisation.transform.position.z), visualSize);
 				//Camera.main.GetComponent<Modules> ()._maximumBuildings --;//tmp
 				Camera.main.GetComponent<gameStats> ()._actualConstructionMaterials -= _price;
 				DestroyImmediate (visualisation);
+				_OnSound = true;
 			}
 			end:
 			if (Input.GetMouseButtonDown (1)) {

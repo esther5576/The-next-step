@@ -106,11 +106,14 @@ public class ProductionAndNeeds : MonoBehaviour
 			_connectedToMainBuilding = true;*/
 		//Les needs et productions sont actifs si le batiment n'est pas une visualisation(=quand on va placer le batiment)
 		//et la bool buildingSwitch est true
-		if (this.name != "visualisation" && _buildingSwitch == true && _buildingBroken == false && _buildingElectricity == true /*&& _connectedToMainBuilding == true*/ && Active) {
+		if (this.name != "visualisation" && _buildingSwitch == true && _buildingBroken == false && _buildingElectricity == true /*&& _connectedToMainBuilding == true*/ && Active && this.tag != "solarPannel") {
 			needs ();
 			production ();
 		}
-
+		if (this.name != "visualisation" && _buildingSwitch == true && _buildingBroken == false && Active && this.tag == "solarPannel") {
+			needs ();
+			production ();
+		}
 		//building can have electricity
 		if (Camera.main.GetComponent<gameStats> ()._actualElectricity <= 0) {
 			_buildingElectricity = false;
@@ -118,7 +121,7 @@ public class ProductionAndNeeds : MonoBehaviour
 			_buildingElectricity = true;
 		}
 
-		if (Camera.main.GetComponent<gameStats> ()._actualElectricity <= 1) {
+		if (Camera.main.GetComponent<gameStats> ()._actualElectricity <= 0) {
 			Camera.main.GetComponent<gameStats> ()._actualElectricity = 0;
 		}
 		//Change production with the building durability
