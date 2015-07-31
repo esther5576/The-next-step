@@ -14,6 +14,7 @@ public class BuildingUi : MonoBehaviour
 	public Button.ButtonClickedEvent RepairLinks;
 	public Button.ButtonClickedEvent UpgradLinks;
 	public List<Sprite> NeedsSprites, ProductionSprites;
+	public string Name;
 	
 	private BuildingUiCanvas _canvas;
 	private bool _displayed;
@@ -49,7 +50,7 @@ public class BuildingUi : MonoBehaviour
 			yield return new WaitForFixedUpdate ();
 			_SwitchOff = false;
 		}
-		_canvas.Display (Needs, Production, PowerLinks, NeedsSprites, ProductionSprites, PowerNeed, HumanNeed, RepairLinks, UpgradLinks);
+		_canvas.Display (Needs, Production, PowerLinks, NeedsSprites, ProductionSprites, PowerNeed, HumanNeed, RepairLinks, UpgradLinks, Name);
 		_displayed = true;
 		while (_displayed) {
 			Vector3 screenPos = Camera.main.WorldToScreenPoint (transform.position);

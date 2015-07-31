@@ -8,7 +8,7 @@ using UnityEngine.Events;
 public class BuildingUiCanvas : MonoBehaviour
 {
 	private GameObject[] _needs, _products;
-	private GameObject _power, _information, _upgrade, _repair, _energy;
+	private GameObject _power, _information, _upgrade, _repair, _energy, _name;
 	// Use this for initialization
 	void Start ()
 	{
@@ -24,6 +24,7 @@ public class BuildingUiCanvas : MonoBehaviour
 		_repair = GameObject.Find ("Repair");
 		_upgrade = GameObject.Find ("Upgrade");
 		_energy = GameObject.Find ("Power and Humans");
+		_name = GameObject.Find ("Name");
 
 		//initialisation and order
 		for (int i = 0; i < _needs.Length; i++) {
@@ -49,7 +50,7 @@ public class BuildingUiCanvas : MonoBehaviour
 	
 	}
 
-	public void Display (int NeedsNumber, int ProductsNumber, Button.ButtonClickedEvent PowerEvents, List<Sprite> NeedsSprites, List<Sprite> ProductionSprites, int PowerNeeds, int HumanNeed, Button.ButtonClickedEvent RepairEvents, Button.ButtonClickedEvent UpgradeEvents)
+	public void Display (int NeedsNumber, int ProductsNumber, Button.ButtonClickedEvent PowerEvents, List<Sprite> NeedsSprites, List<Sprite> ProductionSprites, int PowerNeeds, int HumanNeed, Button.ButtonClickedEvent RepairEvents, Button.ButtonClickedEvent UpgradeEvents, String Name)
 	{
 		for (int i = 0; i < NeedsNumber; i++) {
 			_needs [i].SetActive (true);
@@ -70,6 +71,7 @@ public class BuildingUiCanvas : MonoBehaviour
 		_energy.SetActive (true);
 		_energy.transform.GetChild (0).gameObject.GetComponent<Text> ().text = PowerNeeds.ToString ();
 		_energy.transform.GetChild (1).gameObject.GetComponent<Text> ().text = HumanNeed.ToString ();
+		_name.GetComponent<Text> ().text = Name;
 	}
 
 	public void SwitchOff ()
