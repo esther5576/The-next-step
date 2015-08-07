@@ -47,10 +47,10 @@ public class DayNightController : MonoBehaviour
 	void Update ()
 	{
 		if (_dayMorningNight == true) {
-			_HudstatsRight.GetComponent<Text> ().text = "DAY\n" + "_   " + _days + "   _";
+			_HudstatsRight.GetComponent<Text> ().text = "DAY\n" + "-   " + _days + "   -";
 		}
 		if (_dayMorningNight == false) {
-			_HudstatsRight.GetComponent<Text> ().text = "NIGHT\n" + "_   " + _days + "   _";
+			_HudstatsRight.GetComponent<Text> ().text = "NIGHT\n" + "-   " + _days + "   -";
 		}
 
 

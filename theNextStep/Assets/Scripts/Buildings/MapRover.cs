@@ -38,6 +38,9 @@ public class MapRover : MonoBehaviour
 	public GameObject _slidderNextPart;
 
 	public bool _changeDaysNumber;
+
+	public GameObject _HUDstats;
+	public GameObject _constructionButton;
 	// Use this for initialization
 	void Start ()
 	{
@@ -48,6 +51,8 @@ public class MapRover : MonoBehaviour
 		_sliderTime = GameObject.Find ("SlidderForSpeed");
 		_textDays = GameObject.Find ("Days");
 		_slidderNextPart = GameObject.Find ("slidderNextPart");
+		_HUDstats = GameObject.Find ("HUDstats");
+		_constructionButton = GameObject.Find ("Construction");
 	}
 	
 	// Update is called once per frame
@@ -62,6 +67,8 @@ public class MapRover : MonoBehaviour
 
 	public void openRoverMap (bool _openMap)
 	{
+		_HUDstats.GetComponent<CanvasGroup> ().alpha = 0;
+
 		_roverCanvas.GetComponent<CanvasGroup> ().alpha = 0;
 		_roverCanvas.GetComponent<CanvasGroup> ().interactable = false;
 		_roverCanvas.GetComponent<CanvasGroup> ().blocksRaycasts = false;
@@ -105,6 +112,7 @@ public class MapRover : MonoBehaviour
 
 	void canvasGroupChange ()
 	{
+
 		_zonesCanvas.GetComponent<CanvasGroup> ().alpha = 0;
 		_zonesCanvas.GetComponent<CanvasGroup> ().interactable = false;
 		_zonesCanvas.GetComponent<CanvasGroup> ().blocksRaycasts = false;
@@ -163,6 +171,11 @@ public class MapRover : MonoBehaviour
 		_slidderNextPart.GetComponent<CanvasGroup> ().blocksRaycasts = false;
 
 		_slidderNextPart.GetComponent<Slider> ().value = 0;
+		_HUDstats.GetComponent<CanvasGroup> ().alpha = 1;
+
+		_constructionButton.GetComponent<CanvasGroup> ().alpha = 1;
+		_constructionButton.GetComponent<CanvasGroup> ().blocksRaycasts = true;
+		_constructionButton.GetComponent<CanvasGroup> ().interactable = true;
 	}
 
 	public void adjustDays (int _newDays)

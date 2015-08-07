@@ -18,7 +18,7 @@ public class BarRepresentation : MonoBehaviour
 	//For oxygen ======================================================================================================================================================================================================
 	#endregion
 
-	#region Water
+	#region Water 
 	//For water ======================================================================================================================================================================================================
 	//current progress
 	public float _barDisplayWater; 
@@ -47,6 +47,18 @@ public class BarRepresentation : MonoBehaviour
 	public Texture2D _fullTexFood;
 	//For food ======================================================================================================================================================================================================
 	#endregion
+
+
+	public GameObject _maskO2;
+	public GameObject _maskFood;
+	public GameObject _maskWater;
+
+	void Start ()
+	{
+		_maskO2 = GameObject.Find ("O2Bar");
+		_maskFood = GameObject.Find ("FoodBar");
+		_maskWater = GameObject.Find ("WaterBar");
+	}
 
 	/*void OnGUI ()
 	{
@@ -116,16 +128,23 @@ public class BarRepresentation : MonoBehaviour
 	
 	void Update ()
 	{
+		_maskO2.GetComponent<RectTransform> ().sizeDelta = new Vector2 (125 * _barDisplayOxygen, _maskO2.GetComponent<RectTransform> ().rect.height);
+		_maskO2.GetComponent<RectTransform> ().anchoredPosition = new Vector3 (-233.5f + (_maskO2.GetComponent<RectTransform> ().sizeDelta.x) / 2, 195, 0);
+		//_maskO2.transform.localScale = new Vector3 (_maskO2.transform.localScale.x * _barDisplayOxygen, _maskO2.transform.localScale.y, _maskO2.transform.localScale.z);
 		//For oxygen ==================================================================================================================================================================================================
 		_barDisplayOxygen = (GetComponent<gameStats> ()._actualOxygen / GetComponent<gameStats> ()._maxOxygen);
 		//For oxygen ==================================================================================================================================================================================================
 
-
+		_maskWater.GetComponent<RectTransform> ().sizeDelta = new Vector2 (125 * _barDisplayWater, _maskWater.GetComponent<RectTransform> ().rect.height);
+		_maskWater.GetComponent<RectTransform> ().anchoredPosition = new Vector3 (124.5f + (_maskWater.GetComponent<RectTransform> ().sizeDelta.x) / 2, 195, 0);
+		//_maskWater.transform.localScale = new Vector3 (_maskWater.transform.localScale.x * _barDisplayOxygen, _maskWater.transform.localScale.y, _maskWater.transform.localScale.z);
 		//For water ==================================================================================================================================================================================================
 		_barDisplayWater = (GetComponent<gameStats> ()._actualWater / GetComponent<gameStats> ()._maxWater);
 		//For water ==================================================================================================================================================================================================
 
-
+		_maskFood.GetComponent<RectTransform> ().sizeDelta = new Vector2 (125 * _barDisplayFood, _maskFood.GetComponent<RectTransform> ().rect.height);
+		_maskFood.GetComponent<RectTransform> ().anchoredPosition = new Vector3 (-55.9f + (_maskFood.GetComponent<RectTransform> ().sizeDelta.x) / 2, 195, 0);
+		//_maskFood.transform.localScale = new Vector3 (_maskFood.transform.localScale.x * _barDisplayOxygen, _maskFood.transform.localScale.y, _maskFood.transform.localScale.z);
 		//For water ==================================================================================================================================================================================================
 		_barDisplayFood = (GetComponent<gameStats> ()._actualFood / GetComponent<gameStats> ()._maxFood);
 		//For water ==================================================================================================================================================================================================

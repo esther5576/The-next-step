@@ -16,7 +16,7 @@ public class Visualisation : MonoBehaviour
 	{
 		BuildAble = true;
 		//_initialColor = GetComponent<Renderer> ().material.color;
-		GetComponent<Renderer> ().material.color = _initialColor * Color.green;
+//		GetComponent<Renderer> ().material.color = _initialColor * Color.green;
 	}
 	
 	// Update is called once per frame

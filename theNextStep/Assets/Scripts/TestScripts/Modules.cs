@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class Modules : MonoBehaviour
 {
@@ -19,6 +20,9 @@ public class Modules : MonoBehaviour
 	public GameObject _buttonLandingZone;
 
 	public AudioSource _audio;
+
+	public GameObject _BuildingMaterialsNumberInfo;
+	public GameObject _HUD;
 	// Use this for initialization
 	void Awake ()
 	{
@@ -30,6 +34,8 @@ public class Modules : MonoBehaviour
 		_sliderTime = GameObject.Find ("SlidderForSpeed");
 		_constructionCanvas = GameObject.Find ("Construction");
 		_buttonLandingZone = GameObject.Find ("LandingZoneButton");
+		_BuildingMaterialsNumberInfo = GameObject.Find ("BuildingMaterialsNumber");
+		_HUD = GameObject.Find ("HUDstats");
 	}
 	
 	// Update is called once per frame
@@ -49,6 +55,8 @@ public class Modules : MonoBehaviour
 			_buttonLandingZone.GetComponent<CanvasGroup> ().interactable = false;
 			_buttonLandingZone.GetComponent<CanvasGroup> ().blocksRaycasts = false;
 		}
+
+		_BuildingMaterialsNumberInfo.GetComponent<Text> ().text = "" + Camera.main.GetComponent<gameStats> ()._actualConstructionMaterials;
 	}
 
 	public void MedicalCenter ()
@@ -112,7 +120,7 @@ public class Modules : MonoBehaviour
 
 	public void LandingZone ()
 	{
-		_landingZoneCreated = true;
+		//_landingZoneCreated = true;
 
 		Creator._price = 50f;
 
@@ -160,13 +168,13 @@ public class Modules : MonoBehaviour
 		}
 	}
 
-	void OnGUI ()
+	/*void OnGUI ()
 	{
 		GUIStyle myStyle = new GUIStyle ();
 		myStyle.fontSize = 25;
 		myStyle.normal.textColor = Color.white;
 		GUI.Label (new Rect (Screen.width - 400, 100, 500, 30), "buildings materials: " + Camera.main.GetComponent<gameStats> ()._actualConstructionMaterials, myStyle);
-	}
+	}*/
 
 	void canvasOptions ()
 	{
@@ -181,5 +189,8 @@ public class Modules : MonoBehaviour
 		_constructionCanvas.GetComponent<CanvasGroup> ().alpha = 1;
 		_constructionCanvas.GetComponent<CanvasGroup> ().blocksRaycasts = true;
 		_constructionCanvas.GetComponent<CanvasGroup> ().interactable = true;
+
+		_HUD.GetComponent<CanvasGroup> ().alpha = 1;
+		_HUD.GetComponent<CanvasGroup> ().interactable = true;
 	}
 }

@@ -5,6 +5,7 @@ using UnityEngine.UI;
 public class otherStatsShow : MonoBehaviour
 {
 	public GameObject _statsLeft;
+
 	// Use this for initialization
 	void Start ()
 	{
@@ -14,7 +15,7 @@ public class otherStatsShow : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-		_statsLeft.GetComponent<Text> ().text = "Humans: " + (int)this.GetComponent<gameStats> ()._actualHumans + "\n\nElectricity: " + (int)this.GetComponent<gameStats> ()._actualElectricity + "\n\nUpgrade materials: " + (int)this.GetComponent<gameStats> ()._actualUpgradeMaterials + "\n\nReparation materials: " + (int)this.GetComponent<gameStats> ()._actualReparationMaterials;
+		_statsLeft.GetComponent<Text> ().text = "\n\nHumans      " + (int)this.GetComponent<gameStats> ()._actualHumans + "\n\nElectricity    " + (int)this.GetComponent<gameStats> ()._actualElectricity + "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nUpgrade\nmaterials      " + (int)this.GetComponent<gameStats> ()._actualUpgradeMaterials + "\n\nRepair\nmaterials      " + (int)this.GetComponent<gameStats> ()._actualReparationMaterials;
 	}
 
 	/*void OnGUI ()

@@ -14,14 +14,14 @@ public class BuildingUi : MonoBehaviour
 	public Button.ButtonClickedEvent RepairLinks;
 	public Button.ButtonClickedEvent UpgradLinks;
 	public List<Sprite> NeedsSprites, ProductionSprites;
-	public string Name;
-	
+
 	private BuildingUiCanvas _canvas;
 	private bool _displayed;
 	private CanvasScaler _scale;
 
 	private static bool _SwitchOff = false;
 
+	public string _name;
 	// Use this for initialization
 	void Start ()
 	{
@@ -50,7 +50,11 @@ public class BuildingUi : MonoBehaviour
 			yield return new WaitForFixedUpdate ();
 			_SwitchOff = false;
 		}
-		_canvas.Display (Needs, Production, PowerLinks, NeedsSprites, ProductionSprites, PowerNeed, HumanNeed, RepairLinks, UpgradLinks, Name);
+//<<<<<<< HEAD
+		_canvas.Display (Needs, Production, PowerLinks, NeedsSprites, ProductionSprites, PowerNeed, HumanNeed, RepairLinks, UpgradLinks, _name);
+//=======
+		//	_canvas.Display (Needs, Production, PowerLinks, NeedsSprites, ProductionSprites, PowerNeed, HumanNeed, RepairLinks, UpgradLinks, Name);
+//>>>>>>> origin/master
 		_displayed = true;
 		while (_displayed) {
 			Vector3 screenPos = Camera.main.WorldToScreenPoint (transform.position);

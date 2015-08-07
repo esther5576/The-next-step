@@ -100,6 +100,11 @@ public class ModuleCreator : MonoBehaviour
 			if (Input.GetMouseButtonDown (0) && !visualisation.GetComponent<Visualisation> ().Collide) {
 				GameObject module = Instantiate (ObjectToDeploy, new Vector3 (visualisation.transform.position.x, visualisation.transform.position.y, visualisation.transform.position.z), visualisation.transform.rotation) as GameObject;
 				_onDeployement = false;
+
+				if (ObjectToDeploy.name == "landingzone") {
+					Camera.main.GetComponent<Modules> ()._landingZoneCreated = true;
+				}
+
 				Debug.Log (module);
 				module.GetComponent<ProductionAndNeeds> ()._associateNode = Terrain.activeTerrain.GetComponent<Grid> ().AddBuilding (new Vector3 (visualisation.transform.position.x, visualisation.transform.position.y, visualisation.transform.position.z), visualSize);
 				//Camera.main.GetComponent<Modules> ()._maximumBuildings --;//tmp

@@ -75,9 +75,13 @@ public class gameStats : MonoBehaviour
 		#endregion
 
 		//Redmetrics When the night end send stats
-		/*if (Camera.main.GetComponent<DayNightController> ().currentTimeOfDay == 0) {
-			RedMetricsManager.get ().sendEvent (TrackingEvent.STATS, "{\"Oxygen\": " + _actualOxygen + ", \"Water\": " + _actualWater + ", \"Food\": " + _actualFood + ", \"Days\": " + Camera.main.GetComponent<DayNightController> ()._days + "}");
-		}*/
+		if (Camera.main.GetComponent<DayNightController> ().currentTimeOfDay == 0) {
+
+			CustomData customData = new CustomData ();
+			customData.Add ("DataDay", ",  Oxygen: " + _actualOxygen + ",  Water: " + _actualWater + ",  Food: " + _actualFood + ",  Electricity: " + _actualElectricity + ",  Days: " + Camera.main.GetComponent<DayNightController> ()._days);
+
+			RedMetricsManager.get ().sendEvent (TrackingEvent.STATS, customData);
+		}
 		//Redmetrics When the night end send stats
 
 

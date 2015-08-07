@@ -7,12 +7,14 @@ public class BuidlingCreationCanvas : MonoBehaviour
 	public GameObject _buildings;
 	public GameObject _sliderTime;
 	public GameObject _constructionCanvas;
+	public GameObject _HUD;
 	// Use this for initialization
 	void Start ()
 	{
 		_buildings = GameObject.Find ("Buildings");
 		_sliderTime = GameObject.Find ("SlidderForSpeed");
 		_constructionCanvas = GameObject.Find ("Construction");
+		_HUD = GameObject.Find ("HUDstats");
 	}
 	
 	// Update is called once per frame
@@ -30,6 +32,9 @@ public class BuidlingCreationCanvas : MonoBehaviour
 			_constructionCanvas.GetComponent<CanvasGroup> ().alpha = 1;
 			_constructionCanvas.GetComponent<CanvasGroup> ().blocksRaycasts = true;
 			_constructionCanvas.GetComponent<CanvasGroup> ().interactable = true;
+
+			_HUD.GetComponent<CanvasGroup> ().alpha = 1;
+			_HUD.GetComponent<CanvasGroup> ().interactable = true;
 		}
 	}
 
@@ -46,5 +51,8 @@ public class BuidlingCreationCanvas : MonoBehaviour
 		_constructionCanvas.GetComponent<CanvasGroup> ().alpha = 0;
 		_constructionCanvas.GetComponent<CanvasGroup> ().blocksRaycasts = false;
 		_constructionCanvas.GetComponent<CanvasGroup> ().interactable = false;
+
+		_HUD.GetComponent<CanvasGroup> ().alpha = 0;
+		_HUD.GetComponent<CanvasGroup> ().interactable = false;
 	}
 }

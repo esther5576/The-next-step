@@ -18,6 +18,9 @@ public class roverStation : MonoBehaviour
 	public int _daysOut;
 	public int _daysOutTotal;
 	public int _zoneOut;
+
+	public GameObject _HUDstats;
+	public GameObject _constructionButton;
 	// Use this for initialization
 	void Start ()
 	{
@@ -35,6 +38,8 @@ public class roverStation : MonoBehaviour
 		_RoverOut = GameObject.Find ("RoverOut");
 
 		_TextRoverOut = GameObject.Find ("TextRoverOut");
+		_HUDstats = GameObject.Find ("HUDstats");
+		_constructionButton = GameObject.Find ("Construction");
 	}
 	
 	// Update is called once per frame
@@ -113,6 +118,12 @@ public class roverStation : MonoBehaviour
 			if (Physics.Raycast (ray, out hit)) {
 				if (hit.rigidbody != null && (hit.transform.tag == "RoverStation")) {
 
+					_HUDstats.GetComponent<CanvasGroup> ().alpha = 0;
+
+					_constructionButton.GetComponent<CanvasGroup> ().alpha = 0;
+					_constructionButton.GetComponent<CanvasGroup> ().blocksRaycasts = false;
+					_constructionButton.GetComponent<CanvasGroup> ().interactable = false;
+
 					GameObject _thisRover = hit.transform.gameObject;
 
 					if (_thisRover.GetComponent<roverStation> ()._roverOut == false) {
@@ -133,6 +144,11 @@ public class roverStation : MonoBehaviour
 					}
 
 					if (_thisRover.GetComponent<roverStation> ()._roverOut == true) {
+
+						_sliderTime.GetComponent<slowAndFastMotion> ()._speed = 1;
+						_sliderTime.GetComponent<CanvasGroup> ().alpha = 0;
+						_sliderTime.GetComponent<CanvasGroup> ().interactable = false;
+						_sliderTime.GetComponent<CanvasGroup> ().blocksRaycasts = false;
 
 						_TextRoverOut.GetComponent<Text> ().text = "Days out: " + _thisRover.GetComponent<roverStation> ()._daysOutTotal;
 						_RoverOut.GetComponent<CanvasGroup> ().alpha = 1;
@@ -176,6 +192,11 @@ public class roverStation : MonoBehaviour
 			_RoverOut.GetComponent<CanvasGroup> ().interactable = false;
 			_RoverOut.GetComponent<CanvasGroup> ().blocksRaycasts = false;
 
+			_HUDstats.GetComponent<CanvasGroup> ().alpha = 1;
+
+			_constructionButton.GetComponent<CanvasGroup> ().alpha = 1;
+			_constructionButton.GetComponent<CanvasGroup> ().blocksRaycasts = true;
+			_constructionButton.GetComponent<CanvasGroup> ().interactable = true;
 			//_roverCanvas.GetComponent<MapRover> ()._actualBuildingSelected = null;
 		}
 	}

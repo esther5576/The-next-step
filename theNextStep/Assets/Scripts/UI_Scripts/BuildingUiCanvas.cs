@@ -8,7 +8,9 @@ using UnityEngine.Events;
 public class BuildingUiCanvas : MonoBehaviour
 {
 	private GameObject[] _needs, _products;
+
 	private GameObject _power, _information, _upgrade, _repair, _energy, _name;
+
 	// Use this for initialization
 	void Start ()
 	{
@@ -24,8 +26,9 @@ public class BuildingUiCanvas : MonoBehaviour
 		_repair = GameObject.Find ("Repair");
 		_upgrade = GameObject.Find ("Upgrade");
 		_energy = GameObject.Find ("Power and Humans");
-		_name = GameObject.Find ("Name");
 
+		_name = GameObject.Find ("name");
+		
 		//initialisation and order
 		for (int i = 0; i < _needs.Length; i++) {
 			_needs [Convert.ToInt32 (Needs [i].transform.name.Remove (0, 5)) - 1] = Needs [i];
@@ -71,7 +74,9 @@ public class BuildingUiCanvas : MonoBehaviour
 		_energy.SetActive (true);
 		_energy.transform.GetChild (0).gameObject.GetComponent<Text> ().text = PowerNeeds.ToString ();
 		_energy.transform.GetChild (1).gameObject.GetComponent<Text> ().text = HumanNeed.ToString ();
+
 		_name.GetComponent<Text> ().text = Name;
+
 	}
 
 	public void SwitchOff ()
