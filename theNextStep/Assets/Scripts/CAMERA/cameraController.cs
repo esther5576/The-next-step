@@ -1,4 +1,9 @@
-﻿using UnityEngine;
+﻿//this script lets you move around with your camera
+//by using the arrows keys or by putting the mouse on the corner of the screen
+//it has also a zoom but it is commented because we use the animated zoom from another camera script
+//the camera also turns around a poitn using Q or E
+
+using UnityEngine;
 using System.Collections;
 
 public class cameraController : MonoBehaviour
@@ -21,6 +26,7 @@ public class cameraController : MonoBehaviour
 	
 	void Update ()
 	{
+		//Avec espace on arrete le mouvement de la camera
 		if (Input.GetKey (KeyCode.Space)) {
 			MoveEnabled = false;
 			CombinedMovement = false;
@@ -97,7 +103,8 @@ public class cameraController : MonoBehaviour
 		
 		//move the object
 		MoveMe (_xMove, _yMove, _zMove);
-		
+
+		//Move the camera around a point
 		if (Input.GetKey (KeyCode.Q) && !Input.GetKey (KeyCode.E)) {
 			
 			Ray r = new Ray (Camera.main.transform.position, Camera.main.transform.forward);
@@ -106,6 +113,7 @@ public class cameraController : MonoBehaviour
 				transform.RotateAround (hit.point, Vector3.up, RotateSpeed * Time.deltaTime);
 			}
 		}
+		//Move the camera around a point
 		if (Input.GetKey (KeyCode.E) && !Input.GetKey (KeyCode.Q)) {
 			
 			Ray r = new Ray (Camera.main.transform.position, Camera.main.transform.forward);
@@ -115,7 +123,8 @@ public class cameraController : MonoBehaviour
 			}
 		}
 	}
-	
+
+	//move the object
 	private void MoveMe (float x, float y, float z)
 	{
 		_moveVector = (new Vector3 (x * horizontalScrollSpeed + z * horizontalScrollSpeed,

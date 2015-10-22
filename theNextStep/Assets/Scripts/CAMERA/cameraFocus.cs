@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿//this scripts makes the camera focus on a building when it is clicked on
+
+using UnityEngine;
 using System.Collections;
 
 public class cameraFocus : MonoBehaviour

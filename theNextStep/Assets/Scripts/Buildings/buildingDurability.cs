@@ -1,4 +1,10 @@
-﻿using UnityEngine;
+﻿//By Esther Berges
+//Everybuilding that produces stuff has a durability
+//Everyday the player will lose a little bit of durability
+//This will actually have an effect in the production and needs of the building, because it will consume more to produce less
+//By Esther Berges
+
+using UnityEngine;
 using System.Collections;
 
 public class buildingDurability : MonoBehaviour

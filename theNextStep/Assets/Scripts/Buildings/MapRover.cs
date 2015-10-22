@@ -1,4 +1,11 @@
-﻿using UnityEngine;
+﻿//By Esther Berges 
+//This script lets you manage the rover canvas
+//Where you send your rover
+//How much time ...
+//By Esther Berges
+
+
+using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 

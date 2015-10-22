@@ -1,4 +1,10 @@
-﻿using UnityEngine;
+﻿//By Esther Berges 
+//This script goes on the warehouse
+//It gives more space to stock stuff
+//By Esther Berges
+
+
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 

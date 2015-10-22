@@ -1,4 +1,9 @@
-﻿using UnityEngine;
+﻿//this script controls the animation of the camera
+//This animation moves the camera and places it near the ground with a little effect
+//By modifying the animation number we control the state of the animation so we can zoom or dezoom changing this number
+//This script goes on the camera
+
+using UnityEngine;
 using System.Collections;
 
 public class cameraBehaviour : MonoBehaviour
@@ -36,6 +41,7 @@ public class cameraBehaviour : MonoBehaviour
 		//Curve
 		float _newZoomNumber = _camAnimationCurve.Evaluate (_zoomNumber);
 
+		//change the animation number
 		_animation.SetFloat ("cameraType", _newZoomNumber);
 	}
 }

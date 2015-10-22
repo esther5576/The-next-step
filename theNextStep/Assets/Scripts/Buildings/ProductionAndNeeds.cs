@@ -1,4 +1,9 @@
-﻿using UnityEngine;
+﻿//By Esther Berges 
+//Productions and needs se trouve sur chaque batiment qui produit et utilise des choses
+//Il est applique dans presque tous ñes batiments sauf les batiments speciaux comme la com tower, main building...
+//By Esther Berges
+
+using UnityEngine;
 using System.Collections;
 
 public class ProductionAndNeeds : MonoBehaviour

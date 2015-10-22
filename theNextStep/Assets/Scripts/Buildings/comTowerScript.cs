@@ -1,4 +1,9 @@
-﻿using UnityEngine;
+﻿//By Esther Berges
+//This script goes on the prefab comunication Tower
+//It activates a canvas that leads you to the next step forum
+//By Esther Berges
+
+using UnityEngine;
 using System.Collections;
 
 public class comTowerScript : MonoBehaviour

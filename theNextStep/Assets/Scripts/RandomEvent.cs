@@ -165,6 +165,7 @@ public class RandomEvent : MonoBehaviour
 				foreach (GameObject go in gos) {
 					go.GetComponent<roverStation> ()._daysOutTotal = 0;
 					go.GetComponent<roverStation> ()._daysOut = 0;
+					go.GetComponent<roverStation> ()._roverOut = false;
 				}
 			}
 		}

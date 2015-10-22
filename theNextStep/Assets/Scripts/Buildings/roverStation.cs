@@ -1,4 +1,10 @@
-﻿using UnityEngine;
+﻿//By Esther Berges 
+//This goes on the rover station
+//it lets you open the canvas concerning the rover station
+//By Esther Berges
+
+
+using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 
@@ -21,6 +27,10 @@ public class roverStation : MonoBehaviour
 
 	public GameObject _HUDstats;
 	public GameObject _constructionButton;
+
+	public int _upgradeMaterialsCol;
+	public int _constructionMaterialsCol;
+	public int _repairMaterialsCol;
 	// Use this for initialization
 	void Start ()
 	{
@@ -108,6 +118,9 @@ public class roverStation : MonoBehaviour
 
 			if (_daysOutTotal == 0) {
 				_roverOut = false;
+
+				//Le faire ici?
+				Debug.Log ("J'ai fini");
 			}
 
 		}
