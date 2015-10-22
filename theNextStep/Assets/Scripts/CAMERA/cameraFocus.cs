@@ -1,7 +1,6 @@
-﻿//this scripts makes the camera focus on a building when it is clicked on
-
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.EventSystems;
 
 public class cameraFocus : MonoBehaviour
 {
@@ -10,7 +9,7 @@ public class cameraFocus : MonoBehaviour
 	private Vector3 _target = new Vector3 ();
 	
 	private bool _activeFocus;
-
+	
 	// Use this for initialization
 	void Start ()
 	{
@@ -21,16 +20,17 @@ public class cameraFocus : MonoBehaviour
 	void Update ()
 	{
 		if (Input.GetMouseButtonDown (0)) {
-			RaycastHit hit;
-			Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
-			if (Physics.Raycast (ray, out hit)) {
-				if (hit.rigidbody != null) {
-					StopAllCoroutines ();
-					StartCoroutine (FocusOn (hit.transform));
+			if (!EventSystem.current.IsPointerOverGameObject ()) {
+				RaycastHit hit;
+				Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
+				if (Physics.Raycast (ray, out hit)) {
+					if (hit.rigidbody != null) {
+						StopAllCoroutines ();
+						StartCoroutine (FocusOn (hit.transform));
+					}
 				}
 			}
 		}
-
 	}
 	
 	IEnumerator FocusOn (Transform target)

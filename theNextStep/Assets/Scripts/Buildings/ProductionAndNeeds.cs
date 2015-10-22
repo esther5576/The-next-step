@@ -216,10 +216,16 @@ public class ProductionAndNeeds : MonoBehaviour
 	#endregion
 
 	//Cette fonction est appellee pour lvl up!
+	public int prix = 200;
+
 	public void lvlUp ()
 	{
-		_level ++;
-		Camera.main.GetComponent<gameStats> ()._actualUpgradeMaterials -= 200;
+		prix = 100 + (100 * _level);
+		
+		if (Camera.main.GetComponent<gameStats> ()._actualUpgradeMaterials >= prix && _level < 5) {
+			
+			_level ++;
+			Camera.main.GetComponent<gameStats> ()._actualUpgradeMaterials -= prix;
+		}
 	}
-	
 }

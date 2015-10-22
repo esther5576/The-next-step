@@ -124,7 +124,12 @@ public class gameStats : MonoBehaviour
 
 	public void Repair ()
 	{
-		_actualReparationMaterials -= 200f;
-		Debug.Log ("Repair!!!");
+		if (_actualReparationMaterials >= 200f) {
+			
+			_actualReparationMaterials -= 200f;
+			Debug.Log ("Repair!!!");
+			
+		}
 	}
+
 }

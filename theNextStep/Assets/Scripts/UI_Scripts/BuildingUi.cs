@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.Events;
 using System.Collections.Generic;
+using UnityEngine.EventSystems;
 
 public class BuildingUi : MonoBehaviour
 {
@@ -14,13 +15,13 @@ public class BuildingUi : MonoBehaviour
 	public Button.ButtonClickedEvent RepairLinks;
 	public Button.ButtonClickedEvent UpgradLinks;
 	public List<Sprite> NeedsSprites, ProductionSprites;
-
+	
 	private BuildingUiCanvas _canvas;
 	private bool _displayed;
 	private CanvasScaler _scale;
-
+	
 	private static bool _SwitchOff = false;
-
+	
 	public string _name;
 	// Use this for initialization
 	void Start ()
@@ -32,29 +33,30 @@ public class BuildingUi : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-
-
-	}
-
-	void OnMouseDown ()
-	{	
-		if (!_displayed) {
-			_SwitchOff = true;
-			StartCoroutine (DisplayUi ());
-		}
+		
+		
 	}
 	
+	void OnMouseDown ()
+	{
+		if (!EventSystem.current.IsPointerOverGameObject ()) {
+			if (!_displayed) {
+				_SwitchOff = true;
+				StartCoroutine (DisplayUi ());
+			}
+		}
+	}
 	IEnumerator DisplayUi ()
 	{
 		if (_SwitchOff) {
 			yield return new WaitForFixedUpdate ();
 			_SwitchOff = false;
 		}
-//<<<<<<< HEAD
+		//<<<<<<< HEAD
 		_canvas.Display (Needs, Production, PowerLinks, NeedsSprites, ProductionSprites, PowerNeed, HumanNeed, RepairLinks, UpgradLinks, _name);
-//=======
+		//=======
 		//	_canvas.Display (Needs, Production, PowerLinks, NeedsSprites, ProductionSprites, PowerNeed, HumanNeed, RepairLinks, UpgradLinks, Name);
-//>>>>>>> origin/master
+		//>>>>>>> origin/master
 		_displayed = true;
 		while (_displayed) {
 			Vector3 screenPos = Camera.main.WorldToScreenPoint (transform.position);
@@ -74,6 +76,6 @@ public class BuildingUi : MonoBehaviour
 			yield return null;
 		}
 	}
-
-
+	
+	
 }
